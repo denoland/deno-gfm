@@ -25,6 +25,13 @@ class Renderer extends marked.Renderer {
     const html = Prism.highlight(code, grammar, language);
     return `<div class="highlight highlight-source-${language}"><pre>${html}</pre></div>`;
   }
+
+  link(href: string, title: string, text: string) {
+    if (href.startsWith("#")) {
+      return `<a href="${href}" title="${title}">${text}</a>`;
+    }
+    return `<a href="${href}" title="${title}" rel="noopener noreferrer">${text}</a>`;
+  }
 }
 
 export function render(markdown: string, baseUrl: string | undefined): string {
@@ -45,7 +52,7 @@ export function render(markdown: string, baseUrl: string | undefined): string {
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
       img: ["src", "alt", "height", "width", "align"],
-      a: ["id", "aria-hidden", "href", "tabindex"],
+      a: ["id", "aria-hidden", "href", "tabindex", "rel"],
       svg: ["viewbox", "width", "height", "aria-hidden"],
       path: ["fill-rule", "d"],
     },
