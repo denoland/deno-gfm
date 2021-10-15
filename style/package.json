@@ -1,0 +1,12 @@
+{
+  "name": "deno-gfm",
+  "scripts": {
+    "build": "parcel build main.scss"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.0.0",
+    "@primer/css": "^18.0.1",
+    "normalize.css": "^8.0.1",
+    "parcel": "^2.0.0"
+  }
+}
