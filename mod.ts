@@ -14,6 +14,8 @@ class Renderer extends marked.Renderer {
   }
 
   code(code: string, language: string) {
+    // a language of `ts, ignore` should really be `ts`
+    language = language.split(",")[0];
     const grammar = Object.hasOwnProperty.call(Prism.languages, language)
       ? Prism.languages[language]
       : undefined;
