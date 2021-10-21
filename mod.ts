@@ -55,6 +55,12 @@ export function render(markdown: string, baseUrl: string | undefined): string {
       a: ["id", "aria-hidden", "href", "tabindex", "rel"],
       svg: ["viewbox", "width", "height", "aria-hidden"],
       path: ["fill-rule", "d"],
+      h1: ["id"],
+      h2: ["id"],
+      h3: ["id"],
+      h4: ["id"],
+      h5: ["id"],
+      h6: ["id"],
     },
     allowedClasses: {
       div: ["highlight"],
