@@ -1,8 +1,13 @@
 @import "@primer/css/color-modes/themes/light.scss";
 @import "@primer/css/color-modes/themes/dark.scss";
 
-@import "@primer/css/support/index.scss";
-@import "@primer/css/base/index.scss";
+.markdown-body {
+  @import "@primer/css/support/index.scss";
+  @import "@primer/css/base/index.scss";
+
+  background-color: var(--color-canvas-default);
+  color: var(--color-fg-default);
+}
 
 @import "@primer/css/markdown/index.scss";
 

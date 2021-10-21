@@ -19,6 +19,9 @@ async function handler(_req: Request): Promise<Response> {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <style>
+        body {
+          margin: 0;
+        }
         main {
           max-width: 800px;
           margin: 0 auto;
@@ -44,5 +47,5 @@ async function handler(_req: Request): Promise<Response> {
   }
 }
 
-console.log("Server listening on http://localhost:8000");
-listenAndServe(":8000", handler);
+console.log("Server listening on http://localhost:8001");
+listenAndServe(":8001", handler);
