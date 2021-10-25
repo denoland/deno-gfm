@@ -7,6 +7,14 @@
 
   background-color: var(--color-canvas-default);
   color: var(--color-fg-default);
+
+  ol {
+    list-style: decimal;
+  }
+  
+  ul {
+    list-style: disc;
+  }
 }
 
 @import "@primer/css/markdown/index.scss";
