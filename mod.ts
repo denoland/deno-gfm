@@ -34,21 +34,30 @@ class Renderer extends marked.Renderer {
   }
 }
 
-export function render(markdown: string, baseUrl: string | undefined): string {
+export interface RenderOptions {
+  baseUrl?: string;
+  allowIframes?: boolean;
+}
+
+export function render(markdown: string, opts: RenderOptions = {}): string {
   markdown = emojify(markdown);
 
   const html = marked(markdown, {
-    baseUrl,
+    baseUrl: opts.baseUrl,
     gfm: true,
     renderer: new Renderer(),
   });
 
+  const allowedTags = sanitizeHtml.defaults.allowedTags.concat([
+    "img",
+    "svg",
+    "path",
+  ]);
+  if (opts.allowIframes) {
+    allowedTags.push("iframe");
+  }
   return sanitizeHtml(html, {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-      "img",
-      "svg",
-      "path",
-    ]),
+    allowedTags,
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
       img: ["src", "alt", "height", "width", "align"],
@@ -61,6 +70,7 @@ export function render(markdown: string, baseUrl: string | undefined): string {
       h4: ["id"],
       h5: ["id"],
       h6: ["id"],
+      iframe: ["src", "width", "height"], // Only used when iframe tags are allowed in the first place.
     },
     allowedClasses: {
       div: ["highlight"],

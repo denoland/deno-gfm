@@ -89,6 +89,8 @@ async function serve(conn: Deno.Conn) {
 You can find a deeper introduction, examples, and environment setup guides in
 the [manual](https://deno.land/manual).
 
+<iframe width="100%" height="600" src="https://embed.deno.com/playground/urlpattern?layout=both"></iframe>
+
 The complete API reference is available at the runtime
 [documentation](https://doc.deno.land).
 

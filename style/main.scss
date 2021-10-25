@@ -15,6 +15,12 @@
   ul {
     list-style: disc;
   }
+
+  iframe {
+    background-color: white;
+    border: 0;
+    margin-bottom: 16px;
+  }
 }
 
 @import "@primer/css/markdown/index.scss";

@@ -12,7 +12,9 @@ const CONTENT_PATH = new URL("./content.md", import.meta.url);
 async function handler(_req: Request): Promise<Response> {
   try {
     const markdown = await Deno.readTextFile(CONTENT_PATH);
-    const body = render(markdown, "/");
+    const body = render(markdown, {
+      allowIframes: true,
+    });
     const html = `<!DOCTYPE html>
   <html lang="en">
     <head>
