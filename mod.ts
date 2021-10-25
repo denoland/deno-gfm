@@ -56,7 +56,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
   if (opts.allowIframes) {
     allowedTags.push("iframe");
   }
-  return html;
+
   return sanitizeHtml(html, {
     allowedTags,
     allowedAttributes: {
