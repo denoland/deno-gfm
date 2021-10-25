@@ -25,37 +25,49 @@
 
 @import "@primer/css/markdown/index.scss";
 
-.highlight .token.keyword {
-  color: var(--color-prettylights-syntax-keyword);
-}
+.highlight .token {
+  &.keyword {
+    color: var(--color-prettylights-syntax-keyword);
+  }
 
-.highlight .token.operator,
-.token.number,
-.token.boolean {
-  color: var(--color-prettylights-syntax-constant);
-}
+  &.operator,
+  &.number,
+  &.boolean,
+  &.tag .token.punctuation,
+  &.tag .token.attr-name {
+    color: var(--color-prettylights-syntax-constant);
+  }
 
-.highlight .token.function {
-  color: var(--color-prettylights-syntax-entity);
-}
-
-.highlight .token.string {
-  color: var(--color-prettylights-syntax-string);
-}
-
-.highlight .token.comment {
-  color: var(--color-prettylights-syntax-comment);
-}
-
-.highlight .token.class-name {
-  color: var(--color-prettylights-syntax-variable);
-}
-
-.highlight .token.regex {
-  color: var(--color-prettylights-syntax-string);
-}
-
-.highlight .token.regex .regex-delimiter {
-  color: var(--color-prettylights-syntax-constant);
+  &.function {
+    color: var(--color-prettylights-syntax-entity);
+  }
+  
+  &.string {
+    color: var(--color-prettylights-syntax-string);
+  }
+  
+  &.comment {
+    color: var(--color-prettylights-syntax-comment);
+  }
+  
+  &.class-name {
+    color: var(--color-prettylights-syntax-variable);
+  }
+  
+  &.regex {
+    color: var(--color-prettylights-syntax-string);
+  }
+  
+  &.regex .regex-delimiter {
+    color: var(--color-prettylights-syntax-constant);
+  }
+  
+  &.tag .token.tag {
+    color: var(--color-prettylights-syntax-entity-tag);
+  }
+  
+  &.tag .token.class-name {
+    color: var(--color-prettylights-syntax-storage-modifier-import);
+  }
 }
 

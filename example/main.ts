@@ -2,8 +2,9 @@ import { listenAndServe } from "https://deno.land/std@0.110.0/http/server.ts";
 
 import { CSS, render } from "../mod.ts";
 
-import "https://esm.sh/prismjs@1.25.0/components/prism-javascript?no-check";
+import "https://esm.sh/prismjs@1.25.0/components/prism-jsx?no-check";
 import "https://esm.sh/prismjs@1.25.0/components/prism-typescript?no-check";
+import "https://esm.sh/prismjs@1.25.0/components/prism-tsx?no-check";
 import "https://esm.sh/prismjs@1.25.0/components/prism-bash?no-check";
 import "https://esm.sh/prismjs@1.25.0/components/prism-powershell?no-check";
 

@@ -11,3 +11,5 @@ export { default as marked } from "https://esm.sh/marked@3.0.7";
 export * as Prism from "https://esm.sh/prismjs@1.25.0";
 
 export { default as sanitizeHtml } from "https://esm.sh/sanitize-html@2.5.2";
+
+export { escape as htmlEscape } from "https://esm.sh/he@1.2.0";

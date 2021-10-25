@@ -1,4 +1,4 @@
-import { emojify, marked, Prism, sanitizeHtml } from "./deps.ts";
+import { emojify, htmlEscape, marked, Prism, sanitizeHtml } from "./deps.ts";
 import { CSS } from "./style.js";
 export { CSS };
 
@@ -20,7 +20,7 @@ class Renderer extends marked.Renderer {
       ? Prism.languages[language]
       : undefined;
     if (grammar === undefined) {
-      return `<pre><code>${code}</code></pre>`;
+      return `<pre><code>${htmlEscape(code)}</code></pre>`;
     }
     const html = Prism.highlight(code, grammar, language);
     return `<div class="highlight highlight-source-${language}"><pre>${html}</pre></div>`;
@@ -56,6 +56,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
   if (opts.allowIframes) {
     allowedTags.push("iframe");
   }
+  return html;
   return sanitizeHtml(html, {
     allowedTags,
     allowedAttributes: {
