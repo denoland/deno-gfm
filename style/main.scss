@@ -30,10 +30,16 @@
     color: var(--color-prettylights-syntax-keyword);
   }
 
+  &.tag .token.class-name,
+  &.tag .token.script .token.punctuation {
+    color: var(--color-prettylights-syntax-storage-modifier-import);
+  }
+
   &.operator,
   &.number,
   &.boolean,
   &.tag .token.punctuation,
+  &.tag .token.script .token.script-punctuation,
   &.tag .token.attr-name {
     color: var(--color-prettylights-syntax-constant);
   }
@@ -64,10 +70,6 @@
   
   &.tag .token.tag {
     color: var(--color-prettylights-syntax-entity-tag);
-  }
-  
-  &.tag .token.class-name {
-    color: var(--color-prettylights-syntax-storage-modifier-import);
   }
 }
 
