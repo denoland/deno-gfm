@@ -7,6 +7,7 @@ import "https://esm.sh/prismjs@1.25.0/components/prism-typescript?no-check";
 import "https://esm.sh/prismjs@1.25.0/components/prism-tsx?no-check";
 import "https://esm.sh/prismjs@1.25.0/components/prism-bash?no-check";
 import "https://esm.sh/prismjs@1.25.0/components/prism-powershell?no-check";
+import "https://esm.sh/prismjs@1.25.0/components/prism-json?no-check";
 
 const CONTENT_PATH = new URL("./content.md", import.meta.url);
 

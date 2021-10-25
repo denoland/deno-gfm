@@ -68,7 +68,7 @@
     color: var(--color-prettylights-syntax-constant);
   }
   
-  &.tag .token.tag {
+  &.tag .token.tag, &.property {
     color: var(--color-prettylights-syntax-entity-tag);
   }
 }

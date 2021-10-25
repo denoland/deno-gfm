@@ -93,6 +93,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
         "script-punctuation",
         "script",
         "plain-text",
+        "property",
       ],
       a: ["anchor"],
       svg: ["octicon", "octicon-link"],
