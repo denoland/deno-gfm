@@ -2,12 +2,12 @@ import { listenAndServe } from "https://deno.land/std@0.110.0/http/server.ts";
 
 import { CSS, render } from "../mod.ts";
 
-import "https://esm.sh/prismjs@1.25.0/components/prism-jsx?no-check";
-import "https://esm.sh/prismjs@1.25.0/components/prism-typescript?no-check";
-import "https://esm.sh/prismjs@1.25.0/components/prism-tsx?no-check";
-import "https://esm.sh/prismjs@1.25.0/components/prism-bash?no-check";
-import "https://esm.sh/prismjs@1.25.0/components/prism-powershell?no-check";
-import "https://esm.sh/prismjs@1.25.0/components/prism-json?no-check";
+import "https://esm.sh/prismjs@1.25.0/components/prism-jsx?no-check&pin=v57";
+import "https://esm.sh/prismjs@1.25.0/components/prism-typescript?no-check&pin=v57";
+import "https://esm.sh/prismjs@1.25.0/components/prism-tsx?no-check&pin=v57";
+import "https://esm.sh/prismjs@1.25.0/components/prism-bash?no-check&pin=v57";
+import "https://esm.sh/prismjs@1.25.0/components/prism-powershell?no-check&pin=v57";
+import "https://esm.sh/prismjs@1.25.0/components/prism-json?no-check&pin=v57";
 
 const CONTENT_PATH = new URL("./content.md", import.meta.url);
 
