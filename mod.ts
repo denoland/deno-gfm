@@ -50,6 +50,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
 
   const allowedTags = sanitizeHtml.defaults.allowedTags.concat([
     "img",
+    "video",
     "svg",
     "path",
   ]);
@@ -62,6 +63,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
       img: ["src", "alt", "height", "width", "align"],
+      video: ["src", "alt", "height", "width"],
       a: ["id", "aria-hidden", "href", "tabindex", "rel"],
       svg: ["viewbox", "width", "height", "aria-hidden"],
       path: ["fill-rule", "d"],
