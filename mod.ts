@@ -63,7 +63,16 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
       img: ["src", "alt", "height", "width", "align"],
-      video: ["src", "alt", "height", "width"],
+      video: [
+        "src",
+        "alt",
+        "height",
+        "width",
+        "autoplay",
+        "muted",
+        "loop",
+        "playsinline",
+      ],
       a: ["id", "aria-hidden", "href", "tabindex", "rel"],
       svg: ["viewbox", "width", "height", "aria-hidden"],
       path: ["fill-rule", "d"],
