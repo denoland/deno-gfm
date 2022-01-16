@@ -15,6 +15,9 @@
     "https://esm": false,
     "https://esm,.": false,
     "https://esm.": false,
-    "https://esm.s": false
+    "https://esm.s": false,
+    "https://cdn.": false,
+    "https://cdn.skypack,.": false,
+    "https://cdn.skypack.": false
   }
 }
