@@ -16,13 +16,14 @@ class Renderer extends marked.Renderer {
   code(code: string, language?: string) {
     // a language of `ts, ignore` should really be `ts`
     language = language?.split(",")?.[0];
-    const grammar = Object.hasOwnProperty.call(Prism.languages, language)
-      ? Prism.languages[language]
-      : undefined;
+    const grammar =
+      language && Object.hasOwnProperty.call(Prism.languages, language)
+        ? Prism.languages[language]
+        : undefined;
     if (grammar === undefined) {
       return `<pre><code>${htmlEscape(code)}</code></pre>`;
     }
-    const html = Prism.highlight(code, grammar, language);
+    const html = Prism.highlight(code, grammar, language!);
     return `<div class="highlight highlight-source-${language}"><pre>${html}</pre></div>`;
   }
 
