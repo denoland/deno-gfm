@@ -1,6 +1,7 @@
 {
   "name": "deno-gfm",
   "scripts": {
+    "postinstall": "make patch",
     "build": "parcel build main.scss"
   },
   "devDependencies": {

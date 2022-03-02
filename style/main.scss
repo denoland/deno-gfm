@@ -1,19 +1,18 @@
 @import "@primer/css/color-modes/themes/light.scss";
 @import "@primer/css/color-modes/themes/dark.scss";
+@import "@primer/css/markdown/index.scss";
 
 .markdown-body {
-  @import "@primer/css/support/index.scss";
-  @import "@primer/css/base/index.scss";
-
   background-color: var(--color-canvas-default);
   color: var(--color-fg-default);
 
-  ol {
-    list-style: decimal;
-  }
+  a {
+    color: var(--color-accent-fg);
+    text-decoration: none;
   
-  ul {
-    list-style: disc;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   iframe {
@@ -21,55 +20,52 @@
     border: 0;
     margin-bottom: 16px;
   }
+
+  .highlight .token {
+    &.keyword {
+      color: var(--color-prettylights-syntax-keyword);
+    }
+  
+    &.tag .token.class-name,
+    &.tag .token.script .token.punctuation {
+      color: var(--color-prettylights-syntax-storage-modifier-import);
+    }
+  
+    &.operator,
+    &.number,
+    &.boolean,
+    &.tag .token.punctuation,
+    &.tag .token.script .token.script-punctuation,
+    &.tag .token.attr-name {
+      color: var(--color-prettylights-syntax-constant);
+    }
+  
+    &.function {
+      color: var(--color-prettylights-syntax-entity);
+    }
+    
+    &.string {
+      color: var(--color-prettylights-syntax-string);
+    }
+    
+    &.comment {
+      color: var(--color-prettylights-syntax-comment);
+    }
+    
+    &.class-name {
+      color: var(--color-prettylights-syntax-variable);
+    }
+    
+    &.regex {
+      color: var(--color-prettylights-syntax-string);
+    }
+    
+    &.regex .regex-delimiter {
+      color: var(--color-prettylights-syntax-constant);
+    }
+    
+    &.tag .token.tag, &.property {
+      color: var(--color-prettylights-syntax-entity-tag);
+    }
+  }  
 }
-
-@import "@primer/css/markdown/index.scss";
-
-.highlight .token {
-  &.keyword {
-    color: var(--color-prettylights-syntax-keyword);
-  }
-
-  &.tag .token.class-name,
-  &.tag .token.script .token.punctuation {
-    color: var(--color-prettylights-syntax-storage-modifier-import);
-  }
-
-  &.operator,
-  &.number,
-  &.boolean,
-  &.tag .token.punctuation,
-  &.tag .token.script .token.script-punctuation,
-  &.tag .token.attr-name {
-    color: var(--color-prettylights-syntax-constant);
-  }
-
-  &.function {
-    color: var(--color-prettylights-syntax-entity);
-  }
-  
-  &.string {
-    color: var(--color-prettylights-syntax-string);
-  }
-  
-  &.comment {
-    color: var(--color-prettylights-syntax-comment);
-  }
-  
-  &.class-name {
-    color: var(--color-prettylights-syntax-variable);
-  }
-  
-  &.regex {
-    color: var(--color-prettylights-syntax-string);
-  }
-  
-  &.regex .regex-delimiter {
-    color: var(--color-prettylights-syntax-constant);
-  }
-  
-  &.tag .token.tag, &.property {
-    color: var(--color-prettylights-syntax-entity-tag);
-  }
-}
-
