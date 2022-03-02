@@ -2,7 +2,7 @@
   "name": "deno-gfm",
   "scripts": {
     "postinstall": "make patch",
-    "build": "parcel build main.scss"
+    "build": "parcel build main.scss --no-source-maps"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.0.0",
