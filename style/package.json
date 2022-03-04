@@ -1,7 +1,8 @@
 {
   "name": "deno-gfm",
   "scripts": {
-    "build": "parcel build main.scss"
+    "postinstall": "deno run --allow-read=. --allow-write=. patch.ts",
+    "build": "parcel build main.scss --no-source-maps"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.0.0",
