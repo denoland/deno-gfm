@@ -1,7 +1,7 @@
 {
   "name": "deno-gfm",
   "scripts": {
-    "postinstall": "make patch",
+    "postinstall": "deno run --allow-read=. --allow-write=. patch.ts",
     "build": "parcel build main.scss --no-source-maps"
   },
   "devDependencies": {
