@@ -9,7 +9,7 @@ for (
     ...expandGlobSync("node_modules/@primer/css/markdown/*.scss"),
   ]
 ) {
-  const file = await Deno.readTextFile(path);
+  const file = Deno.readTextFileSync(path);
 
   for (const variable of file.match(variableRegex) ?? []) {
     colorVariables.add(variable);
