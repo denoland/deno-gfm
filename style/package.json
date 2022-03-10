@@ -5,8 +5,11 @@
     "build": "parcel build main.scss --no-source-maps"
   },
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.0.0",
-    "@primer/css": "^18.0.1",
-    "parcel": "^2.0.0"
-  }
+    "@parcel/optimizer-css": "^2.3.2",
+    "@parcel/transformer-css-experimental": "^2.3.2",
+    "@parcel/transformer-sass": "^2.3.2",
+    "@primer/css": "^19.5.1",
+    "parcel": "^2.3.2"
+  },
+  "browserslist": ">= 0.25% and not ie 11"
 }

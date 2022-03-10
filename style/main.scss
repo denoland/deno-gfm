@@ -20,52 +20,52 @@
     border: 0;
     margin-bottom: 16px;
   }
-
-  .highlight .token {
-    &.keyword {
-      color: var(--color-prettylights-syntax-keyword);
-    }
-  
-    &.tag .token.class-name,
-    &.tag .token.script .token.punctuation {
-      color: var(--color-prettylights-syntax-storage-modifier-import);
-    }
-  
-    &.operator,
-    &.number,
-    &.boolean,
-    &.tag .token.punctuation,
-    &.tag .token.script .token.script-punctuation,
-    &.tag .token.attr-name {
-      color: var(--color-prettylights-syntax-constant);
-    }
-  
-    &.function {
-      color: var(--color-prettylights-syntax-entity);
-    }
-    
-    &.string {
-      color: var(--color-prettylights-syntax-string);
-    }
-    
-    &.comment {
-      color: var(--color-prettylights-syntax-comment);
-    }
-    
-    &.class-name {
-      color: var(--color-prettylights-syntax-variable);
-    }
-    
-    &.regex {
-      color: var(--color-prettylights-syntax-string);
-    }
-    
-    &.regex .regex-delimiter {
-      color: var(--color-prettylights-syntax-constant);
-    }
-    
-    &.tag .token.tag, &.property {
-      color: var(--color-prettylights-syntax-entity-tag);
-    }
-  }  
 }
+
+.markdown-body .highlight .token, .gfm-highlight .token {
+  &.keyword {
+    color: var(--color-prettylights-syntax-keyword);
+  }
+
+  &.tag .token.class-name,
+  &.tag .token.script .token.punctuation {
+    color: var(--color-prettylights-syntax-storage-modifier-import);
+  }
+
+  &.operator,
+  &.number,
+  &.boolean,
+  &.tag .token.punctuation,
+  &.tag .token.script .token.script-punctuation,
+  &.tag .token.attr-name {
+    color: var(--color-prettylights-syntax-constant);
+  }
+
+  &.function {
+    color: var(--color-prettylights-syntax-entity);
+  }
+  
+  &.string {
+    color: var(--color-prettylights-syntax-string);
+  }
+  
+  &.comment {
+    color: var(--color-prettylights-syntax-comment);
+  }
+  
+  &.class-name {
+    color: var(--color-prettylights-syntax-variable);
+  }
+  
+  &.regex {
+    color: var(--color-prettylights-syntax-string);
+  }
+  
+  &.regex .regex-delimiter {
+    color: var(--color-prettylights-syntax-constant);
+  }
+  
+  &.tag .token.tag, &.property {
+    color: var(--color-prettylights-syntax-entity-tag);
+  }
+}  
