@@ -54,6 +54,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     "video",
     "svg",
     "path",
+    "circle",
   ]);
   if (opts.allowIframes) {
     allowedTags.push("iframe");
@@ -75,8 +76,9 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
         "playsinline",
       ],
       a: ["id", "aria-hidden", "href", "tabindex", "rel"],
-      svg: ["viewbox", "width", "height", "aria-hidden"],
+      svg: ["viewbox", "width", "height", "aria-hidden", "background"],
       path: ["fill-rule", "d"],
+      circle: ["cx", "cy", "r", "stroke", "stroke-width", "fill", "alpha"],
       h1: ["id"],
       h2: ["id"],
       h3: ["id"],
