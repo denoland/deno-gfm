@@ -25,6 +25,8 @@ async function handler(_req: Request): Promise<Response> {
       <style>
         body {
           margin: 0;
+          background-color: var(--color-canvas-default);
+          color: var(--color-fg-default);
         }
         main {
           max-width: 800px;

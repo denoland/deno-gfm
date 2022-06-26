@@ -20,6 +20,10 @@
     border: 0;
     margin-bottom: 16px;
   }
+
+  svg.octicon {
+    fill: currentColor;
+  }
 }
 
 .markdown-body .highlight .token, .gfm-highlight .token {
