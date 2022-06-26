@@ -24,6 +24,10 @@
   svg.octicon {
     fill: currentColor;
   }
+
+  .anchor>.octicon {
+    display: inline;
+  }
 }
 
 .markdown-body .highlight .token, .gfm-highlight .token {
