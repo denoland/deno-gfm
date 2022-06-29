@@ -1,4 +1,11 @@
-import { emojify, htmlEscape, Marked, Prism, sanitizeHtml } from "./deps.ts";
+import {
+  emojify,
+  htmlEscape,
+  katex,
+  Marked,
+  Prism,
+  sanitizeHtml,
+} from "./deps.ts";
 import { CSS } from "./style.js";
 export { CSS };
 
@@ -16,6 +23,12 @@ class Renderer extends Marked.Renderer {
   code(code: string, language?: string) {
     // a language of `ts, ignore` should really be `ts`
     language = language?.split(",")?.[0];
+
+    // transform math code blocks into HTML+MathML
+    // https://github.blog/changelog/2022-06-28-fenced-block-syntax-for-mathematical-expressions/
+    if (language === "math") {
+      return htmlEscape(katex.renderToString(code));
+    }
     const grammar =
       language && Object.hasOwnProperty.call(Prism.languages, language)
         ? Prism.languages[language]
