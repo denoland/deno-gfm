@@ -8,6 +8,7 @@ import "https://esm.sh/prismjs@1.25.0/components/prism-tsx?no-check&pin=v57";
 import "https://esm.sh/prismjs@1.25.0/components/prism-bash?no-check&pin=v57";
 import "https://esm.sh/prismjs@1.25.0/components/prism-powershell?no-check&pin=v57";
 import "https://esm.sh/prismjs@1.25.0/components/prism-json?no-check&pin=v57";
+import "https://esm.sh/prismjs@1.25.0/components/prism-diff?no-check&pin=v57";
 
 const CONTENT_PATH = new URL("./content.md", import.meta.url);
 
