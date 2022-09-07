@@ -31,6 +31,9 @@ class Renderer extends Marked.Renderer {
     if (href.startsWith("#")) {
       return `<a href="${href}" title="${title}">${text}</a>`;
     }
+    if (this.options.baseUrl) {
+      href = new URL(href, this.options.baseUrl).href;
+    }
     return `<a href="${href}" title="${title}" rel="noopener noreferrer">${text}</a>`;
   }
 }
@@ -60,6 +63,19 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
   }
 
   return sanitizeHtml(html, {
+    transformTags: {
+      img: (tagName, attribs) => {
+        console.log(tagName, attribs);
+        if (opts.baseUrl && attribs.src) {
+          try {
+            attribs.src = new URL(attribs.src, opts.baseUrl).href;
+          } catch {
+            delete attribs.src;
+          }
+        }
+        return { tagName, attribs };
+      },
+    },
     allowedTags,
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
