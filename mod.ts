@@ -65,7 +65,6 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
   return sanitizeHtml(html, {
     transformTags: {
       img: (tagName, attribs) => {
-        console.log(tagName, attribs);
         if (opts.baseUrl && attribs.src) {
           try {
             attribs.src = new URL(attribs.src, opts.baseUrl).href;
