@@ -40,6 +40,7 @@ class Renderer extends Marked.Renderer {
 
 export interface RenderOptions {
   baseUrl?: string;
+  mediaBaseUrl?: string;
   allowIframes?: boolean;
 }
 
@@ -62,18 +63,21 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     allowedTags.push("iframe");
   }
 
+  function transformMedia(tagName: string, attribs: sanitizeHtml.Attributes) {
+    if (opts.mediaBaseUrl && attribs.src) {
+      try {
+        attribs.src = new URL(attribs.src, opts.mediaBaseUrl).href;
+      } catch {
+        delete attribs.src;
+      }
+    }
+    return { tagName, attribs };
+  }
+
   return sanitizeHtml(html, {
     transformTags: {
-      img: (tagName, attribs) => {
-        if (opts.baseUrl && attribs.src) {
-          try {
-            attribs.src = new URL(attribs.src, opts.baseUrl).href;
-          } catch {
-            delete attribs.src;
-          }
-        }
-        return { tagName, attribs };
-      },
+      img: transformMedia,
+      video: transformMedia,
     },
     allowedTags,
     allowedAttributes: {
