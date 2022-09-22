@@ -159,3 +159,8 @@ function Counter() {
 
 export const config: PageConfig = { runtimeJS: true };
 ```
+
+<figure>
+  <img src="https://deno.land/logo.svg" />
+  <figcaption><b>Figure 1.</b> The deno mascot dinosaur standing in the rain.</figcaption>
+</figure>
