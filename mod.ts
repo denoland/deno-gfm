@@ -57,6 +57,8 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     "video",
     "svg",
     "path",
+    "figure",
+    "figcaption",
   ]);
   if (opts.allowIframes) {
     allowedTags.push("iframe");
