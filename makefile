@@ -4,4 +4,4 @@ build:
 	echo "/** @type {string} */\nexport const CSS = \``cat style/dist/main.css`\`;" > style.js
 
 dev:
-	deno run --allow-net --allow-read --unstable --watch --no-check ./example/main.ts
+	deno run -A --unstable --watch --no-check ./example/main.ts

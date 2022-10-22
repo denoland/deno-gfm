@@ -20,6 +20,19 @@
     border: 0;
     margin-bottom: 16px;
   }
+
+  svg.octicon {
+    fill: currentColor;
+  }
+
+  .anchor>.octicon {
+    display: inline;
+  }
+  
+  figcaption {
+    padding-top: 2px;
+    text-align: center;
+  }
 }
 
 .markdown-body .highlight .token, .gfm-highlight .token {
@@ -68,4 +81,14 @@
   &.tag .token.tag, &.property {
     color: var(--color-prettylights-syntax-entity-tag);
   }
-}  
+
+  &.deleted {
+    color: var(--color-prettylights-syntax-markup-deleted-text);
+    background-color: var(--color-prettylights-syntax-markup-deleted-bg);
+  }
+
+  &.inserted {
+    color: var(--color-prettylights-syntax-markup-inserted-text);
+    background-color: var(--color-prettylights-syntax-markup-inserted-bg);
+  }
+}

@@ -21,15 +21,18 @@ class Renderer extends Marked.Renderer {
         ? Prism.languages[language]
         : undefined;
     if (grammar === undefined) {
-      return `<pre><code>${htmlEscape(code)}</code></pre>`;
+      return `<pre><code class="notranslate">${htmlEscape(code)}</code></pre>`;
     }
     const html = Prism.highlight(code, grammar, language!);
-    return `<div class="highlight highlight-source-${language}"><pre>${html}</pre></div>`;
+    return `<div class="highlight highlight-source-${language} notranslate"><pre>${html}</pre></div>`;
   }
 
   link(href: string, title: string, text: string) {
     if (href.startsWith("#")) {
       return `<a href="${href}" title="${title}">${text}</a>`;
+    }
+    if (this.options.baseUrl) {
+      href = new URL(href, this.options.baseUrl).href;
     }
     return `<a href="${href}" title="${title}" rel="noopener noreferrer">${text}</a>`;
   }
@@ -54,6 +57,8 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     "video",
     "svg",
     "path",
+    "figure",
+    "figcaption",
     "details",
     "summary",
   ]);
@@ -62,6 +67,18 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
   }
 
   return sanitizeHtml(html, {
+    transformTags: {
+      img: (tagName, attribs) => {
+        if (opts.baseUrl && attribs.src) {
+          try {
+            attribs.src = new URL(attribs.src, opts.baseUrl).href;
+          } catch {
+            delete attribs.src;
+          }
+        }
+        return { tagName, attribs };
+      },
+    },
     allowedTags,
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
@@ -88,7 +105,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       iframe: ["src", "width", "height"], // Only used when iframe tags are allowed in the first place.
     },
     allowedClasses: {
-      div: ["highlight"],
+      div: ["highlight", "notranslate"],
       span: [
         "token",
         "keyword",
@@ -108,6 +125,10 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
         "script",
         "plain-text",
         "property",
+        "prefix",
+        "line",
+        "deleted",
+        "inserted",
       ],
       a: ["anchor"],
       svg: ["octicon", "octicon-link"],

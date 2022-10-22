@@ -8,6 +8,7 @@ import "https://esm.sh/prismjs@1.25.0/components/prism-tsx?no-check&pin=v57";
 import "https://esm.sh/prismjs@1.25.0/components/prism-bash?no-check&pin=v57";
 import "https://esm.sh/prismjs@1.25.0/components/prism-powershell?no-check&pin=v57";
 import "https://esm.sh/prismjs@1.25.0/components/prism-json?no-check&pin=v57";
+import "https://esm.sh/prismjs@1.25.0/components/prism-diff?no-check&pin=v57";
 
 const CONTENT_PATH = new URL("./content.md", import.meta.url);
 
@@ -25,6 +26,8 @@ async function handler(_req: Request): Promise<Response> {
       <style>
         body {
           margin: 0;
+          background-color: var(--color-canvas-default);
+          color: var(--color-fg-default);
         }
         main {
           max-width: 800px;
