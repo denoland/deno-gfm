@@ -11,6 +11,8 @@
 + world
 ```
 
+~~Some strikethrough `text`~~
+
 # Deno
 
 [![Build Status - Cirrus][]][Build status] [![Twitter handle][]][Twitter badge]
