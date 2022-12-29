@@ -13,6 +13,15 @@
 
 ~~Some strikethrough `text`~~
 
+<details>
+  <summary>Summary</summary>
+  <p>Some Details
+
+  **even more details**
+
+  </p>
+</details>
+
 # Deno
 
 [![Build Status - Cirrus][]][Build status] [![Twitter handle][]][Twitter badge]
