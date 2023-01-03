@@ -1,11 +1,11 @@
-![gfm](https://user-images.githubusercontent.com/30534965/210406591-202c0e74-4014-4597-bcca-12cabaa7a276.png)
+![gfm](https://user-images.githubusercontent.com/30534965/210409286-ff36deb0-3941-42ac-a902-8326c91cfe82.png)
 
-# deno-gfm
+# deno-gfm 🦕
 
 Server-side GitHub Flavored Markdown rendering for Deno, including GitHub style
 CSS, syntax highlighting, and HTML sanitization.
 
-## How to watch for changes
+## How to watch for changes 👀
 
 Run the following command to watch for changes in the `example/main.ts` file:
 
@@ -15,7 +15,7 @@ deno run -A --unstable --watch --no-check ./example/main.ts
 
 Modify the `example/content.md` file to see the changes.
 
-## Usage
+## Usage 🚀
 
 ```js
 import { CSS, render } from "https://deno.land/x/gfm/mod.ts";
@@ -58,7 +58,7 @@ const html = `
 `;
 ```
 
-### Styling
+### Styling 🎨
 
 The GitHub CSS styles (https://primer.style) are used. There are two themes
 available: light and dark.
@@ -93,7 +93,7 @@ preference, set the following:
 
 Also see the example application in the `example/` directory.
 
-## Extensability
+## Extensability 🧩
 
 By default syntax highlighting for JavaScript, Markdown, and HTML is included.
 You can include more languages importing them:
