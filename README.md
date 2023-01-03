@@ -3,6 +3,16 @@
 Server-side GitHub Flavored Markdown rendering for Deno, including GitHub style
 CSS, syntax highlighting, and HTML sanitization.
 
+## How to watch for changes
+
+Run the following command to watch for changes in the `example/main.ts` file:
+
+```sh
+deno run -A --unstable --watch --no-check ./example/main.ts
+```
+
+Modify the `example/content.md` file to see the changes.
+
 ## Usage
 
 ```js
@@ -69,7 +79,12 @@ If you want to use the light or dark theme depending on the user's browser
 preference, set the following:
 
 ```html
-<div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body">
+<div
+  data-color-mode="auto"
+  data-light-theme="light"
+  data-dark-theme="dark"
+  class="markdown-body"
+>
   ... markdown body here ...
 </div>
 ```
