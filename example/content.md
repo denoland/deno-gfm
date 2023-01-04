@@ -1,4 +1,4 @@
-```json
+```JSON
 {
   "json": {
     "name": "Deno"
