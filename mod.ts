@@ -15,7 +15,8 @@ class Renderer extends Marked.Renderer {
 
   code(code: string, language?: string) {
     // a language of `ts, ignore` should really be `ts`
-    language = language?.split(",")?.[0];
+    // and it should be lowercase to ensure it has parity with regular github markdown
+    language = language?.split(",")?.[0].toLocaleLowerCase();
     const grammar =
       language && Object.hasOwnProperty.call(Prism.languages, language)
         ? Prism.languages[language]
@@ -59,6 +60,9 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     "path",
     "figure",
     "figcaption",
+    "del",
+    "details",
+    "summary"
   ]);
   if (opts.allowIframes) {
     allowedTags.push("iframe");

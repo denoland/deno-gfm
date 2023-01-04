@@ -1,4 +1,4 @@
-```json
+```JSON
 {
   "json": {
     "name": "Deno"
@@ -31,6 +31,17 @@ import styles from "./styles.scss"
 
 document.getElementsByTagName("head")[0].innerHTML += `<style>${styles}</style>`
 ```
+
+~~Some strikethrough `text`~~
+
+<details>
+  <summary>Summary</summary>
+  <p>Some Details
+
+  **even more details**
+
+  </p>
+</details>
 
 # Deno
 
