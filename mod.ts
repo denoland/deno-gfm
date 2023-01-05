@@ -41,7 +41,6 @@ class Renderer extends Marked.Renderer {
 
 export interface RenderOptions {
   baseUrl?: string;
-  mediaBaseUrl?: string;
   allowIframes?: boolean;
 }
 
@@ -70,9 +69,9 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
   }
 
   function transformMedia(tagName: string, attribs: sanitizeHtml.Attributes) {
-    if (opts.mediaBaseUrl && attribs.src) {
+    if (opts.baseUrl && attribs.src) {
       try {
-        attribs.src = new URL(attribs.src, opts.mediaBaseUrl).href;
+        attribs.src = new URL(attribs.src, opts.baseUrl).href;
       } catch {
         delete attribs.src;
       }
