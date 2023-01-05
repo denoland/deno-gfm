@@ -28,6 +28,11 @@
   .anchor>.octicon {
     display: inline;
   }
+  
+  figcaption {
+    padding-top: 2px;
+    text-align: center;
+  }
 }
 
 .markdown-body .highlight .token, .gfm-highlight .token {
@@ -86,4 +91,4 @@
     color: var(--color-prettylights-syntax-markup-inserted-text);
     background-color: var(--color-prettylights-syntax-markup-inserted-bg);
   }
-}  
+}

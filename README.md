@@ -76,7 +76,7 @@ preference, set the following:
 
 Also see the example application in the `example/` directory.
 
-## Extensability
+## Extensibility
 
 By default syntax highlighting for JavaScript, Markdown, and HTML is included.
 You can include more languages importing them:

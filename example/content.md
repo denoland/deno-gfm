@@ -1,4 +1,4 @@
-```json
+```JSON
 {
   "json": {
     "name": "Deno"
@@ -10,6 +10,38 @@
 - hello
 + world
 ```
+
+- Buildscript
+```ts
+import { build } from "https://deno.land/x/esbuild/mod.ts"
+import sassPlugin from "https://deno.land/x/esbuild_plugin_sass_deno/mod.ts"
+
+build({
+    entryPoints: [
+        "example/in.ts"
+    ],
+    bundle: true,
+    outfile: "example/out.js",
+    plugins: [sassPlugin()]
+})
+```
+- Main Entrypoint File:
+```ts
+import styles from "./styles.scss"
+
+document.getElementsByTagName("head")[0].innerHTML += `<style>${styles}</style>`
+```
+
+~~Some strikethrough `text`~~
+
+<details>
+  <summary>Summary</summary>
+  <p>Some Details
+
+  **even more details**
+
+  </p>
+</details>
 
 # Deno
 
@@ -159,3 +191,8 @@ function Counter() {
 
 export const config: PageConfig = { runtimeJS: true };
 ```
+
+<figure>
+  <img src="https://deno.land/logo.svg" />
+  <figcaption><b>Figure 1.</b> The deno mascot dinosaur standing in the rain.</figcaption>
+</figure>
