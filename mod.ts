@@ -64,7 +64,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     "figcaption",
     "del",
     "details",
-    "summary"
+    "summary",
   ]);
   if (opts.allowIframes) {
     allowedTags.push("iframe");
