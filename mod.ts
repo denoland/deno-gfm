@@ -41,10 +41,12 @@ class Renderer extends Marked.Renderer {
 
 export interface RenderOptions {
   baseUrl?: string;
+  mediaBaseUrl?: string;
   allowIframes?: boolean;
 }
 
 export function render(markdown: string, opts: RenderOptions = {}): string {
+  opts.mediaBaseUrl ??= opts.baseUrl;
   markdown = emojify(markdown);
 
   const html = Marked.marked(markdown, {
@@ -69,9 +71,9 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
   }
 
   function transformMedia(tagName: string, attribs: sanitizeHtml.Attributes) {
-    if (opts.baseUrl && attribs.src) {
+    if (opts.mediaBaseUrl && attribs.src) {
       try {
-        attribs.src = new URL(attribs.src, opts.baseUrl).href;
+        attribs.src = new URL(attribs.src, opts.mediaBaseUrl).href;
       } catch {
         delete attribs.src;
       }
