@@ -47,13 +47,10 @@ export interface RenderOptions {
   baseUrl?: string;
   mediaBaseUrl?: string;
   allowIframes?: boolean;
-  sanitizeHtml?: boolean;
+  disableHtmlSanitization?: boolean;
 }
 
-export function render(
-  markdown: string,
-  opts: RenderOptions = { sanitizeHtml: true },
-): string {
+export function render(markdown: string, opts: RenderOptions = {}): string {
   opts.mediaBaseUrl ??= opts.baseUrl;
   markdown = emojify(markdown);
 
@@ -63,7 +60,7 @@ export function render(
     renderer: new Renderer(),
   });
 
-  if (!opts.sanitizeHtml) {
+  if (opts.disableHtmlSanitization) {
     return html;
   }
 
