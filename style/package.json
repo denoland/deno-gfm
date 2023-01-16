@@ -5,10 +5,10 @@
     "build": "parcel build main.scss --no-source-maps"
   },
   "devDependencies": {
-    "@parcel/optimizer-css": "^2.6.2",
-    "@parcel/transformer-sass": "^2.6.2",
-    "@primer/css": "^20.2.3",
-    "parcel": "^2.6.2"
+    "@parcel/optimizer-css": "^2.8.2",
+    "@parcel/transformer-sass": "^2.8.2",
+    "@primer/css": "^20.8.0",
+    "parcel": "^2.8.2"
   },
   "browserslist": ">= 0.25% and not dead"
 }
