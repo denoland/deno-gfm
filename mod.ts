@@ -118,7 +118,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       iframe: ["src", "width", "height"], // Only used when iframe tags are allowed in the first place.
     },
     allowedClasses: {
-      div: ["highlight", "notranslate"],
+      div: ["highlight", "highlight-source-*", "notranslate"],
       span: [
         "token",
         "keyword",
