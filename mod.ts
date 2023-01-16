@@ -105,7 +105,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
         "loop",
         "playsinline",
       ],
-      a: ["id", "aria-hidden", "href", "tabindex", "rel"],
+      a: ["id", "aria-hidden", "href", "tabindex", "rel", "target"],
       svg: ["viewbox", "width", "height", "aria-hidden", "background"],
       path: ["fill-rule", "d"],
       circle: ["cx", "cy", "r", "stroke", "stroke-width", "fill", "alpha"],
