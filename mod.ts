@@ -47,9 +47,13 @@ export interface RenderOptions {
   baseUrl?: string;
   mediaBaseUrl?: string;
   allowIframes?: boolean;
+  sanitizeHtml?: boolean;
 }
 
-export function render(markdown: string, opts: RenderOptions = {}): string {
+export function render(
+  markdown: string,
+  opts: RenderOptions = { sanitizeHtml: true },
+): string {
   opts.mediaBaseUrl ??= opts.baseUrl;
   markdown = emojify(markdown);
 
@@ -58,6 +62,10 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     gfm: true,
     renderer: new Renderer(),
   });
+
+  if (!opts.sanitizeHtml) {
+    return html;
+  }
 
   const allowedTags = sanitizeHtml.defaults.allowedTags.concat([
     "img",
