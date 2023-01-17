@@ -1,4 +1,4 @@
-import { expandGlobSync } from "https://deno.land/std@0.128.0/fs/mod.ts";
+import { expandGlobSync } from "https://deno.land/std@0.172.0/fs/mod.ts";
 
 const colorVariables = new Set<string>();
 const variableRegex = /--[\w-]+/g;
