@@ -9,9 +9,15 @@
   a {
     color: var(--color-accent-fg);
     text-decoration: none;
-  
+
     &:hover {
       text-decoration: underline;
+    }
+  }
+
+  img {
+    &[align="center"] {
+      margin: 0 auto;
     }
   }
 
@@ -25,17 +31,18 @@
     fill: currentColor;
   }
 
-  .anchor>.octicon {
+  .anchor > .octicon {
     display: inline;
   }
-  
+
   figcaption {
     padding-top: 2px;
     text-align: center;
   }
 }
 
-.markdown-body .highlight .token, .gfm-highlight .token {
+.markdown-body .highlight .token,
+.gfm-highlight .token {
   &.keyword {
     color: var(--color-prettylights-syntax-keyword);
   }
@@ -57,28 +64,29 @@
   &.function {
     color: var(--color-prettylights-syntax-entity);
   }
-  
+
   &.string {
     color: var(--color-prettylights-syntax-string);
   }
-  
+
   &.comment {
     color: var(--color-prettylights-syntax-comment);
   }
-  
+
   &.class-name {
     color: var(--color-prettylights-syntax-variable);
   }
-  
+
   &.regex {
     color: var(--color-prettylights-syntax-string);
   }
-  
+
   &.regex .regex-delimiter {
     color: var(--color-prettylights-syntax-constant);
   }
-  
-  &.tag .token.tag, &.property {
+
+  &.tag .token.tag,
+  &.property {
     color: var(--color-prettylights-syntax-entity-tag);
   }
 
