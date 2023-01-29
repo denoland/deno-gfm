@@ -47,6 +47,7 @@ export interface RenderOptions {
   baseUrl?: string;
   mediaBaseUrl?: string;
   allowIframes?: boolean;
+  disableHtmlSanitization?: boolean;
 }
 
 export function render(markdown: string, opts: RenderOptions = {}): string {
@@ -58,6 +59,10 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     gfm: true,
     renderer: new Renderer(),
   });
+
+  if (opts.disableHtmlSanitization) {
+    return html;
+  }
 
   const allowedTags = sanitizeHtml.defaults.allowedTags.concat([
     "img",
