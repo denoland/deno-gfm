@@ -32,7 +32,7 @@ class Renderer extends Marked.Renderer {
     // transform math code blocks into HTML+MathML
     // https://github.blog/changelog/2022-06-28-fenced-block-syntax-for-mathematical-expressions/
     if (language === "math") {
-      return katex.renderToString(code);
+      return katex.renderToString(code, { displayMode: true });
     }
     const grammar =
       language && Object.hasOwnProperty.call(Prism.languages, language)
@@ -56,6 +56,30 @@ class Renderer extends Marked.Renderer {
   }
 }
 
+/** Convert inline and block math to katex */
+function mathify(markdown: string) {
+  // Deal with inline math
+  const inlineMath = /\$(\S.+\S)\$/;
+  let match;
+  while ((match = inlineMath.exec(markdown)) !== null) {
+    markdown = markdown.replace(
+      inlineMath,
+      katex.renderToString(match[1], { displayMode: false }),
+    );
+  }
+
+  // Deal with block math
+  const blockMath = /\$\$\s([\s\S]+)\s\$\$/;
+  while ((match = blockMath.exec(markdown)) !== null) {
+    markdown = markdown.replace(
+      blockMath,
+      katex.renderToString(match[1], { displayMode: true }),
+    );
+  }
+
+  return markdown;
+}
+
 export interface RenderOptions {
   baseUrl?: string;
   mediaBaseUrl?: string;
@@ -67,8 +91,9 @@ export interface RenderOptions {
 export function render(markdown: string, opts: RenderOptions = {}): string {
   opts.mediaBaseUrl ??= opts.baseUrl;
   markdown = emojify(markdown);
+  markdown = mathify(markdown);
 
-  const html = Marked.marked(markdown, {
+  const html = Marked.marked.parse(markdown, {
     baseUrl: opts.baseUrl,
     gfm: true,
     renderer: new Renderer(),

@@ -49,9 +49,18 @@ document.getElementsByTagName("head")[0].innerHTML +=
 
 ## Math rendering
 
+We support code blocks with the "math" type!
+
 ```math
 S(\omega) = \frac{\alpha g^2}{\omega^5} e^{[ -0.74\bigl\{\frac{\omega U_\omega 19.5}{g}\bigr\}^{\!-4}\,]}
 ```
+
+We also support math code blocks directly!
+
+$$ S(\omega) = \frac{\alpha g^2}{\omega^5} e^{[ -0.74\bigl\{\frac{\omega
+U_\omega 19.5}{g}\bigr\}^{\!-4}\,]} $$
+
+An inline formula ($y=x^2$) works just as well!
 
 # Deno
 
