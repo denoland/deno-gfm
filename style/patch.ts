@@ -42,3 +42,12 @@ for (const mode of ["light", "dark"]) {
 }`,
   );
 }
+
+// KATEX
+
+// Download the file and write it to disk
+const req = await fetch(
+  "https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css",
+);
+const text = await req.text();
+await Deno.writeTextFile("katex.css", text);
