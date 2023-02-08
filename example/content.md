@@ -47,6 +47,12 @@ document.getElementsByTagName("head")[0].innerHTML +=
 </p>
 </details>
 
+## Math rendering
+
+```math
+S(\omega) = \frac{\alpha g^2}{\omega^5} e^{[ -0.74\bigl\{\frac{\omega U_\omega 19.5}{g}\bigr\}^{\!-4}\,]}
+```
+
 # Deno
 
 [![Build Status - Cirrus][]][Build status] [![Twitter handle][]][Twitter badge]

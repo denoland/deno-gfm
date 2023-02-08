@@ -1,6 +1,6 @@
 import { listenAndServe } from "https://deno.land/std@0.110.0/http/server.ts";
 
-import { CSS, render } from "../mod.ts";
+import { CSS, KATEX_CSS, render } from "../mod.ts";
 
 import "https://esm.sh/prismjs@1.25.0/components/prism-jsx?no-check&pin=v57";
 import "https://esm.sh/prismjs@1.25.0/components/prism-typescript?no-check&pin=v57";
@@ -35,6 +35,7 @@ async function handler(_req: Request): Promise<Response> {
           padding: 2rem 1rem;
         }
         ${CSS}
+        ${KATEX_CSS}
       </style>
     </head>
     <body data-color-mode="auto" data-light-theme="light" data-dark-theme="dark">
