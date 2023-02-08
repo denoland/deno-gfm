@@ -1,9 +1,5 @@
 {
   "name": "deno-gfm",
-  "scripts": {
-    "postinstall": "deno run --allow-read=. --allow-write=. --allow-net -- patch.ts",
-    "build": "parcel build main.scss --no-source-maps"
-  },
   "devDependencies": {
     "@parcel/optimizer-css": "^2.8.2",
     "@parcel/transformer-sass": "^2.8.2",

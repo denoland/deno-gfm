@@ -56,5 +56,5 @@ async function handler(_req: Request): Promise<Response> {
 }
 
 serve(handler, {
-  port: 8001
+  port: 8001,
 });
