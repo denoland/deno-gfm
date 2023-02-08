@@ -17,6 +17,7 @@ async function handler(_req: Request): Promise<Response> {
     const markdown = await Deno.readTextFile(CONTENT_PATH);
     const body = render(markdown, {
       allowIframes: true,
+      allowMath: true,
     });
     const html = `<!DOCTYPE html>
   <html lang="en">
