@@ -73,7 +73,7 @@ function mathify(markdown: string) {
   while ((match = inlineMath.exec(markdown)) !== null) {
     markdown = markdown.replace(
       inlineMath,
-      katex.renderToString(match[1], { displayMode: false }),
+      " " + katex.renderToString(match[1], { displayMode: false }),
     );
   }
 
