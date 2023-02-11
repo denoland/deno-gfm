@@ -59,7 +59,7 @@ class Renderer extends Marked.Renderer {
 /** Convert inline and block math to katex */
 function mathify(markdown: string) {
   // Deal with block math
-  const blockMath = /\$\$\s(.+)\s\$\$/s;
+  const blockMath = /\$\$\s(.+?)\s\$\$/s;
   let match;
   while ((match = blockMath.exec(markdown)) !== null) {
     markdown = markdown.replace(
@@ -69,7 +69,7 @@ function mathify(markdown: string) {
   }
 
   // Deal with inline math
-  const inlineMath = /\$(\S.+\S)\$/;
+  const inlineMath = /\s\$(\S.+?\S)\$/;
   while ((match = inlineMath.exec(markdown)) !== null) {
     markdown = markdown.replace(
       inlineMath,
