@@ -69,11 +69,11 @@ function mathify(markdown: string) {
   }
 
   // Deal with block math
-  const blockMath = /\$\$\s([\s\S]+)\s\$\$/;
+  const blockMath = /\$\$\s(.+)\s\$\$/s;
   while ((match = blockMath.exec(markdown)) !== null) {
     markdown = markdown.replace(
       blockMath,
-      katex.renderToString(match[1], { displayMode: true }),
+      katex.renderToString(match[1].trim(), { displayMode: true }),
     );
   }
 

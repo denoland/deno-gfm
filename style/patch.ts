@@ -44,7 +44,7 @@ for (const mode of ["light", "dark"]) {
 }
 
 const command = new Deno.Command("npx", {
-  args: ["parce", "build", "main.scss", "--no-source-maps"],
+  args: ["parcel", "build", "main.scss", "--no-source-maps"],
 });
 await command.output();
 
