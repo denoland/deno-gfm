@@ -52,10 +52,12 @@ await command.output();
 // KATEX
 
 console.log("Fetching katex styles");
-const req = await fetch(
-  "https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css",
-);
-const KATEX_CSS = await req.text();
+const KATEX_BASE_URL = "https://cdn.jsdelivr.net/npm/katex@0.16.4/dist";
+const req = await fetch(`${KATEX_BASE_URL}/katex.min.css`);
+let KATEX_CSS = await req.text();
+
+// Replace url of fonts with a cdn since we aren't packaging these
+KATEX_CSS = KATEX_CSS.replaceAll("fonts/", `${KATEX_BASE_URL}/fonts/`);
 
 console.log("Extracting katex classes");
 const KATEX_CSS_AST = css.parse(KATEX_CSS);
