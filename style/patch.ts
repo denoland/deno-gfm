@@ -1,4 +1,5 @@
 import { expandGlobSync } from "https://deno.land/std@0.172.0/fs/mod.ts";
+import css from "npm:css";
 
 const colorVariables = new Set<string>();
 const variableRegex = /--[\w-]+/g;
@@ -57,19 +58,27 @@ const req = await fetch(
 const KATEX_CSS = await req.text();
 
 console.log("Extracting katex classes");
+const KATEX_CSS_AST = css.parse(KATEX_CSS);
+const KATEX_CSS_RULES = KATEX_CSS_AST.stylesheet.rules.filter((
+  rule: { type: string },
+) => rule.type === "rule");
+const KATEX_CSS_SELECTORS = KATEX_CSS_RULES.reduce(
+  (acc: string[], cur: { selectors: string[] }) => [...acc, ...cur.selectors],
+  [],
+);
+
 const classRegex = /\.([\w-]+)/g;
 let classes = [];
 
-let match;
-while ((match = classRegex.exec(KATEX_CSS)) !== null) {
-  classes.push(match[1]);
+for (const selector of KATEX_CSS_SELECTORS) {
+  let match;
+  while ((match = classRegex.exec(selector)) !== null) {
+    classes.push(match[1]);
+  }
 }
 
 // de-duplicate classes
 classes = [...new Set(classes)];
-
-// remove things that aren't classes but are extracted because I'm bad at regex
-classes = classes.filter((c) => !["woff2", "woff", "ttf"].includes(c));
 
 console.log("Writing the final style.js");
 const CSS = await Deno.readTextFile("./dist/main.css");
