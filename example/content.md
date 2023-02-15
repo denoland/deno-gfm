@@ -47,6 +47,20 @@ document.getElementsByTagName("head")[0].innerHTML +=
 </p>
 </details>
 
+## Math rendering
+
+We support code blocks with the "math" type!
+
+```math
+G_{\mu v} = \frac{8 \pi G}{c^4} T_{\mu v}
+```
+
+We also support math blocks and inline math blocks as well!
+
+When $a \ne 0$, there are two solutions to $(ax^2 + bx + c = 0)$ and they are
+
+$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
+
 # Deno
 
 [![Build Status - Cirrus][]][Build status] [![Twitter handle][]][Twitter badge]

@@ -14,3 +14,5 @@ export { default as Prism } from "https://esm.sh/prismjs@1.29.0";
 export { default as sanitizeHtml } from "https://esm.sh/sanitize-html@2.8.1?target=esnext";
 
 export { escape as htmlEscape } from "https://esm.sh/he@1.2.0";
+
+export { default as katex } from "https://esm.sh/katex@0.16.4/dist/katex.mjs";

@@ -1,6 +1,13 @@
-import { emojify, htmlEscape, Marked, Prism, sanitizeHtml } from "./deps.ts";
-import { CSS } from "./style.js";
-export { CSS };
+import {
+  emojify,
+  htmlEscape,
+  katex,
+  Marked,
+  Prism,
+  sanitizeHtml,
+} from "./deps.ts";
+import { CSS, KATEX_CLASSES, KATEX_CSS } from "./style.js";
+export { CSS, KATEX_CSS };
 
 class Renderer extends Marked.Renderer {
   heading(
@@ -21,6 +28,12 @@ class Renderer extends Marked.Renderer {
     // a language of `ts, ignore` should really be `ts`
     // and it should be lowercase to ensure it has parity with regular github markdown
     language = language?.split(",")?.[0].toLocaleLowerCase();
+
+    // transform math code blocks into HTML+MathML
+    // https://github.blog/changelog/2022-06-28-fenced-block-syntax-for-mathematical-expressions/
+    if (language === "math") {
+      return katex.renderToString(code, { displayMode: true });
+    }
     const grammar =
       language && Object.hasOwnProperty.call(Prism.languages, language)
         ? Prism.languages[language]
@@ -43,18 +56,44 @@ class Renderer extends Marked.Renderer {
   }
 }
 
+/** Convert inline and block math to katex */
+function mathify(markdown: string) {
+  // Deal with block math
+  const blockMath = /\$\$\s(.+?)\s\$\$/s;
+  let match;
+  while ((match = blockMath.exec(markdown)) !== null) {
+    markdown = markdown.replace(
+      blockMath,
+      katex.renderToString(match[1].trim(), { displayMode: true }),
+    );
+  }
+
+  // Deal with inline math
+  const inlineMath = /\s\$(\S.+?\S)\$/;
+  while ((match = inlineMath.exec(markdown)) !== null) {
+    markdown = markdown.replace(
+      inlineMath,
+      " " + katex.renderToString(match[1], { displayMode: false }),
+    );
+  }
+
+  return markdown;
+}
+
 export interface RenderOptions {
   baseUrl?: string;
   mediaBaseUrl?: string;
   allowIframes?: boolean;
+  allowMath?: boolean;
   disableHtmlSanitization?: boolean;
 }
 
 export function render(markdown: string, opts: RenderOptions = {}): string {
   opts.mediaBaseUrl ??= opts.baseUrl;
   markdown = emojify(markdown);
+  markdown = mathify(markdown);
 
-  const html = Marked.marked(markdown, {
+  const html = Marked.marked.parse(markdown, {
     baseUrl: opts.baseUrl,
     gfm: true,
     renderer: new Renderer(),
@@ -64,7 +103,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     return html;
   }
 
-  const allowedTags = sanitizeHtml.defaults.allowedTags.concat([
+  let allowedTags = sanitizeHtml.defaults.allowedTags.concat([
     "img",
     "video",
     "svg",
@@ -78,6 +117,40 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
   ]);
   if (opts.allowIframes) {
     allowedTags.push("iframe");
+  }
+  if (opts.allowMath) {
+    allowedTags = allowedTags.concat([
+      "math",
+      "maction",
+      "annotation",
+      "annotation-xml",
+      "menclose",
+      "merror",
+      "mfenced",
+      "mfrac",
+      "mi",
+      "mmultiscripts",
+      "mn",
+      "mo",
+      "mover",
+      "mpadded",
+      "mphantom",
+      "mprescripts",
+      "mroot",
+      "mrow",
+      "ms",
+      "semantics",
+      "mspace",
+      "msqrt",
+      "mstyle",
+      "msub",
+      "msup",
+      "msubsup",
+      "mtable",
+      "mtd",
+      "mtext",
+      "mtr",
+    ]);
   }
 
   function transformMedia(tagName: string, attribs: sanitizeHtml.Attributes) {
@@ -114,6 +187,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       svg: ["viewbox", "width", "height", "aria-hidden", "background"],
       path: ["fill-rule", "d"],
       circle: ["cx", "cy", "r", "stroke", "stroke-width", "fill", "alpha"],
+      span: opts.allowMath ? ["aria-hidden", "style"] : [],
       h1: ["id"],
       h2: ["id"],
       h3: ["id"],
@@ -121,6 +195,8 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       h5: ["id"],
       h6: ["id"],
       iframe: ["src", "width", "height"], // Only used when iframe tags are allowed in the first place.
+      math: ["xmlns"], // Only enabled when math is enabled
+      annotation: ["encoding"], // Only enabled when math is enabled
     },
     allowedClasses: {
       div: ["highlight", "highlight-source-*", "notranslate"],
@@ -147,6 +223,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
         "line",
         "deleted",
         "inserted",
+        ...(opts.allowMath ? KATEX_CLASSES : []),
       ],
       a: ["anchor"],
       svg: ["octicon", "octicon-link"],

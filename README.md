@@ -19,9 +19,10 @@ const markdown = `
 console.log("Hello, world!");
 \`\`\`
 `;
-const rootUrl = "https://example.com";
 
-const body = render(markdown, rootUrl);
+const body = render(markdown, {
+  baseUrl: "https://example.com",
+});
 
 const html = `
 <!DOCTYPE html>
@@ -85,10 +86,54 @@ You can include more languages importing them:
 import { CSS, render } from "https://deno.land/x/gfm/mod.ts";
 
 // Add support for TypeScript, Bash, and Rust.
-import "https://esm.sh/prismjs@1.27.0/components/prism-typescript?no-check";
-import "https://esm.sh/prismjs@1.27.0/components/prism-bash?no-check";
-import "https://esm.sh/prismjs@1.27.0/components/prism-rust?no-check";
+import "https://esm.sh/prismjs@1.29.0/components/prism-typescript?no-check";
+import "https://esm.sh/prismjs@1.29.0/components/prism-bash?no-check";
+import "https://esm.sh/prismjs@1.29.0/components/prism-rust?no-check";
 ```
 
 A full list of supported languages is available here:
-https://unpkg.com/browse/prismjs@1.27.0/components/
+https://unpkg.com/browse/prismjs@1.29.0/components/
+
+## Math rendering
+
+By default math rendering is disabled. To enable it, you must include the
+additional CSS and enable the `allowMath` setting:
+
+```ts
+import { CSS, KATEX_CSS, render } from "https://deno.land/x/gfm/mod.ts";
+
+const markdown = `
+Block math:
+
+$$ y = x^2 $$
+
+Inline math: $y = x^2$
+`;
+
+const body = render(markdown, {
+  allowMath: true,
+});
+
+const html = `
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      main {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      ${CSS}
+      ${KATEX_CSS}
+    </style>
+  </head>
+  <body>
+    <main data-color-mode="light" data-light-theme="light" data-dark-theme="dark" class="markdown-body">
+      ${body}
+    </main>
+  </body>
+</html>
+`;
+```
