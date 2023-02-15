@@ -1,4 +1,5 @@
-import { expandGlobSync } from "https://deno.land/std@0.172.0/fs/mod.ts";
+import { expandGlobSync } from "https://deno.land/std@0.177.0/fs/expand_glob.ts";
+import $ from "https://deno.land/x/dax@0.26.0/mod.ts";
 import css from "npm:css";
 
 const colorVariables = new Set<string>();
@@ -44,10 +45,7 @@ for (const mode of ["light", "dark"]) {
   );
 }
 
-const command = new Deno.Command("npx", {
-  args: ["parcel", "build", "main.scss", "--no-source-maps"],
-});
-await command.output();
+await $`npx parcel build main.scss --no-source-maps`;
 
 // KATEX
 
