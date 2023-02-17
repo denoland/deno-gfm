@@ -69,7 +69,7 @@ function mathify(markdown: string) {
   }
 
   // Deal with inline math
-  const inlineMath = /\s\$(\S.+?\S)\$/;
+  const inlineMath = /\s\$((?=\S).*?(?=\S))\$/;
   while ((match = inlineMath.exec(markdown)) !== null) {
     markdown = markdown.replace(
       inlineMath,
