@@ -2,7 +2,7 @@ import $ from "https://deno.land/x/dax@0.27.0/mod.ts";
 import css from "npm:css";
 
 await $`rm -rf style/node_modules/@primer/primitives`;
-await $`cd style && npm install`;
+await $`npm install`.cwd("./style").quiet();
 
 const colorVariables = new Set<string>();
 const variableRegex = /--[\w-]+/g;
@@ -23,7 +23,7 @@ for (const pathRef of scssFiles) {
   }
 }
 
-$.logStep("Extracted color variables", colorVariables);
+$.logStep("Extracted color variables", Deno.inspect(colorVariables));
 
 const colorRegex = new RegExp(
   [...colorVariables].map((colorVariable) => `\\s+${colorVariable}.+`).join(
@@ -50,7 +50,7 @@ for (const mode of ["light", "dark"]) {
   );
 }
 
-await $`cd style && npx parcel build main.scss --no-source-maps`;
+await $`npx parcel build main.scss --no-source-maps`.cwd("./style").quiet();
 
 // KATEX
 
