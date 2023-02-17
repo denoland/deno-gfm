@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "build": "rm -f ./style.js && rm -rf style/node_modules/@primer/primitives && cd style && npm install && deno run --allow-read --allow-write=. --allow-net --allow-run --allow-env patch.ts && cd $INIT_CWD && mv ./style/style.js ./style.js && deno fmt",
+    "build": "deno run --allow-read --allow-write --allow-net --allow-run --allow-env ./style/patch.ts && deno fmt",
     "dev": "deno run -A --unstable --watch --no-check ./example/main.ts"
   }
 }
