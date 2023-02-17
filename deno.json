@@ -2,5 +2,6 @@
   "tasks": {
     "build": "deno run --allow-read --allow-write --allow-net --allow-run --allow-env ./style/patch.ts && deno fmt",
     "dev": "deno run -A --unstable --watch --no-check ./example/main.ts"
-  }
+  },
+  "lock": false
 }
