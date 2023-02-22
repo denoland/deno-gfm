@@ -85,7 +85,7 @@ classes = [...new Set(classes)];
 $.logStep("Writing the final style.js");
 const CSS = await cwd.join("./style/dist/main.css").readText();
 
-await Deno.writeTextFile(
+await cwd.join("./style.js").writeText(
   `/** @type {string} */
 export const CSS = \`${CSS}\`;
 
