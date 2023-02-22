@@ -85,7 +85,7 @@ for (const selector of KATEX_CSS_SELECTORS) {
 classes = [...new Set(classes)];
 
 $.logStep("Writing the final style.js");
-const CSS = await Deno.readTextFile("./style/dist/main.css");
+const CSS = await cwd.join("./style/dist/main.css").readText();
 
 await Deno.writeTextFile(
   `/** @type {string} */
