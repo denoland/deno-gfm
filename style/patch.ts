@@ -88,7 +88,6 @@ $.logStep("Writing the final style.js");
 const CSS = await Deno.readTextFile("./style/dist/main.css");
 
 await Deno.writeTextFile(
-  "./style.js",
   `/** @type {string} */
 export const CSS = \`${CSS}\`;
 
