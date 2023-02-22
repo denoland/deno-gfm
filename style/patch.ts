@@ -2,7 +2,7 @@ import $ from "https://deno.land/x/dax@0.27.0/mod.ts";
 import css from "npm:css";
 
 await $`rm -rf style/node_modules/@primer/primitives`;
-await $`npm install`.cwd("./style").quiet();
+await $`npm install`.cwd("./style");
 
 const colorVariables = new Set<string>();
 const variableRegex = /--[\w-]+/g;
