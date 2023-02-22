@@ -34,11 +34,9 @@ const colorRegex = new RegExp(
 
 for (const mode of ["light", "dark"]) {
   const primitiveFile =
-    `./style/node_modules/@primer/primitives/dist/scss/colors/_${mode}.scss`;
+    cwd.join(`./style/node_modules/@primer/primitives/dist/scss/colors/_${mode}.scss`);
   $.logStep("Patching", primitiveFile);
-  const colorPrimitive = Deno.readTextFileSync(
-    primitiveFile,
-  );
+  const colorPrimitive = primitiveFile.readTextSync();
   const matchedColors = colorPrimitive.match(colorRegex) ?? [];
 
   Deno.writeTextFileSync(
