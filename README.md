@@ -94,6 +94,19 @@ import "https://esm.sh/prismjs@1.29.0/components/prism-rust?no-check";
 A full list of supported languages is available here:
 https://unpkg.com/browse/prismjs@1.29.0/components/
 
+## Inline rendering
+
+By default, all rendering is in blocks. There are cases where one would like to
+render some inline markdown, and this is achievable using the `inline` setting:
+
+```ts
+import { render } from "https://deno.land/x/gfm/mod.ts";
+
+const markdown = "My [Deno](https://deno.land) Blog";
+const header = render(markdown, { inline: true });
+console.log(header);
+```
+
 ## Math rendering
 
 By default math rendering is disabled. To enable it, you must include the

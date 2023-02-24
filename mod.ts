@@ -83,6 +83,7 @@ function mathify(markdown: string) {
 export interface RenderOptions {
   baseUrl?: string;
   mediaBaseUrl?: string;
+  inline?: boolean;
   allowIframes?: boolean;
   allowMath?: boolean;
   disableHtmlSanitization?: boolean;
@@ -93,11 +94,15 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
   markdown = emojify(markdown);
   markdown = mathify(markdown);
 
-  const html = Marked.marked.parse(markdown, {
+  const marked_opts = {
     baseUrl: opts.baseUrl,
     gfm: true,
     renderer: new Renderer(),
-  });
+  };
+
+  const html = opts.inline
+    ? Marked.marked.parseInline(markdown, marked_opts)
+    : Marked.marked.parse(markdown, marked_opts);
 
   if (opts.disableHtmlSanitization) {
     return html;
