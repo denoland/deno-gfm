@@ -14,13 +14,7 @@ const CONTENT_PATH = new URL("./content.md", import.meta.url);
 
 async function handler(_req: Request): Promise<Response> {
   try {
-    let markdown: string;
-    // Allow script to be ran via url
-    if (CONTENT_PATH.protocol === "file:") {
-      markdown = await Deno.readTextFile(CONTENT_PATH);
-    } else {
-      markdown = await (await fetch(CONTENT_PATH)).text();
-    }
+    const markdown = await (await fetch(CONTENT_PATH)).text();
 
     const body = render(markdown, {
       allowIframes: true,
