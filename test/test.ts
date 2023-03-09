@@ -18,7 +18,9 @@ Deno.test("Basic markdown", async () => {
 
 Deno.test("Math rendering", async () => {
   const math = await Deno.readTextFile("./test/fixtures/math.md");
+  const expected = await Deno.readTextFile("./test/fixtures/math.html");
   const html = render(math, { allowMath: true });
+  assertEquals(html, expected);
   const document = new DOMParser().parseFromString(
     html,
     "text/html",
