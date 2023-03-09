@@ -1,7 +1,9 @@
 {
   "tasks": {
     "build": "deno run --allow-read --allow-write --allow-net --allow-run --allow-env ./style/patch.ts && deno fmt",
-    "dev": "deno run -A --unstable --watch --no-check ./example/main.ts"
+    "dev": "deno run -A --unstable --watch --no-check ./example/main.ts",
+    "test": "deno test --allow-read",
+    "coverage": "deno test --allow-read --coverage=cov_profile"
   },
   "lock": false
 }
