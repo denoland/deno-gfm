@@ -187,6 +187,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
         "muted",
         "loop",
         "playsinline",
+        "poster",
       ],
       a: ["id", "aria-hidden", "href", "tabindex", "rel", "target"],
       svg: ["viewbox", "width", "height", "aria-hidden", "background"],
