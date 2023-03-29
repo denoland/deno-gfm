@@ -199,6 +199,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       h4: ["id"],
       h5: ["id"],
       h6: ["id"],
+      td: ["colspan", "rowspan"],
       iframe: ["src", "width", "height"], // Only used when iframe tags are allowed in the first place.
       math: ["xmlns"], // Only enabled when math is enabled
       annotation: ["encoding"], // Only enabled when math is enabled
