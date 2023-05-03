@@ -8,10 +8,7 @@ Deno.test("Basic markdown", async () => {
   const html = render(markdown);
   assertEquals(html, expected);
 
-  const document = new DOMParser().parseFromString(
-    html,
-    "text/html",
-  );
+  const document = new DOMParser().parseFromString(html, "text/html");
   assertEquals(document?.querySelector("h1")?.textContent, "Heading");
   assertEquals(document?.querySelectorAll("li")?.length, 3);
 });
@@ -21,12 +18,35 @@ Deno.test("Math rendering", async () => {
   const expected = await Deno.readTextFile("./test/fixtures/math.html");
   const html = render(math, { allowMath: true });
   assertEquals(html, expected);
-  const document = new DOMParser().parseFromString(
-    html,
-    "text/html",
-  );
+  const document = new DOMParser().parseFromString(html, "text/html");
   assertEquals(
     document?.querySelector(".katex-mathml")?.textContent,
     "y=x2y = x^2",
   );
 });
+
+Deno.test("bug #61 generate a tag", () => {
+  const markdown = "[link](https://example.com)";
+  const expected =
+    `<p><a href="https://example.com" rel="noopener noreferrer">link</a></p>\n`;
+  const html = render(markdown);
+  assertEquals(html, expected);
+});
+
+Deno.test("bug #61 generate a tag with disableHtmlSanitization", () => {
+  const markdown = "[link](https://example.com)";
+  const expected =
+    `<p><a href="https://example.com" rel="noopener noreferrer">link</a></p>\n`;
+  const html = render(markdown, { disableHtmlSanitization: true });
+  assertEquals(html, expected);
+});
+
+Deno.test(
+  "bug #61 generate an in-page link with disableHtmlSanitization",
+  () => {
+    const markdown = "[link](#example)";
+    const expected = `<p><a href="#example">link</a></p>\n`;
+    const html = render(markdown, { disableHtmlSanitization: true });
+    assertEquals(html, expected);
+  },
+);
