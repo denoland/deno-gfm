@@ -45,15 +45,14 @@ class Renderer extends Marked.Renderer {
     return `<div class="highlight highlight-source-${language} notranslate"><pre>${html}</pre></div>`;
   }
   link(href: string, title: string | null, text: string) {
+    const titleAttr = title ? ` title="${title}"` : "";
     if (href.startsWith("#")) {
-      return `<a href="${href}" title="${title}">${text}</a>`;
+      return `<a href="${href}"${titleAttr}>${text}</a>`;
     }
     if (this.options.baseUrl) {
       href = new URL(href, this.options.baseUrl).href;
     }
-    return `<a href="${href}"${
-      title ? ` title="${title}"` : ""
-    } rel="noopener noreferrer">${text}</a>`;
+    return `<a href="${href}"${titleAttr} rel="noopener noreferrer">${text}</a>`;
   }
 }
 
