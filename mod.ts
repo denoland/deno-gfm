@@ -59,23 +59,26 @@ class Renderer extends Marked.Renderer {
 /** Convert inline and block math to katex */
 function mathify(markdown: string) {
   // Deal with block math
-  const blockMath = /\$\$\s(.+?)\s\$\$/s;
-  let match;
-  while ((match = blockMath.exec(markdown)) !== null) {
-    markdown = markdown.replace(
-      blockMath,
-      katex.renderToString(match[1].trim(), { displayMode: true }),
-    );
-  }
+  markdown = markdown.replace(/\$\$\s(.+?)\s\$\$/g, (match, p1) => {
+    try {
+      return katex.renderToString(p1.trim(), { displayMode: true });
+    } catch (e) {
+      console.warn(e);
+      // Don't replace the math if there's an error
+      return match;
+    }
+  });
 
   // Deal with inline math
-  const inlineMath = /\s\$((?=\S).*?(?=\S))\$/;
-  while ((match = inlineMath.exec(markdown)) !== null) {
-    markdown = markdown.replace(
-      inlineMath,
-      " " + katex.renderToString(match[1], { displayMode: false }),
-    );
-  }
+  markdown = markdown.replace(/\s\$((?=\S).*?(?=\S))\$/g, (match, p1) => {
+    try {
+      return " " + katex.renderToString(p1, { displayMode: false });
+    } catch (e) {
+      console.warn(e);
+      // Don't replace the math if there's an error
+      return match;
+    }
+  });
 
   return markdown;
 }

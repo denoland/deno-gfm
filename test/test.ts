@@ -25,6 +25,11 @@ Deno.test("Math rendering", async () => {
   );
 });
 
+Deno.test("Math rendering doesn't throw on invalid katex input", () => {
+  render("$$ & $$");
+  render(" $&$");
+});
+
 Deno.test("bug #61 generate a tag", () => {
   const markdown = "[link](https://example.com)";
   const expected =
