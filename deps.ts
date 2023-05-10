@@ -7,7 +7,7 @@
 
 export { emojify } from "https://deno.land/x/emoji@0.2.1/mod.ts";
 
-export * as Marked from "https://esm.sh/marked@4.2.12";
+export * as Marked from "https://esm.sh/marked@5.0.1";
 
 export { default as Prism } from "https://esm.sh/prismjs@1.29.0";
 
