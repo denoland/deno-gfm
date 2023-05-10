@@ -7,7 +7,7 @@ import {
   sanitizeHtml,
 } from "./deps.ts";
 import { CSS, KATEX_CLASSES, KATEX_CSS } from "./style.js";
-export { CSS, KATEX_CSS };
+export { CSS, KATEX_CSS, Marked };
 
 class Renderer extends Marked.Renderer {
   heading(
