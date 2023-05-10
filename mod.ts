@@ -1,5 +1,6 @@
 import {
   emojify,
+  gfmHeadingId,
   htmlEscape,
   katex,
   Marked,
@@ -7,7 +8,9 @@ import {
   sanitizeHtml,
 } from "./deps.ts";
 import { CSS, KATEX_CLASSES, KATEX_CSS } from "./style.js";
-export { CSS, KATEX_CSS };
+export { CSS, KATEX_CSS, Marked };
+
+Marked.marked.use(gfmHeadingId());
 
 class Renderer extends Marked.Renderer {
   heading(
