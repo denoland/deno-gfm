@@ -7,7 +7,6 @@ import {
   Prism,
   sanitizeHtml,
 } from "./deps.ts";
-
 import { CSS, KATEX_CLASSES, KATEX_CSS } from "./style.js";
 export { CSS, KATEX_CSS, Marked };
 
@@ -109,7 +108,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
 
   const html = opts.inline
     ? Marked.marked.parseInline(markdown, marked_opts)
-    : Marked.marked.parse(markdown, { ...marked_opts });
+    : Marked.marked.parse(markdown, marked_opts);
 
   if (opts.disableHtmlSanitization) {
     return html;
