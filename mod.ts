@@ -1,14 +1,18 @@
 import {
+  all,
+  createStarryNight,
   emojify,
   gfmHeadingId,
   htmlEscape,
   katex,
   Marked,
-  Prism,
   sanitizeHtml,
+  toHtml,
 } from "./deps.ts";
-import { CSS, KATEX_CLASSES, KATEX_CSS } from "./style.js";
+import { CSS, KATEX_CLASSES, KATEX_CSS, STARRY_CLASSES } from "./style.js";
 export { CSS, KATEX_CSS, Marked };
+
+const starryNight = await createStarryNight(all);
 
 Marked.marked.use(gfmHeadingId());
 
@@ -28,6 +32,10 @@ class Renderer extends Marked.Renderer {
   }
 
   code(code: string, language?: string) {
+    if (!language) {
+      return `<pre><code class="notranslate">${htmlEscape(code)}</code></pre>`;
+    }
+
     // a language of `ts, ignore` should really be `ts`
     // and it should be lowercase to ensure it has parity with regular github markdown
     language = language?.split(",")?.[0].toLocaleLowerCase();
@@ -37,14 +45,13 @@ class Renderer extends Marked.Renderer {
     if (language === "math") {
       return katex.renderToString(code, { displayMode: true });
     }
-    const grammar =
-      language && Object.hasOwnProperty.call(Prism.languages, language)
-        ? Prism.languages[language]
-        : undefined;
-    if (grammar === undefined) {
+
+    const scope = starryNight.flagToScope(language);
+    if (scope === undefined) {
       return `<pre><code class="notranslate">${htmlEscape(code)}</code></pre>`;
     }
-    const html = Prism.highlight(code, grammar, language!);
+    const highlight = starryNight.highlight(code, scope);
+    const html = toHtml(highlight);
     return `<div class="highlight highlight-source-${language} notranslate"><pre>${html}</pre></div>`;
   }
   link(href: string, title: string | null, text: string) {
@@ -213,28 +220,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     allowedClasses: {
       div: ["highlight", "highlight-source-*", "notranslate"],
       span: [
-        "token",
-        "keyword",
-        "operator",
-        "number",
-        "boolean",
-        "function",
-        "string",
-        "comment",
-        "class-name",
-        "regex",
-        "regex-delimiter",
-        "tag",
-        "attr-name",
-        "punctuation",
-        "script-punctuation",
-        "script",
-        "plain-text",
-        "property",
-        "prefix",
-        "line",
-        "deleted",
-        "inserted",
+        ...STARRY_CLASSES,
         ...(opts.allowMath ? KATEX_CLASSES : []),
       ],
       a: ["anchor"],

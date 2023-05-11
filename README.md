@@ -77,23 +77,6 @@ preference, set the following:
 
 Also see the example application in the `example/` directory.
 
-## Extensibility
-
-By default syntax highlighting for JavaScript, Markdown, and HTML is included.
-You can include more languages importing them:
-
-```js
-import { CSS, render } from "https://deno.land/x/gfm/mod.ts";
-
-// Add support for TypeScript, Bash, and Rust.
-import "https://esm.sh/prismjs@1.29.0/components/prism-typescript?no-check";
-import "https://esm.sh/prismjs@1.29.0/components/prism-bash?no-check";
-import "https://esm.sh/prismjs@1.29.0/components/prism-rust?no-check";
-```
-
-A full list of supported languages is available here:
-https://unpkg.com/browse/prismjs@1.29.0/components/
-
 ## Inline rendering
 
 By default, all rendering is in blocks. There are cases where one would like to

@@ -11,7 +11,12 @@ export * as Marked from "https://esm.sh/marked@5.0.1";
 
 export { gfmHeadingId } from "https://esm.sh/marked-gfm-heading-id@3.0.3";
 
-export { default as Prism } from "https://esm.sh/prismjs@1.29.0";
+export {
+  all,
+  createStarryNight,
+} from "https://esm.sh/@wooorm/starry-night@2.0.0";
+
+export { toHtml } from "https://esm.sh/hast-util-to-html@8.0.4";
 
 export { default as sanitizeHtml } from "https://esm.sh/sanitize-html@2.8.1?target=esnext";
 

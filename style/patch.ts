@@ -48,6 +48,38 @@ for (const mode of ["light", "dark"]) {
 
 await $`npx parcel build main.scss --no-source-maps`.cwd("./style").quiet();
 
+function extractClasses(cssText: string): string[] {
+  const CSS_AST = css.parse(cssText);
+  const CSS_RULES = CSS_AST.stylesheet.rules.filter((
+    rule: { type: string },
+  ) => rule.type === "rule");
+  const CSS_SELECTORS = CSS_RULES.reduce(
+    (acc: string[], cur: { selectors: string[] }) => [...acc, ...cur.selectors],
+    [],
+  );
+
+  const classRegex = /\.([\w-]+)/g;
+  const classes: string[] = [];
+
+  for (const selector of CSS_SELECTORS) {
+    let match;
+    while ((match = classRegex.exec(selector)) !== null) {
+      classes.push(match[1]);
+    }
+  }
+
+  // de-duplicate classes
+  return [...new Set(classes)];
+}
+
+// Starry Night
+
+$.logStep("Fetching Starry Night styles");
+const STARRY_CSS = (await $.request(
+  "https://esm.sh/@wooorm/starry-night@2.0.0/style/both.css",
+).text()).split("\n").slice(3).join("");
+const STARRY_CLASSES = extractClasses(STARRY_CSS);
+
 // KATEX
 
 $.logStep("Fetching katex styles");
@@ -57,39 +89,21 @@ let KATEX_CSS = await $.request(`${KATEX_BASE_URL}/katex.min.css`).text();
 // Replace url of fonts with a cdn since we aren't packaging these
 KATEX_CSS = KATEX_CSS.replaceAll("fonts/", `${KATEX_BASE_URL}/fonts/`);
 
-$.logStep("Extracting katex classes");
-const KATEX_CSS_AST = css.parse(KATEX_CSS);
-const KATEX_CSS_RULES = KATEX_CSS_AST.stylesheet.rules.filter((
-  rule: { type: string },
-) => rule.type === "rule");
-const KATEX_CSS_SELECTORS = KATEX_CSS_RULES.reduce(
-  (acc: string[], cur: { selectors: string[] }) => [...acc, ...cur.selectors],
-  [],
-);
-
-const classRegex = /\.([\w-]+)/g;
-let classes = [];
-
-for (const selector of KATEX_CSS_SELECTORS) {
-  let match;
-  while ((match = classRegex.exec(selector)) !== null) {
-    classes.push(match[1]);
-  }
-}
-
-// de-duplicate classes
-classes = [...new Set(classes)];
+// Extract classes
+const KATEX_CLASSES = extractClasses(KATEX_CSS);
 
 $.logStep("Writing the final style.js");
 const CSS = await cwd.join("dist/main.css").textSync();
 
 await cwd.join("../style.js").writeText(
   `/** @type {string} */
-export const CSS = \`${CSS}\`;
+export const CSS = \`${CSS + STARRY_CSS}\`;
+
+export const STARRY_CLASSES = ${JSON.stringify(STARRY_CLASSES)};
 
 /** @type {string} */
 export const KATEX_CSS = \`${KATEX_CSS}\`;
 
-export const KATEX_CLASSES = ${JSON.stringify(classes)};
+export const KATEX_CLASSES = ${JSON.stringify(KATEX_CLASSES)};
 `,
 );
