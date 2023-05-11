@@ -52,7 +52,7 @@ class Renderer extends Marked.Renderer {
     }
     const highlight = starryNight.highlight(code, scope);
     const html = toHtml(highlight);
-    return `<div class="highlight highlight-source-${language} notranslate"><pre>${html}</pre></div>`;
+    return `<div class="notranslate"><pre>${html}</pre></div>`;
   }
   link(href: string, title: string | null, text: string) {
     const titleAttr = title ? ` title="${title}"` : "";
@@ -218,7 +218,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       annotation: ["encoding"], // Only enabled when math is enabled
     },
     allowedClasses: {
-      div: ["highlight", "highlight-source-*", "notranslate"],
+      div: ["notranslate"],
       span: [
         ...STARRY_CLASSES,
         ...(opts.allowMath ? KATEX_CLASSES : []),
