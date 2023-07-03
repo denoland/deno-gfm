@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.192.0/http/server.ts";
 
 import { CSS, KATEX_CSS, render } from "../mod.ts";
 
