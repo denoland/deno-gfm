@@ -3,6 +3,7 @@ import {
   gfmHeadingId,
   htmlEscape,
   katex,
+  mangle,
   Marked,
   Prism,
   sanitizeHtml,
@@ -10,6 +11,7 @@ import {
 import { CSS, KATEX_CLASSES, KATEX_CSS } from "./style.js";
 export { CSS, KATEX_CSS, Marked };
 
+Marked.marked.use(mangle());
 Marked.marked.use(gfmHeadingId());
 
 class Renderer extends Marked.Renderer {
