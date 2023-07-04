@@ -100,7 +100,9 @@ export interface RenderOptions {
 export function render(markdown: string, opts: RenderOptions = {}): string {
   opts.mediaBaseUrl ??= opts.baseUrl;
   markdown = emojify(markdown);
-  markdown = mathify(markdown);
+  if (opts.allowMath) {
+    markdown = mathify(markdown);
+  }
 
   const marked_opts = {
     baseUrl: opts.baseUrl,
