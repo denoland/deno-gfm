@@ -30,6 +30,20 @@ Deno.test("Math rendering doesn't throw on invalid katex input", () => {
   render(" $&$");
 });
 
+Deno.test("When allowMath is not specified, make sure math is not rendered", () => {
+  const markdown = "This is a test $$y=x^2$$";
+  const expected = `<p>This is a test $$y=x^2$$</p>\n`;
+  const html = render(markdown);
+  assertEquals(html, expected);
+});
+
+Deno.test("When allowMath is not specified, make sure math code block is not rendered", () => {
+  const markdown = "```math\ny=x^2\n```";
+  const expected = `<pre><code>y=x^2</code></pre>`;
+  const html = render(markdown);
+  assertEquals(html, expected);
+});
+
 Deno.test("bug #61 generate a tag", () => {
   const markdown = "[link](https://example.com)";
   const expected =
