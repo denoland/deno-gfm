@@ -5,6 +5,7 @@ import {
   gfmHeadingId,
   htmlEscape,
   katex,
+  mangle,
   Marked,
   sanitizeHtml,
   toHtml,
@@ -14,9 +15,17 @@ export { CSS, KATEX_CSS, Marked };
 
 const starryNight = await createStarryNight(all);
 
+Marked.marked.use(mangle());
 Marked.marked.use(gfmHeadingId());
 
 class Renderer extends Marked.Renderer {
+  allowMath: boolean;
+
+  constructor(options: Marked.marked.MarkedOptions & RenderOptions = {}) {
+    super(options);
+    this.allowMath = options.allowMath ?? false;
+  }
+
   heading(
     text: string,
     level: 1 | 2 | 3 | 4 | 5 | 6,
@@ -42,7 +51,7 @@ class Renderer extends Marked.Renderer {
 
     // transform math code blocks into HTML+MathML
     // https://github.blog/changelog/2022-06-28-fenced-block-syntax-for-mathematical-expressions/
-    if (language === "math") {
+    if (language === "math" && this.allowMath) {
       return katex.renderToString(code, { displayMode: true });
     }
 
@@ -105,12 +114,14 @@ export interface RenderOptions {
 export function render(markdown: string, opts: RenderOptions = {}): string {
   opts.mediaBaseUrl ??= opts.baseUrl;
   markdown = emojify(markdown);
-  markdown = mathify(markdown);
+  if (opts.allowMath) {
+    markdown = mathify(markdown);
+  }
 
   const marked_opts = {
     baseUrl: opts.baseUrl,
     gfm: true,
-    renderer: new Renderer(),
+    renderer: new Renderer(opts),
   };
 
   const html = opts.inline
