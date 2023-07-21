@@ -16,10 +16,12 @@ Marked.marked.use(gfmHeadingId());
 
 class Renderer extends Marked.Renderer {
   allowMath: boolean;
+  customClasses: Partial<customClasses>;
 
   constructor(options: Marked.marked.MarkedOptions & RenderOptions = {}) {
     super(options);
     this.allowMath = options.allowMath ?? false;
+    this.customClasses = options.customClasses ?? {};
   }
 
   heading(
@@ -29,11 +31,11 @@ class Renderer extends Marked.Renderer {
     slugger: Marked.Slugger,
   ): string {
     const slug = slugger.slug(raw);
-    return `<h${level} id="${slug}"><a class="anchor" aria-hidden="true" tabindex="-1" href="#${slug}"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>${text}</h${level}>`;
+    return `<h${level} ${customClass(this.customClasses.heading)} id="${slug}"><a class="anchor" aria-hidden="true" tabindex="-1" href="#${slug}"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>${text}</h${level}>`;
   }
 
   image(src: string, title: string | null, alt: string | null) {
-    return `<img src="${src}" alt="${alt ?? ""}" title="${title ?? ""}" />`;
+    return `<img ${customClass(this.customClasses.image)} src="${src}" alt="${alt ?? ''}" title="${title ?? ''}" />`;
   }
 
   code(code: string, language?: string) {
@@ -51,11 +53,14 @@ class Renderer extends Marked.Renderer {
         ? Prism.languages[language]
         : undefined;
     if (grammar === undefined) {
-      return `<pre><code class="notranslate">${htmlEscape(code)}</code></pre>`;
+      return `<pre><code ${customClass(this.customClasses.image, 'notranslate')}>${htmlEscape(
+        code
+      )}</code></pre>`;
     }
     const html = Prism.highlight(code, grammar, language!);
-    return `<div class="highlight highlight-source-${language} notranslate"><pre>${html}</pre></div>`;
+    return `<div ${customClass(this.customClasses.image, 'highlight', `highlight-source-${language}`, 'notranslate')}><pre>${html}</pre></div>`;
   }
+
   link(href: string, title: string | null, text: string) {
     const titleAttr = title ? ` title="${title}"` : "";
     if (href.startsWith("#")) {
@@ -68,7 +73,78 @@ class Renderer extends Marked.Renderer {
         //
       }
     }
-    return `<a href="${href}"${titleAttr} rel="noopener noreferrer">${text}</a>`;
+    return `<a ${customClass(this.customClasses.link)} href="${href}"${titleAttr} rel="noopener noreferrer">${text}</a>`;
+  }
+
+  blockquote(quote: string) {
+    return `<blockquote ${customClass(this.customClasses.blockquote)}>\n${quote}</blockquote>\n`;
+  }
+
+  hr() {
+    return this.options.xhtml ? `<hr ${customClass(this.customClasses.hr)} />\n` : `<hr ${customClass(this.customClasses.hr)}>\n`;
+  }
+
+  list(body: string, ordered: boolean, start: number) {
+    const type = ordered ? 'ol' : 'ul',
+      startatt = (ordered && start !== 1) ? (' start="' + start + '"') : '';
+    return '<' + type + startatt + customClass(this.customClasses.list) + '>\n' + body + '</' + type + '>\n';
+  }
+
+
+  listitem(text: string) {
+    return `<li ${customClass(this.customClasses.listitem)}>${text}</li>\n`;
+  }
+
+  checkbox(checked: boolean) {
+    return `<input ${customClass(this.customClasses.checkbox)}`
+      + (checked ? 'checked="" ' : '')
+      + 'disabled="" type="checkbox"'
+      + (this.options.xhtml ? ' /' : '')
+      + '> ';
+  }
+
+  paragraph(text:string) {
+    return `<p ${customClass(this.customClasses.paragraph)}>${text}</p>\n`;
+  }
+
+  table(header: string, body: string) {
+    if (body) body = `<tbody>${body}</tbody>`;
+
+    return '<table'+ customClass(this.customClasses.table) +'>\n'
+      + '<thead>\n'
+      + header
+      + '</thead>\n'
+      + body
+      + '</table>\n';
+  }
+
+  tablerow(content: string) {
+    return `<tr ${customClass(this.customClasses.tablerow)}>\n${content}</tr>\n`;
+  }
+
+  tablecell(content: string, flags: any) {
+    const className = customClass(this.customClasses.tablecell);
+    const type = flags.header ? 'th' : 'td';
+    const tag = flags.align
+      ? `<${type} ${className} align="${flags.align}">`
+      : `<${type} ${className}>`;
+    return tag + content + `</${type}>\n`;
+  }
+
+  strong(text: string) {
+    return `<strong ${customClass(this.customClasses.strong)}>${text}</strong>`;
+  }
+
+  em(text: string) {
+    return `<em ${customClass(this.customClasses.em)}>${text}</em>`;
+  }
+
+  codespan(text: string) {
+    return `<code ${customClass(this.customClasses.codespan)}>${text}</code>`;
+  }
+
+  del(text: string) {
+    return `<del ${customClass(this.customClasses.del)}>${text}</del>`;
   }
 }
 
@@ -99,6 +175,9 @@ function mathify(markdown: string) {
   return markdown;
 }
 
+const customClass = (classStr?: string[], ...staticClasses: string[]) =>
+  classStr ? ` class="${classStr.concat(staticClasses).join(' ')}" ` : '';
+
 export interface RenderOptions {
   baseUrl?: string;
   mediaBaseUrl?: string;
@@ -106,9 +185,32 @@ export interface RenderOptions {
   allowIframes?: boolean;
   allowMath?: boolean;
   disableHtmlSanitization?: boolean;
+  customClasses?: Partial<customClasses>;
 }
 
-export function render(markdown: string, opts: RenderOptions = {}): string {
+interface customClasses {
+  // Block
+  code: string[];
+  blockquote: string[];
+  heading: string[];
+  hr: string[];
+  list: string[];
+  listitem: string[];
+  checkbox: string[];
+  paragraph: string[];
+  table: string[];
+  tablerow: string[];
+  tablecell: string[];
+  // Inline
+  strong: string[];
+  em: string[];
+  codespan: string[];
+  del: string[];
+  link: string[];
+  image: string[];
+}
+
+export function render(this: any, markdown: string, opts: RenderOptions = {}): string {
   opts.mediaBaseUrl ??= opts.baseUrl;
   markdown = emojify(markdown);
   if (opts.allowMath) {
@@ -142,7 +244,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     "summary",
   ]);
   if (opts.allowIframes) {
-    allowedTags.push("iframe");
+    allowedTags.push('iframe');
   }
   if (opts.allowMath) {
     allowedTags = allowedTags.concat([
@@ -188,6 +290,13 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       }
     }
     return { tagName, attribs };
+  }
+
+  const allCustomClasses = [];
+  if (opts.customClasses) {
+    for (const [_key, value] of Object.entries(opts.customClasses)) {
+      allCustomClasses.push(...(value as string[]));
+    }
   }
 
   return sanitizeHtml(html, {
@@ -254,6 +363,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       ],
       a: ["anchor"],
       svg: ["octicon", "octicon-link"],
+      '*': allCustomClasses,
     },
     allowProtocolRelative: false,
   });
