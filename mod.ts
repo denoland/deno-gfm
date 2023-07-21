@@ -62,7 +62,11 @@ class Renderer extends Marked.Renderer {
       return `<a href="${href}"${titleAttr}>${text}</a>`;
     }
     if (this.options.baseUrl) {
-      href = new URL(href, this.options.baseUrl).href;
+      try {
+        href = new URL(href, this.options.baseUrl).href;
+      } catch (_) {
+        //
+      }
     }
     return `<a href="${href}"${titleAttr} rel="noopener noreferrer">${text}</a>`;
   }
