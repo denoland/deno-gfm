@@ -69,3 +69,13 @@ Deno.test(
     assertEquals(html, expected);
   },
 );
+
+Deno.test(
+  "<td> in table supports align, rowspan, and colspan",
+  async () => {
+    const markdown = await Deno.readTextFile("./test/fixtures/table.md");
+    const expected = await Deno.readTextFile("./test/fixtures/table.html");
+    const html = render(markdown);
+    assertEquals(html, expected);
+  },
+);
