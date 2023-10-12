@@ -1,6 +1,6 @@
 import { assertEquals } from "https://deno.land/std@0.178.0/testing/asserts.ts";
 import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.35-alpha/deno-dom-wasm.ts";
-import { render } from "../mod.ts";
+import { render, Renderer } from "../mod.ts";
 
 Deno.test("Basic markdown", async () => {
   const markdown = await Deno.readTextFile("./test/fixtures/basic.md");
@@ -76,6 +76,23 @@ Deno.test(
     const markdown = await Deno.readTextFile("./test/fixtures/table.md");
     const expected = await Deno.readTextFile("./test/fixtures/table.html");
     const html = render(markdown);
+    assertEquals(html, expected);
+  },
+);
+
+Deno.test(
+  "custom renderer",
+  () => {
+    const markdown = `# hello world`;
+    const expected = `<h1 id="custom-renderer">hello world</h1>`;
+
+    class CustomRenderer extends Renderer {
+      heading(text: string, level: 1 | 2 | 3 | 4 | 5 | 6): string {
+        return `<h${level} id="custom-renderer">${text}</h${level}>`;
+      }
+    }
+
+    const html = render(markdown, { renderer: new CustomRenderer({}) });
     assertEquals(html, expected);
   },
 );
