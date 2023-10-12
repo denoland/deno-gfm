@@ -12,7 +12,7 @@ export { CSS, KATEX_CSS, Marked };
 
 Marked.marked.use(gfmHeadingId());
 
-class Renderer extends Marked.Renderer {
+export class Renderer extends Marked.Renderer {
   allowMath: boolean;
 
   constructor(options: Marked.marked.MarkedOptions & RenderOptions = {}) {
@@ -104,6 +104,7 @@ export interface RenderOptions {
   allowIframes?: boolean;
   allowMath?: boolean;
   disableHtmlSanitization?: boolean;
+  renderer?: Renderer;
 }
 
 export function render(markdown: string, opts: RenderOptions = {}): string {
@@ -117,7 +118,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     baseUrl: opts.baseUrl,
     gfm: true,
     mangle: false,
-    renderer: new Renderer(opts),
+    renderer: opts.renderer ? opts.renderer : new Renderer(opts),
   };
 
   const html = opts.inline
