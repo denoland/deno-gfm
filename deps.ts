@@ -7,9 +7,11 @@
 
 export { emojify } from "https://deno.land/x/emoji@0.3.0/mod.ts";
 
-export * as Marked from "https://esm.sh/marked@5.1.0/";
+export * as Marked from "https://esm.sh/marked@9.1.1/";
 
-export { gfmHeadingId } from "https://esm.sh/marked-gfm-heading-id@3.0.4/";
+export { default as GitHubSlugger } from "https://esm.sh/github-slugger@2.0.0/";
+
+export { gfmHeadingId } from "https://esm.sh/marked-gfm-heading-id@3.1.0/";
 
 export { default as Prism } from "https://esm.sh/prismjs@1.29.0";
 
