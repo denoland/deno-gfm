@@ -106,3 +106,27 @@ Deno.test(
     assertEquals(html, expected);
   },
 );
+
+Deno.test(
+  "custom allowed classes",
+  async () => {
+    const markdown = await Deno.readTextFile(
+      "./test/fixtures/customAllowedClasses.md",
+    );
+    const expected = await Deno.readTextFile(
+      "./test/fixtures/customAllowedClasses.html",
+    );
+    class CustomRenderer extends Renderer {
+      list(body: string, ordered: boolean): string {
+        const type = ordered ? "list-decimal" : "list-disc";
+        const tag = ordered ? "ol" : "ul";
+        return `<${tag} class="${type}">${body}</${tag}>`;
+      }
+    }
+    const html = render(markdown, {
+      renderer: new CustomRenderer({}),
+      allowedClasses: { ul: ["list-disc"], ol: ["list-decimal"] },
+    });
+    assertEquals(html, expected);
+  },
+);

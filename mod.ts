@@ -112,6 +112,7 @@ export interface RenderOptions {
   allowMath?: boolean;
   disableHtmlSanitization?: boolean;
   renderer?: Renderer;
+  allowedClasses?: { [index: string]: boolean | Array<string | RegExp> };
 }
 
 export function render(markdown: string, opts: RenderOptions = {}): string {
@@ -197,6 +198,44 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     return { tagName, attribs };
   }
 
+  const defaultAllowedClasses = {
+    div: [
+      "highlight",
+      "highlight-source-*",
+      "notranslate",
+      "markdown-alert",
+      "markdown-alert-*",
+    ],
+    span: [
+      "token",
+      "keyword",
+      "operator",
+      "number",
+      "boolean",
+      "function",
+      "string",
+      "comment",
+      "class-name",
+      "regex",
+      "regex-delimiter",
+      "tag",
+      "attr-name",
+      "punctuation",
+      "script-punctuation",
+      "script",
+      "plain-text",
+      "property",
+      "prefix",
+      "line",
+      "deleted",
+      "inserted",
+      ...(opts.allowMath ? KATEX_CLASSES : []),
+    ],
+    a: ["anchor"],
+    p: ["markdown-alert-title"],
+    svg: ["octicon", "octicon-alert", "octicon-link"],
+  };
+
   return sanitizeHtml(html, {
     transformTags: {
       img: transformMedia,
@@ -234,43 +273,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       math: ["xmlns"], // Only enabled when math is enabled
       annotation: ["encoding"], // Only enabled when math is enabled
     },
-    allowedClasses: {
-      div: [
-        "highlight",
-        "highlight-source-*",
-        "notranslate",
-        "markdown-alert",
-        "markdown-alert-*",
-      ],
-      span: [
-        "token",
-        "keyword",
-        "operator",
-        "number",
-        "boolean",
-        "function",
-        "string",
-        "comment",
-        "class-name",
-        "regex",
-        "regex-delimiter",
-        "tag",
-        "attr-name",
-        "punctuation",
-        "script-punctuation",
-        "script",
-        "plain-text",
-        "property",
-        "prefix",
-        "line",
-        "deleted",
-        "inserted",
-        ...(opts.allowMath ? KATEX_CLASSES : []),
-      ],
-      a: ["anchor"],
-      p: ["markdown-alert-title"],
-      svg: ["octicon", "octicon-alert", "octicon-link"],
-    },
+    allowedClasses: { ...defaultAllowedClasses, ...opts.allowedClasses },
     allowProtocolRelative: false,
   });
 }

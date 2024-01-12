@@ -1,9 +1,11 @@
 {
   "tasks": {
     "build": "deno run --allow-read --allow-write --allow-net --allow-run --allow-env ./style/patch.ts && deno fmt",
+    "check:types": "deno check **/*.ts",
+    "coverage": "deno test --allow-read --coverage=cov_profile",
     "dev": "deno run -A --unstable --watch --no-check ./example/main.ts",
-    "test": "deno test --allow-read",
-    "coverage": "deno test --allow-read --coverage=cov_profile"
+    "ok": "deno fmt --check && deno lint && deno task check:types && deno task test",
+    "test": "deno test --allow-read"
   },
   "fmt": {
     "exclude": ["./test/fixtures/alerts.md"]
