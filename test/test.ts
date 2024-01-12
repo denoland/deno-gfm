@@ -127,6 +127,6 @@ Deno.test(
       renderer: new CustomRenderer({}),
       allowedClasses: { ul: ["list-disc"], ol: ["list-decimal"] },
     });
-    assertEquals(html, expected);
+    assertEquals(html, expected.trim());
   },
 );
