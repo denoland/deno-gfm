@@ -5,5 +5,8 @@
     "test": "deno test --allow-read",
     "coverage": "deno test --allow-read --coverage=cov_profile"
   },
+  "fmt": {
+    "exclude": ["./test/fixtures/alerts.md"]
+  },
   "lock": false
 }
