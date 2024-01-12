@@ -11,6 +11,8 @@ export * as Marked from "https://esm.sh/marked@9.1.1?pin=v135";
 
 export { default as GitHubSlugger } from "https://esm.sh/github-slugger@2.0.0?pin=v135";
 
+export { default as markedAlert } from "https://esm.sh/marked-alert@2.0.1?pin=v135";
+
 export { gfmHeadingId } from "https://esm.sh/marked-gfm-heading-id@3.1.0?pin=v135";
 
 export { default as Prism } from "https://esm.sh/prismjs@1.29.0?pin=v135";
