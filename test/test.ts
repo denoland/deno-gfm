@@ -96,3 +96,13 @@ Deno.test(
     assertEquals(html, expected);
   },
 );
+
+Deno.test(
+  "alerts rendering",
+  async () => {
+    const markdown = await Deno.readTextFile("./test/fixtures/alerts.md");
+    const expected = await Deno.readTextFile("./test/fixtures/alerts.html");
+    const html = render(markdown);
+    assertEquals(html, expected);
+  },
+);

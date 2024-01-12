@@ -5,12 +5,14 @@ import {
   htmlEscape,
   katex,
   Marked,
+  markedAlert,
   Prism,
   sanitizeHtml,
 } from "./deps.ts";
 import { CSS, KATEX_CLASSES, KATEX_CSS } from "./style.js";
 export { CSS, KATEX_CSS, Marked };
 
+Marked.marked.use(markedAlert());
 Marked.marked.use(gfmHeadingId());
 
 const slugger = new GitHubSlugger();
@@ -58,6 +60,7 @@ export class Renderer extends Marked.Renderer {
     const html = Prism.highlight(code, grammar, language!);
     return `<div class="highlight highlight-source-${language} notranslate"><pre>${html}</pre></div>`;
   }
+
   link(href: string, title: string | null, text: string) {
     const titleAttr = title ? ` title="${title}"` : "";
     if (href.startsWith("#")) {
@@ -232,7 +235,13 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       annotation: ["encoding"], // Only enabled when math is enabled
     },
     allowedClasses: {
-      div: ["highlight", "highlight-source-*", "notranslate"],
+      div: [
+        "highlight",
+        "highlight-source-*",
+        "notranslate",
+        "markdown-alert",
+        "markdown-alert-*",
+      ],
       span: [
         "token",
         "keyword",
@@ -259,7 +268,8 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
         ...(opts.allowMath ? KATEX_CLASSES : []),
       ],
       a: ["anchor"],
-      svg: ["octicon", "octicon-link"],
+      p: ["markdown-alert-title"],
+      svg: ["octicon", "octicon-alert", "octicon-link"],
     },
     allowProtocolRelative: false,
   });
