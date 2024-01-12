@@ -21,7 +21,7 @@ export class Renderer extends Marked.Renderer {
   allowMath: boolean;
   baseUrl: string | undefined;
 
-  constructor(options: Marked.marked.MarkedOptions & RenderOptions = {}) {
+  constructor(options: Marked.MarkedOptions & RenderOptions = {}) {
     super(options);
     this.baseUrl = options.baseUrl;
     this.allowMath = options.allowMath ?? false;
@@ -126,11 +126,13 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     gfm: true,
     mangle: false,
     renderer: opts.renderer ? opts.renderer : new Renderer(opts),
+    async: false,
   };
 
-  const html = opts.inline
-    ? Marked.marked.parseInline(markdown, marked_opts)
-    : Marked.marked.parse(markdown, marked_opts);
+  const html =
+    (opts.inline
+      ? Marked.marked.parseInline(markdown, marked_opts)
+      : Marked.marked.parse(markdown, marked_opts)) as string;
 
   if (opts.disableHtmlSanitization) {
     return html;
