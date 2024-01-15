@@ -1,5 +1,5 @@
-import { assertEquals } from "https://deno.land/std@0.178.0/testing/asserts.ts";
-import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.35-alpha/deno-dom-wasm.ts";
+import { assertEquals } from "https://deno.land/std@0.211.0/assert/assert_equals.ts";
+import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.43/deno-dom-wasm.ts";
 import { render, Renderer } from "../mod.ts";
 
 Deno.test("Basic markdown", async () => {
@@ -106,3 +106,105 @@ Deno.test(
     assertEquals(html, expected);
   },
 );
+
+Deno.test("Iframe rendering", () => {
+  const markdown =
+    'Here is an iframe:\n\n<iframe src="https://example.com" width="300" height="200"></iframe>';
+  const expected =
+    `<p>Here is an iframe:</p>\n<iframe src="https://example.com" width="300" height="200"></iframe>`;
+
+  const html = render(markdown, { allowIframes: true });
+  assertEquals(html, expected);
+});
+
+Deno.test("Iframe rendering disabled", () => {
+  const markdown =
+    'Here is an iframe:\n\n<iframe src="https://example.com" width="300" height="200"></iframe>';
+  const expectedWithoutIframe = `<p>Here is an iframe:</p>\n`;
+
+  const html = render(markdown);
+  assertEquals(html, expectedWithoutIframe);
+});
+
+Deno.test("Media URL transformation", () => {
+  const markdown = "![Image](image.jpg)\n\n![Video](video.mp4)";
+  const mediaBaseUrl = "https://cdn.example.com/";
+  const expected =
+    `<p><img src="https://cdn.example.com/image.jpg" alt="Image" /></p>\n<p><img src="https://cdn.example.com/video.mp4" alt="Video" /></p>\n`;
+
+  const html = render(markdown, { mediaBaseUrl: mediaBaseUrl });
+  assertEquals(html, expected);
+});
+
+Deno.test("Media URL transformation without base URL", () => {
+  const markdown = "![Image](image.jpg)\n\n![Video](video.mp4)";
+  const expectedWithoutTransformation =
+    `<p><img src="image.jpg" alt="Image" /></p>\n<p><img src="video.mp4" alt="Video" /></p>\n`;
+
+  const html = render(markdown);
+  assertEquals(html, expectedWithoutTransformation);
+});
+
+Deno.test("Media URL transformation with invalid URL", () => {
+  const markdown = "![Image](invalid-url)";
+  const mediaBaseUrl = "this is an invalid url";
+  const expected = `<p><img alt="Image" /></p>\n`;
+
+  const html = render(markdown, { mediaBaseUrl: mediaBaseUrl });
+  assertEquals(html, expected);
+});
+
+Deno.test("Inline rendering", () => {
+  const markdown = "My [Deno](https://deno.land) Blog";
+  const expected =
+    `My <a href="https://deno.land" rel="noopener noreferrer">Deno</a> Blog`;
+
+  const html = render(markdown, { inline: true });
+  assertEquals(html, expected);
+});
+
+Deno.test("Inline rendering false", () => {
+  const markdown = "My [Deno](https://deno.land) Blog";
+  const expected =
+    `<p>My <a href="https://deno.land" rel="noopener noreferrer">Deno</a> Blog</p>\n`;
+
+  const html = render(markdown, { inline: false });
+  assertEquals(html, expected);
+});
+
+Deno.test("Link URL resolution with base URL", () => {
+  const markdown = "[Test Link](/path/to/resource)";
+  const baseUrl = "https://example.com/";
+  const expected =
+    `<p><a href="https://example.com/path/to/resource" rel="noopener noreferrer">Test Link</a></p>\n`;
+
+  const html = render(markdown, { baseUrl: baseUrl });
+  assertEquals(html, expected);
+});
+
+Deno.test("Link URL resolution without base URL", () => {
+  const markdown = "[Test Link](/path/to/resource)";
+  const expected =
+    `<p><a href="/path/to/resource" rel="noopener noreferrer">Test Link</a></p>\n`;
+
+  const html = render(markdown);
+  assertEquals(html, expected);
+});
+
+Deno.test("Link URL resolution with invalid URL and base URL", () => {
+  const markdown = "[Test Link](/path/to/resource)";
+  const baseUrl = "this is an invalid url";
+  const expected =
+    `<p><a href="/path/to/resource" rel="noopener noreferrer">Test Link</a></p>\n`;
+
+  const html = render(markdown, { baseUrl: baseUrl });
+  assertEquals(html, expected);
+});
+
+Deno.test("Math rendering in code block", () => {
+  const markdown = "```math\ny = mx + b\n```";
+  const expected = Deno.readTextFileSync("./test/fixtures/codeMath.html");
+
+  const html = render(markdown, { allowMath: true });
+  assertEquals(html, expected);
+});
