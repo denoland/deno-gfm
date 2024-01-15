@@ -5,6 +5,7 @@
     "coverage": "deno test --allow-read --coverage=cov_profile",
     "dev": "deno run -A --unstable --watch --no-check ./example/main.ts",
     "ok": "deno fmt --check && deno lint && deno task check:types && deno task test",
+    "report": "deno coverage cov_profile --html",
     "test": "deno test --allow-read"
   },
   "fmt": {
