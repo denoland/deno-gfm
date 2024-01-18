@@ -1,10 +1,10 @@
 {
   "name": "deno-gfm",
   "devDependencies": {
-    "@parcel/optimizer-css": "^2.8.3",
-    "@parcel/transformer-sass": "^2.8.3",
-    "@primer/css": "^20.8.2",
-    "parcel": "^2.8.3"
+    "@parcel/optimizer-css": "^2.11.0",
+    "@parcel/transformer-sass": "^2.11.0",
+    "@primer/css": "^21.1.1",
+    "parcel": "^2.11.0"
   },
   "browserslist": ">= 0.25% and not dead"
 }
