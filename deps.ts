@@ -21,4 +21,4 @@ export { default as sanitizeHtml } from "https://esm.sh/sanitize-html@2.11.0?tar
 
 export { escape as htmlEscape } from "https://esm.sh/he@1.2.0?pin=v135";
 
-export { default as katex } from "https://esm.sh/katex@0.16.9/dist/katex.mjs?pin=v135";
+export { default as katex } from "https://esm.sh/katex@0.16.9?pin=v135";
