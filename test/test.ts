@@ -3,7 +3,7 @@ import {
   assertStringIncludes,
 } from "https://deno.land/std@0.211.0/assert/mod.ts";
 import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.43/deno-dom-wasm.ts";
-import { render, Renderer } from "../mod.ts";
+import { CSS, render, Renderer } from "../mod.ts";
 
 Deno.test("Basic markdown", async () => {
   const markdown = await Deno.readTextFile("./test/fixtures/basic.md");
@@ -286,4 +286,42 @@ Deno.test("expect console warning from invalid math", () => {
   );
 
   console.warn = originalWarn;
+});
+
+Deno.test("basic md table with dollar signs", () => {
+  const markdown = `| Fruit Name | Quantity | Unit Cost per Item | Subtotal |
+  |------------|----------|--------------------|----------|
+  | Apple      | 1        | $1.50              | $1.50    |
+  | Pear       | 2        | $2.00              | $4.00    |
+  | Orange     | 3        | $2.50              | $7.50    |
+  | Grape      | 60       | $0.05              | $3.00    |
+  | Total      |          |                    | $16.00   |`;
+
+  const body = render(markdown);
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      main {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      ${CSS}
+    </style>
+  </head>
+  <body>
+    <main data-color-mode="light" data-light-theme="light" data-dark-theme="dark" class="markdown-body">
+      ${body}
+    </main>
+  </body>
+</html>
+`;
+  // uncomment to update the fixture when the css changes
+  // Deno.writeTextFileSync("./test/fixtures/basic_md_table.html", html);
+
+  const expected = Deno.readTextFileSync("./test/fixtures/basic_md_table.html");
+  assertEquals(html, expected);
 });
