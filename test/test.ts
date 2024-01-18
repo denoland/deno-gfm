@@ -1,4 +1,7 @@
-import { assertEquals } from "https://deno.land/std@0.211.0/assert/assert_equals.ts";
+import {
+  assertEquals,
+  assertStringIncludes,
+} from "https://deno.land/std@0.211.0/assert/mod.ts";
 import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.43/deno-dom-wasm.ts";
 import { render, Renderer } from "../mod.ts";
 
@@ -232,3 +235,55 @@ Deno.test(
     assertEquals(html, expected.trim());
   },
 );
+
+Deno.test("image title and no alt", () => {
+  const markdown = `![](image.jpg "best title")`;
+  const expected = `<p><img src="image.jpg" title="best title" /></p>\n`;
+
+  const html = render(markdown);
+  assertEquals(html, expected);
+});
+
+Deno.test("js language", () => {
+  const markdown = "```js\nconst foo = 'bar';\n```";
+  const expected =
+    `<div class="highlight highlight-source-js notranslate"><pre><span class="token keyword">const</span> foo <span class="token operator">=</span> <span class="token string">'bar'</span><span class="token punctuation">;</span></pre></div>`;
+
+  const html = render(markdown);
+  assertEquals(html, expected);
+});
+
+Deno.test("link with title", () => {
+  const markdown = `[link](https://example.com "asdf")`;
+  const expected =
+    `<p><a href="https://example.com" title="asdf" rel="noopener noreferrer">link</a></p>\n`;
+  const html = render(markdown);
+  assertEquals(html, expected);
+});
+
+Deno.test("expect console warning from invalid math", () => {
+  const originalWarn = console.warn;
+  const warnCalls: string[] = [];
+  console.warn = (...args) => {
+    warnCalls.push(args[0].message);
+  };
+
+  const html = render("$$ +& $$", { allowMath: true });
+  const expected =
+    `<p>$$ +&amp; <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow></mrow><annotation encoding="application/x-tex"></annotation></semantics></math></span><span class="katex-html" aria-hidden="true"></span></span></p>\n`;
+  assertEquals(html, expected);
+  assertStringIncludes(
+    warnCalls[0],
+    "KaTeX parse error: Expected 'EOF', got '&' at position 2: +&̲",
+  );
+
+  const html2 = render(" $&$", { allowMath: true });
+  const expected2 = `<p> $&amp;$</p>\n`;
+  assertEquals(html2, expected2);
+  assertStringIncludes(
+    warnCalls[1],
+    "KaTeX parse error: Expected 'EOF', got '&' at position 1: &̲",
+  );
+
+  console.warn = originalWarn;
+});

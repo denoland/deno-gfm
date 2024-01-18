@@ -2,7 +2,7 @@
   "tasks": {
     "build": "deno run --allow-read --allow-write --allow-net --allow-run --allow-env ./style/patch.ts && deno fmt",
     "check:types": "deno check **/*.ts",
-    "coverage": "deno test --allow-read --coverage=cov_profile",
+    "coverage": "rm -rf cov_profile && deno test --allow-read --coverage=cov_profile",
     "dev": "deno run -A --unstable --watch --no-check ./example/main.ts",
     "ok": "deno fmt --check && deno lint && deno task check:types && deno task test",
     "report": "deno coverage cov_profile --html",
