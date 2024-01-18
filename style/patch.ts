@@ -51,7 +51,7 @@ await $`npx parcel build main.scss --no-source-maps`.cwd("./style").quiet();
 // KATEX
 
 $.logStep("Fetching katex styles");
-const KATEX_BASE_URL = "https://cdn.jsdelivr.net/npm/katex@0.16.4/dist";
+const KATEX_BASE_URL = "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist";
 let KATEX_CSS = await $.request(`${KATEX_BASE_URL}/katex.min.css`).text();
 
 // Replace url of fonts with a cdn since we aren't packaging these
