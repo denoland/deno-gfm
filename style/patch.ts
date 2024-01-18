@@ -1,5 +1,5 @@
-import $ from "https://deno.land/x/dax@0.28.0/mod.ts";
-import css from "npm:css";
+import $ from "https://deno.land/x/dax@0.36.0/mod.ts";
+import css from "npm:css@3.0.0";
 
 await $`rm -rf style/node_modules/@primer/primitives`;
 await $`npm install`.cwd("./style");
@@ -16,7 +16,7 @@ const scssFiles = [
 ];
 
 for (const pathRef of scssFiles) {
-  const file = pathRef.textSync();
+  const file = pathRef.readTextSync();
 
   for (const variable of file.match(variableRegex) ?? []) {
     colorVariables.add(variable);
@@ -37,7 +37,7 @@ for (const mode of ["light", "dark"]) {
     `node_modules/@primer/primitives/dist/scss/colors/_${mode}.scss`,
   );
   $.logStep("Patching", primitiveFile);
-  const colorPrimitive = primitiveFile.textSync();
+  const colorPrimitive = primitiveFile.readTextSync();
   const matchedColors = colorPrimitive.match(colorRegex) ?? [];
 
   primitiveFile.writeTextSync(`@mixin primer-colors-${mode} {
@@ -81,7 +81,7 @@ for (const selector of KATEX_CSS_SELECTORS) {
 classes = [...new Set(classes)];
 
 $.logStep("Writing the final style.js");
-const CSS = await cwd.join("dist/main.css").textSync();
+const CSS = await cwd.join("dist/main.css").readTextSync();
 
 await cwd.join("../style.js").writeText(
   `/** @type {string} */
