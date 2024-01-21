@@ -16,9 +16,9 @@ jobs:
       - name: Run lint
         run: |
           deno lint
-      - name: Check mod.ts
+      - name: Check project
         run: |
-          deno check mod.ts
+          deno task check:types
       - name: Run tests
         run: |
           deno task test
