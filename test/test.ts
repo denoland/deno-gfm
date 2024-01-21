@@ -325,3 +325,11 @@ Deno.test("basic md table with dollar signs", () => {
   const expected = Deno.readTextFileSync("./test/fixtures/basic_md_table.html");
   assertEquals(html, expected);
 });
+
+Deno.test("footnotes", () => {
+  const markdown = Deno.readTextFileSync("./test/fixtures/footnote.md");
+  const expected = Deno.readTextFileSync("./test/fixtures/footnote.html");
+
+  const html = render(markdown);
+  assertEquals(html, expected);
+});

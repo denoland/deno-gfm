@@ -6,6 +6,7 @@ import {
   katex,
   Marked,
   markedAlert,
+  markedFootnote,
   Prism,
   sanitizeHtml,
 } from "./deps.ts";
@@ -14,6 +15,7 @@ export { CSS, KATEX_CSS, Marked };
 
 Marked.marked.use(markedAlert());
 Marked.marked.use(gfmHeadingId());
+Marked.marked.use(markedFootnote());
 
 const slugger = new GitHubSlugger();
 
