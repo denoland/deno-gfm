@@ -19,6 +19,10 @@ jobs:
       - name: Check project
         run: |
           deno task check:types
+      - name: Install Chromium
+        run: deno run -A --unstable https://deno.land/x/puppeteer@16.2.0/install.ts
+        env:
+          PUPPETEER_PRODUCT: chrome
       - name: Run tests
         run: |
           deno task test
