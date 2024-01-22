@@ -238,6 +238,8 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     a: ["anchor"],
     p: ["markdown-alert-title"],
     svg: ["octicon", "octicon-alert", "octicon-link"],
+    h2: ["sr-only"],
+    section: ["footnotes"],
   };
 
   return sanitizeHtml(html, {
@@ -262,7 +264,19 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
         "controls",
         "title",
       ],
-      a: ["id", "aria-hidden", "href", "tabindex", "rel", "target", "title"],
+      a: [
+        "id",
+        "aria-hidden",
+        "href",
+        "tabindex",
+        "rel",
+        "target",
+        "title",
+        "data-footnote-ref",
+        "data-footnote-backref",
+        "aria-label",
+        "aria-describedby",
+      ],
       svg: ["viewbox", "width", "height", "aria-hidden", "background"],
       path: ["fill-rule", "d"],
       circle: ["cx", "cy", "r", "stroke", "stroke-width", "fill", "alpha"],
@@ -273,10 +287,12 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       h4: ["id"],
       h5: ["id"],
       h6: ["id"],
+      li: ["id"],
       td: ["colspan", "rowspan", "align"],
       iframe: ["src", "width", "height"], // Only used when iframe tags are allowed in the first place.
       math: ["xmlns"], // Only enabled when math is enabled
-      annotation: ["encoding"], // Only enabled when math is enabled
+      annotation: ["encoding"], // Only enabled when math is enabled,
+      section: ["data-footnotes"],
     },
     allowedClasses: { ...defaultAllowedClasses, ...opts.allowedClasses },
     allowProtocolRelative: false,

@@ -35,8 +35,6 @@ function startServer(htmlContent: string, port: number) {
   const hostname = "localhost";
   const address = `http://${hostname}:${port}`;
 
-  console.log(`Server running at ${address}`);
-
   return { serverProcess, address };
 }
 
