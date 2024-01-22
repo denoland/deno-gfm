@@ -291,7 +291,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       td: ["colspan", "rowspan", "align"],
       iframe: ["src", "width", "height"], // Only used when iframe tags are allowed in the first place.
       math: ["xmlns"], // Only enabled when math is enabled
-      annotation: ["encoding"], // Only enabled when math is enabled,
+      annotation: ["encoding"], // Only enabled when math is enabled
       section: ["data-footnotes"],
     },
     allowedClasses: { ...defaultAllowedClasses, ...opts.allowedClasses },
