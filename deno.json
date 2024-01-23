@@ -6,6 +6,7 @@
     "dev": "deno run -A --unstable --watch --no-check ./example/main.ts",
     "ok": "deno fmt --check && deno lint && deno task check:types && deno task test",
     "report": "deno coverage cov_profile --html",
+    "server": "deno run -A --watch=test/,mod.ts ./test/runTestServer.ts",
     "test": "deno test --allow-read --allow-env --allow-write --allow-run --allow-net"
   },
   "fmt": {

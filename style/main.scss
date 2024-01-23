@@ -61,6 +61,14 @@
     color: var(--color-prettylights-syntax-constant);
   }
 
+  &.atrule {
+    color: var(--color-prettylights-syntax-keyword);
+  }
+
+  &.punctuation {
+    color: var(--color-prettylights-syntax-entity);
+  }
+
   &.function {
     color: var(--color-prettylights-syntax-entity);
   }
