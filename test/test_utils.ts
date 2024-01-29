@@ -6,7 +6,7 @@ type TestCase = {
   renderOptions?: RenderOptions;
 };
 
-export type TestCases = "basicMarkdownTable" | "yaml";
+export type TestCases = "basicMarkdownTable" | "footnotes" | "yaml";
 
 export const testCases: Record<TestCases, TestCase> = {
   "basicMarkdownTable": {
@@ -17,6 +17,9 @@ export const testCases: Record<TestCases, TestCase> = {
 | Orange     | 3        | $2.50              | $7.50    |
 | Grape      | 60       | $0.05              | $3.00    |
 | Total      |          |                    | $16.00   |`,
+  },
+  "footnotes": {
+    markdown: Deno.readTextFileSync("./test/fixtures/footnote.md"),
   },
   "yaml": {
     markdown: Deno.readTextFileSync("./test/fixtures/yaml.md"),

@@ -293,6 +293,22 @@ Deno.test("render github-slugger not reused", function () {
   }
 });
 
+Deno.test("footnotes", () => {
+  const markdown = Deno.readTextFileSync("./test/fixtures/footnote.md");
+  const expected = Deno.readTextFileSync("./test/fixtures/footnote.html");
+
+  const html = render(markdown);
+  assertEquals(html, expected);
+});
+
+Deno.test("hard line breaks", () => {
+  const markdown = Deno.readTextFileSync("./test/fixtures/lineBreaks.md");
+  const expected = Deno.readTextFileSync("./test/fixtures/lineBreaks.html");
+
+  const html = render(markdown, { breaks: true });
+  assertEquals(html, expected);
+});
+
 Deno.test("yaml unit", () => {
   const markdown = Deno.readTextFileSync("./test/fixtures/yaml.md");
   const expected = Deno.readTextFileSync("./test/fixtures/yaml.html");

@@ -10,7 +10,7 @@
     "test": "deno test --allow-read --allow-env --allow-write --allow-run --allow-net"
   },
   "fmt": {
-    "exclude": ["./test/fixtures/alerts.md"]
+    "exclude": ["./test/fixtures/alerts.md", "./test/fixtures/lineBreaks.md"]
   },
   "lock": false
 }
