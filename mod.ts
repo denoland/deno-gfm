@@ -6,6 +6,7 @@ import {
   katex,
   Marked,
   markedAlert,
+  markedFootnote,
   Prism,
   sanitizeHtml,
 } from "./deps.ts";
@@ -14,17 +15,18 @@ export { CSS, KATEX_CSS, Marked };
 
 Marked.marked.use(markedAlert());
 Marked.marked.use(gfmHeadingId());
-
-const slugger = new GitHubSlugger();
+Marked.marked.use(markedFootnote());
 
 export class Renderer extends Marked.Renderer {
   allowMath: boolean;
   baseUrl: string | undefined;
+  #slugger: GitHubSlugger;
 
   constructor(options: Marked.MarkedOptions & RenderOptions = {}) {
     super(options);
     this.baseUrl = options.baseUrl;
     this.allowMath = options.allowMath ?? false;
+    this.#slugger = new GitHubSlugger();
   }
 
   heading(
@@ -32,7 +34,7 @@ export class Renderer extends Marked.Renderer {
     level: 1 | 2 | 3 | 4 | 5 | 6,
     raw: string,
   ): string {
-    const slug = slugger.slug(raw);
+    const slug = this.#slugger.slug(raw);
     return `<h${level} id="${slug}"><a class="anchor" aria-hidden="true" tabindex="-1" href="#${slug}"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>${text}</h${level}>`;
   }
 
@@ -238,6 +240,8 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     a: ["anchor"],
     p: ["markdown-alert-title"],
     svg: ["octicon", "octicon-alert", "octicon-link"],
+    h2: ["sr-only"],
+    section: ["footnotes"],
   };
 
   const defaultAllowedAttributes = {
@@ -256,7 +260,19 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       "controls",
       "title",
     ],
-    a: ["id", "aria-hidden", "href", "tabindex", "rel", "target", "title"],
+    a: [
+      "id",
+      "aria-hidden",
+      "href",
+      "tabindex",
+      "rel",
+      "target",
+      "title",
+      "data-footnote-ref",
+      "data-footnote-backref",
+      "aria-label",
+      "aria-describedby",
+    ],
     svg: ["viewbox", "width", "height", "aria-hidden", "background"],
     path: ["fill-rule", "d"],
     circle: ["cx", "cy", "r", "stroke", "stroke-width", "fill", "alpha"],
@@ -267,11 +283,13 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     h4: ["id"],
     h5: ["id"],
     h6: ["id"],
+    li: ["id"],
     td: ["colspan", "rowspan", "align"],
     iframe: ["src", "width", "height"], // Only used when iframe tags are allowed in the first place.
     math: ["xmlns"], // Only enabled when math is enabled
     annotation: ["encoding"], // Only enabled when math is enabled
     details: ["open"],
+    section: ["data-footnotes"],
   };
 
   return sanitizeHtml(html, {
