@@ -115,6 +115,7 @@ export interface RenderOptions {
   disableHtmlSanitization?: boolean;
   renderer?: Renderer;
   allowedClasses?: { [index: string]: boolean | Array<string | RegExp> };
+  breaks?: boolean;
 }
 
 export function render(markdown: string, opts: RenderOptions = {}): string {
@@ -126,6 +127,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
 
   const marked_opts = {
     baseUrl: opts.baseUrl,
+    breaks: opts.breaks ?? false,
     gfm: true,
     mangle: false,
     renderer: opts.renderer ? opts.renderer : new Renderer(opts),
