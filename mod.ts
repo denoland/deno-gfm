@@ -115,6 +115,8 @@ export interface RenderOptions {
   disableHtmlSanitization?: boolean;
   renderer?: Renderer;
   allowedClasses?: { [index: string]: boolean | Array<string | RegExp> };
+  allowedTags?: string[];
+  allowedAttributes?: Record<string, sanitizeHtml.AllowedAttribute[]>;
   breaks?: boolean;
 }
 
@@ -143,7 +145,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     return html;
   }
 
-  let allowedTags = sanitizeHtml.defaults.allowedTags.concat([
+  let defaultAllowedTags = sanitizeHtml.defaults.allowedTags.concat([
     "img",
     "video",
     "svg",
@@ -156,10 +158,10 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     "summary",
   ]);
   if (opts.allowIframes) {
-    allowedTags.push("iframe");
+    defaultAllowedTags.push("iframe");
   }
   if (opts.allowMath) {
-    allowedTags = allowedTags.concat([
+    defaultAllowedTags = defaultAllowedTags.concat([
       "math",
       "maction",
       "annotation",
@@ -244,59 +246,76 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     section: ["footnotes"],
   };
 
+  const defaultAllowedAttributes = {
+    ...sanitizeHtml.defaults.allowedAttributes,
+    img: ["src", "alt", "height", "width", "align", "title"],
+    video: [
+      "src",
+      "alt",
+      "height",
+      "width",
+      "autoplay",
+      "muted",
+      "loop",
+      "playsinline",
+      "poster",
+      "controls",
+      "title",
+    ],
+    a: [
+      "id",
+      "aria-hidden",
+      "href",
+      "tabindex",
+      "rel",
+      "target",
+      "title",
+      "data-footnote-ref",
+      "data-footnote-backref",
+      "aria-label",
+      "aria-describedby",
+    ],
+    svg: ["viewbox", "width", "height", "aria-hidden", "background"],
+    path: ["fill-rule", "d"],
+    circle: ["cx", "cy", "r", "stroke", "stroke-width", "fill", "alpha"],
+    span: opts.allowMath ? ["aria-hidden", "style"] : [],
+    h1: ["id"],
+    h2: ["id"],
+    h3: ["id"],
+    h4: ["id"],
+    h5: ["id"],
+    h6: ["id"],
+    li: ["id"],
+    td: ["colspan", "rowspan", "align"],
+    iframe: ["src", "width", "height"], // Only used when iframe tags are allowed in the first place.
+    math: ["xmlns"], // Only enabled when math is enabled
+    annotation: ["encoding"], // Only enabled when math is enabled
+    details: ["open"],
+    section: ["data-footnotes"],
+  };
+
   return sanitizeHtml(html, {
     transformTags: {
       img: transformMedia,
       video: transformMedia,
     },
-    allowedTags,
-    allowedAttributes: {
-      ...sanitizeHtml.defaults.allowedAttributes,
-      img: ["src", "alt", "height", "width", "align", "title"],
-      video: [
-        "src",
-        "alt",
-        "height",
-        "width",
-        "autoplay",
-        "muted",
-        "loop",
-        "playsinline",
-        "poster",
-        "controls",
-        "title",
-      ],
-      a: [
-        "id",
-        "aria-hidden",
-        "href",
-        "tabindex",
-        "rel",
-        "target",
-        "title",
-        "data-footnote-ref",
-        "data-footnote-backref",
-        "aria-label",
-        "aria-describedby",
-      ],
-      svg: ["viewbox", "width", "height", "aria-hidden", "background"],
-      path: ["fill-rule", "d"],
-      circle: ["cx", "cy", "r", "stroke", "stroke-width", "fill", "alpha"],
-      span: opts.allowMath ? ["aria-hidden", "style"] : [],
-      h1: ["id"],
-      h2: ["id"],
-      h3: ["id"],
-      h4: ["id"],
-      h5: ["id"],
-      h6: ["id"],
-      li: ["id"],
-      td: ["colspan", "rowspan", "align"],
-      iframe: ["src", "width", "height"], // Only used when iframe tags are allowed in the first place.
-      math: ["xmlns"], // Only enabled when math is enabled
-      annotation: ["encoding"], // Only enabled when math is enabled
-      section: ["data-footnotes"],
-    },
+    allowedTags: [...defaultAllowedTags, ...opts.allowedTags ?? []],
+    allowedAttributes: mergeAttributes(
+      defaultAllowedAttributes,
+      opts.allowedAttributes ?? {},
+    ),
     allowedClasses: { ...defaultAllowedClasses, ...opts.allowedClasses },
     allowProtocolRelative: false,
   });
+}
+
+function mergeAttributes(
+  defaults: Record<string, sanitizeHtml.AllowedAttribute[]>,
+  customs: Record<string, sanitizeHtml.AllowedAttribute[]>,
+) {
+  const merged = { ...defaults };
+  for (const tag in customs) {
+    merged[tag] = [...(merged[tag] || []), ...customs[tag]];
+  }
+  return merged;
 }

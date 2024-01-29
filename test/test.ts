@@ -308,3 +308,41 @@ Deno.test("hard line breaks", () => {
   const html = render(markdown, { breaks: true });
   assertEquals(html, expected);
 });
+
+Deno.test(
+  "custom allowed tags and attributes",
+  () => {
+    const markdown = Deno.readTextFileSync(
+      "./test/fixtures/customAllowedTags.md",
+    );
+    const expected = Deno.readTextFileSync(
+      "./test/fixtures/customAllowedTags.html",
+    );
+
+    const html = render(markdown, {
+      allowedTags: ["meter"],
+      allowedAttributes: { meter: ["value", "optimum"], a: ["hreflang"] },
+    });
+    assertEquals(html, expected);
+  },
+);
+
+Deno.test("details, summary, and del", () => {
+  const markdown = `Example
+
+  <details open>
+  <summary>Shopping list</summary>
+
+  * Vegetables
+  * Fruits
+  * Fish
+  * <del>tofu</del>
+
+  </details>`;
+  const expected = Deno.readTextFileSync(
+    "./test/fixtures/detailsSummaryDel.html",
+  );
+
+  const html = render(markdown);
+  assertEquals(html, expected.trim());
+});
