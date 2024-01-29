@@ -117,6 +117,7 @@ export interface RenderOptions {
   allowedClasses?: { [index: string]: boolean | Array<string | RegExp> };
   allowedTags?: string[];
   allowedAttributes?: Record<string, sanitizeHtml.AllowedAttribute[]>;
+  breaks?: boolean;
 }
 
 export function render(markdown: string, opts: RenderOptions = {}): string {
@@ -128,6 +129,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
 
   const marked_opts = {
     baseUrl: opts.baseUrl,
+    breaks: opts.breaks ?? false,
     gfm: true,
     mangle: false,
     renderer: opts.renderer ? opts.renderer : new Renderer(opts),

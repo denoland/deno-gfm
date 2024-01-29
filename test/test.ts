@@ -301,6 +301,14 @@ Deno.test("footnotes", () => {
   assertEquals(html, expected);
 });
 
+Deno.test("hard line breaks", () => {
+  const markdown = Deno.readTextFileSync("./test/fixtures/lineBreaks.md");
+  const expected = Deno.readTextFileSync("./test/fixtures/lineBreaks.html");
+
+  const html = render(markdown, { breaks: true });
+  assertEquals(html, expected);
+});
+
 Deno.test(
   "custom allowed tags and attributes",
   () => {
