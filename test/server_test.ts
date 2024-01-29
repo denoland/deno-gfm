@@ -82,7 +82,7 @@ Deno.test("yaml style", async () => {
   await browserTest("yaml", async (page) => {
     const nameStyle = await page.evaluate(() => {
       const element = document.querySelector(
-        "body > main > div > pre > span:nth-child(1)",
+        "body > main > div > pre > span:nth-child(1)", // doe in the first line
       );
       if (element) {
         return globalThis.getComputedStyle(element).color;
@@ -93,7 +93,7 @@ Deno.test("yaml style", async () => {
 
     const colonStyle = await page.evaluate(() => {
       const element = document.querySelector(
-        "body > main > div > pre > span:nth-child(2)",
+        "body > main > div > pre > span:nth-child(2)", // : in the first line
       );
       if (element) {
         return globalThis.getComputedStyle(element).color;

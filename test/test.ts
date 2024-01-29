@@ -298,5 +298,5 @@ Deno.test("yaml unit", () => {
   const expected = Deno.readTextFileSync("./test/fixtures/yaml.html");
 
   const html = render(markdown);
-  assertEquals(html, expected);
+  assertEquals(html, expected.trim());
 });
