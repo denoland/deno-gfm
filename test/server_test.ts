@@ -1,22 +1,8 @@
 import { assert } from "./test_deps.ts";
-import { render } from "../mod.ts";
-import { browserTest, setupHtmlWithCss } from "./test_utils.ts";
+import { browserTest } from "./test_utils.ts";
 
 Deno.test("basic md table with dollar signs", async () => {
-  const markdown = `| Fruit Name | Quantity | Unit Cost per Item | Subtotal |
-  |------------|----------|--------------------|----------|
-  | Apple      | 1        | $1.50              | $1.50    |
-  | Pear       | 2        | $2.00              | $4.00    |
-  | Orange     | 3        | $2.50              | $7.50    |
-  | Grape      | 60       | $0.05              | $3.00    |
-  | Total      |          |                    | $16.00   |`;
-
-  const body = render(markdown);
-  const html = setupHtmlWithCss(body);
-
-  await browserTest(html, async (page, address) => {
-    await page.goto(`${address}`);
-
+  await browserTest("basicMarkdownTable", async (page) => {
     await page.waitForSelector("table", { timeout: 1000 });
     const tableExists = await page.evaluate(() => {
       const table = document.querySelector("table");
@@ -64,7 +50,7 @@ Deno.test("basic md table with dollar signs", async () => {
           if (!element) {
             return null;
           }
-          const style = window.getComputedStyle(element);
+          const style = globalThis.getComputedStyle(element);
           return style[property];
         },
         selector,

@@ -1,12 +1,30 @@
 import { Page, puppeteer } from "./test_deps.ts";
-import { CSS } from "../mod.ts";
+import { CSS, render, RenderOptions } from "../mod.ts";
+
+type TestCase = {
+  markdown: string;
+  renderOptions?: RenderOptions;
+};
+
+export type TestCases = "basicMarkdownTable";
+
+export const testCases: Record<TestCases, TestCase> = {
+  "basicMarkdownTable": {
+    markdown: `| Fruit Name | Quantity | Unit Cost per Item | Subtotal |
+|------------|----------|--------------------|----------|
+| Apple      | 1        | $1.50              | $1.50    |
+| Pear       | 2        | $2.00              | $4.00    |
+| Orange     | 3        | $2.50              | $7.50    |
+| Grape      | 60       | $0.05              | $3.00    |
+| Total      |          |                    | $16.00   |`,
+  },
+};
 
 export async function browserTest(
-  htmlContent: string,
-  fn: (page: Page, address: string) => Promise<void>,
-  port = 8000,
+  test: TestCases,
+  fn: (page: Page) => Promise<void>,
 ) {
-  const { serverProcess, address } = await startServer(htmlContent, port);
+  const { serverProcess, address } = await startServer();
 
   try {
     const browser = await puppeteer.launch({
@@ -16,7 +34,8 @@ export async function browserTest(
 
     try {
       const page = await browser.newPage();
-      await fn(page, address);
+      await page.goto(`${address}/${test}`);
+      await fn(page);
     } finally {
       await browser.close();
     }
@@ -25,22 +44,34 @@ export async function browserTest(
   }
 }
 
-function startServer(htmlContent: string, port: number) {
-  const serverProcess = Deno.serve({ port }, (_req) => {
+export function startServer() {
+  const serverProcess = Deno.serve((req) => {
+    const route = req.url.replace("http://localhost:8000/", "");
+    let body = "";
+    if (isTestCase(route)) {
+      const testCase = testCases[route];
+      body = render(testCase.markdown, testCase.renderOptions);
+    } else if (route === "") {
+      body = render(generateIndexMarkdown());
+    } else if (route === "favicon.ico") {
+      // swallow
+    } else {
+      console.log(route);
+      throw new Error("Invalid route specified");
+    }
+    const htmlContent = wrapBody(body);
+
     return new Response(htmlContent, {
       headers: { "Content-Type": "text/html" },
     });
   });
 
-  const hostname = "localhost";
-  const address = `http://${hostname}:${port}`;
-
-  console.log(`Server running at ${address}`);
+  const address = `http://localhost:8000`;
 
   return { serverProcess, address };
 }
 
-export function setupHtmlWithCss(bodyContent: string): string {
+function wrapBody(bodyContent: string) {
   return `<!DOCTYPE html>
   <html lang="en">
     <head>
@@ -61,4 +92,16 @@ export function setupHtmlWithCss(bodyContent: string): string {
     </body>
   </html>
 `;
+}
+
+function generateIndexMarkdown() {
+  let markdown = "# Deno GFM Server Tests\n";
+  markdown += Object.keys(testCases).map((testCase) => {
+    return `- [${testCase}](http://localhost:8000/${testCase})`;
+  }).join("\n");
+  return markdown;
+}
+
+function isTestCase(route: string): route is TestCases {
+  return route in testCases;
 }
