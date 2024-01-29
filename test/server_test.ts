@@ -50,7 +50,7 @@ Deno.test("basic md table with dollar signs", async () => {
           if (!element) {
             return null;
           }
-          const style = window.getComputedStyle(element);
+          const style = globalThis.getComputedStyle(element);
           return style[property];
         },
         selector,
@@ -85,7 +85,7 @@ Deno.test("yaml style", async () => {
         "body > main > div > pre > span:nth-child(1)",
       );
       if (element) {
-        return window.getComputedStyle(element).color;
+        return globalThis.getComputedStyle(element).color;
       }
       return null;
     });
@@ -96,7 +96,7 @@ Deno.test("yaml style", async () => {
         "body > main > div > pre > span:nth-child(2)",
       );
       if (element) {
-        return window.getComputedStyle(element).color;
+        return globalThis.getComputedStyle(element).color;
       }
       return null;
     });

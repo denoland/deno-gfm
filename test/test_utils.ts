@@ -56,7 +56,10 @@ export function startServer() {
       body = render(testCase.markdown, testCase.renderOptions);
     } else if (route === "") {
       body = render(generateIndexMarkdown());
+    } else if (route === "favicon.ico") {
+      // swallow
     } else {
+      console.log(route);
       throw new Error("Invalid route specified");
     }
     const htmlContent = wrapBody(body);
