@@ -19,6 +19,8 @@
     &[align="center"] {
       margin: 0 auto;
     }
+    
+    display: inline;
   }
 
   iframe {
@@ -38,6 +40,18 @@
   figcaption {
     padding-top: 2px;
     text-align: center;
+  }
+  
+  ol {
+    list-style: decimal;
+  }
+  
+  ul {
+    list-style: disc;
+  }
+  
+  table {
+    width: fit-content;
   }
 }
 
