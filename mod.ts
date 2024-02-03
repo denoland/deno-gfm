@@ -293,7 +293,10 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     annotation: ["encoding"], // Only enabled when math is enabled
     details: ["open"],
     section: ["data-footnotes"],
-    input: ["type", "checked", "disabled"],
+    input: ["checked", "disabled", {
+      name: "type",
+      values: ["checkbox"],
+    }],
   };
 
   return sanitizeHtml(html, {
