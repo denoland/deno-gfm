@@ -156,6 +156,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     "del",
     "details",
     "summary",
+    "input",
   ]);
   if (opts.allowIframes) {
     defaultAllowedTags.push("iframe");
@@ -292,6 +293,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     annotation: ["encoding"], // Only enabled when math is enabled
     details: ["open"],
     section: ["data-footnotes"],
+    input: ["type", "checked", "disabled"],
   };
 
   return sanitizeHtml(html, {

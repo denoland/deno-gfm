@@ -346,3 +346,13 @@ Deno.test("details, summary, and del", () => {
   const html = render(markdown);
   assertEquals(html, expected.trim());
 });
+
+Deno.test("task list", () => {
+  const markdown = `- Normal list
+- [x] done
+- [ ] not done`;
+  const expected = Deno.readTextFileSync("./test/fixtures/taskList.html");
+
+  const html = render(markdown);
+  assertEquals(html, expected);
+});
