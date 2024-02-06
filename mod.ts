@@ -1,15 +1,14 @@
-import {
-  emojify,
-  gfmHeadingId,
-  GitHubSlugger,
-  htmlEscape,
-  katex,
-  Marked,
-  markedAlert,
-  markedFootnote,
-  Prism,
-  sanitizeHtml,
-} from "./deps.ts";
+import { emojify } from "emoji";
+import * as Marked from "marked";
+import GitHubSlugger from "github-slugger";
+import markedAlert from "marked-alert";
+import markedFootnote from "marked-footnote";
+import { gfmHeadingId } from "marked-gfm-heading-id";
+import Prism from "prismjs";
+import sanitizeHtml from "sanitize-html";
+import htmlEscape from "he";
+import katex from "katex";
+
 import { CSS, KATEX_CLASSES, KATEX_CSS } from "./style.js";
 export { CSS, KATEX_CSS, Marked };
 

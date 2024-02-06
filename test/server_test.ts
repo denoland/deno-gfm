@@ -1,4 +1,4 @@
-import { assert, assertEquals } from "./test_deps.ts";
+import { assert, assertEquals } from "@std/assert";
 import { browserTest } from "./test_utils.ts";
 
 Deno.test("basic md table with dollar signs", async () => {

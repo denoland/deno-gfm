@@ -1,4 +1,5 @@
-import { assertEquals, assertStringIncludes, DOMParser } from "./test_deps.ts";
+import { assertEquals, assertStringIncludes } from "@std/assert";
+import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.43/deno-dom-wasm.ts";
 import { render, Renderer } from "../mod.ts";
 
 Deno.test("Basic markdown", async () => {
