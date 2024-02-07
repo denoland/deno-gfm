@@ -6,7 +6,7 @@ import markedFootnote from "marked-footnote";
 import { gfmHeadingId } from "marked-gfm-heading-id";
 import Prism from "prismjs";
 import sanitizeHtml from "sanitize-html";
-import htmlEscape from "he";
+import he from "he";
 import katex from "katex";
 
 import { CSS, KATEX_CLASSES, KATEX_CSS } from "./style.js";
@@ -66,7 +66,7 @@ export class Renderer extends Marked.Renderer {
         ? Prism.languages[language]
         : undefined;
     if (grammar === undefined) {
-      return `<pre><code class="notranslate">${htmlEscape(code)}</code></pre>`;
+      return `<pre><code class="notranslate">${he.encode(code)}</code></pre>`;
     }
     const html = Prism.highlight(code, grammar, language!);
     return `<div class="highlight highlight-source-${language} notranslate"><pre>${html}</pre></div>`;
