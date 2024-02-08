@@ -1,7 +1,7 @@
 {
   "name": "@deno/gfm",
   "version": "0.6.0",
-  "export": "./mod.ts",
+  "exports": "./mod.ts",
   "imports": {
     "emoji": "./vendor/emoji/mod.ts",
     "marked": "npm:marked@^11.1",
