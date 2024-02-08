@@ -1,9 +1,9 @@
 {
   "name": "@deno/gfm",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "exports": "./mod.ts",
   "imports": {
-    "emoji": "./vendor/emoji/mod.ts",
+    "emoji": "jsr:@denosaurs/emoji@0.3",
     "marked": "npm:marked@^11.1",
     "github-slugger": "npm:github-slugger@^2.0",
     "marked-alert": "npm:marked-alert@^2.0",
@@ -16,13 +16,7 @@
     "@std/assert": "jsr:@std/assert@^0.214"
   },
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "dom.asynciterable",
-      "deno.ns",
-      "deno.unstable"
-    ]
+    "lib": ["dom", "dom.iterable", "dom.asynciterable", "deno.ns"]
   },
   "tasks": {
     "build": "deno run --allow-read --allow-write --allow-net --allow-run --allow-env ./style/patch.ts && deno fmt",
