@@ -152,3 +152,29 @@ Deno.test("footnote with style", async () => {
     assertEquals(footnoteStyle, "rgb(31, 35, 40)");
   });
 });
+
+Deno.test("yaml style", async () => {
+  await browserTest("yaml", async (page) => {
+    const nameStyle = await page.evaluate(() => {
+      const element = document.querySelector(
+        "body > main > div > pre > span:nth-child(1)", // doe in the first line
+      );
+      if (element) {
+        return globalThis.getComputedStyle(element).color;
+      }
+      return null;
+    });
+    assertEquals(nameStyle, "rgb(207, 34, 46)");
+
+    const colonStyle = await page.evaluate(() => {
+      const element = document.querySelector(
+        "body > main > div > pre > span:nth-child(2)", // : in the first line
+      );
+      if (element) {
+        return globalThis.getComputedStyle(element).color;
+      }
+      return null;
+    });
+    assertEquals(colonStyle, "rgb(102, 57, 186)");
+  });
+});

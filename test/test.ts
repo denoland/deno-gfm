@@ -389,3 +389,11 @@ Deno.test("task list", () => {
   const html = render(markdown);
   assertEquals(html, expected);
 });
+
+Deno.test("yaml unit", () => {
+  const markdown = Deno.readTextFileSync("./test/fixtures/yaml.md");
+  const expected = Deno.readTextFileSync("./test/fixtures/yaml.html");
+
+  const html = render(markdown);
+  assertEquals(html, expected.trim());
+});

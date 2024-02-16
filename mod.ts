@@ -12,6 +12,7 @@ import {
 } from "./deps.ts";
 import { CSS, KATEX_CLASSES, KATEX_CSS } from "./style.js";
 export { CSS, KATEX_CSS, Marked };
+import "https://esm.sh/prismjs@1.29.0/components/prism-yaml";
 
 Marked.marked.use(markedAlert());
 Marked.marked.use(gfmHeadingId());
@@ -238,6 +239,8 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       "line",
       "deleted",
       "inserted",
+      "key",
+      "atrule",
       ...(opts.allowMath ? KATEX_CLASSES : []),
     ],
     a: ["anchor"],
