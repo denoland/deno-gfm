@@ -144,6 +144,14 @@ Deno.test("Media URL transformation without base URL", () => {
   assertEquals(html, expectedWithoutTransformation);
 });
 
+Deno.test("simple img test", () => {
+  const markdown = "![asdf](image.jpg)";
+  const result = `<p><img src="image.jpg" alt="asdf" /></p>\n`;
+
+  const html = render(markdown);
+  assertEquals(html, result);
+});
+
 Deno.test("Media URL transformation with invalid URL", () => {
   const markdown = "![Image](invalid-url)";
   const mediaBaseUrl = "this is an invalid url";
@@ -288,7 +296,7 @@ Deno.test("render github-slugger not reused", function () {
   for (let i = 0; i < 2; i++) {
     const html = render("## Hello");
     const expected =
-      `<h2 id="hello"><a class="anchor" aria-hidden="true" tabindex="-1" href="#hello"><svg class="octicon octicon-link" viewbox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Hello</h2>`;
+      `<h2 id="hello"><a class="anchor" aria-hidden="true" tabindex="-1" href="#hello"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Hello</h2>`;
     assertEquals(html, expected);
   }
 });
@@ -345,6 +353,31 @@ Deno.test("details, summary, and del", () => {
 
   const html = render(markdown);
   assertEquals(html, expected.trim());
+});
+
+Deno.test("del tag test", () => {
+  const markdown = "<del>tofu</del>";
+  const result = `<p><del>tofu</del></p>\n`;
+
+  const html = render(markdown);
+  assertEquals(html, result);
+});
+
+Deno.test("h1 test", () => {
+  const markdown = "# Hello";
+  const result =
+    `<h1 id="hello"><a class="anchor" aria-hidden="true" tabindex="-1" href="#hello"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Hello</h1>`;
+
+  const html = render(markdown);
+  assertEquals(html, result);
+});
+
+Deno.test("svg test", () => {
+  const markdown = `<svg viewBox="foo"></svg>`;
+  const result = `<p><svg viewBox="foo"></svg></p>\n`;
+
+  const html = render(markdown);
+  assertEquals(html, result);
 });
 
 Deno.test("task list", () => {

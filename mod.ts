@@ -276,7 +276,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       "aria-label",
       "aria-describedby",
     ],
-    svg: ["viewbox", "width", "height", "aria-hidden", "background"],
+    svg: ["viewBox", "width", "height", "aria-hidden", "background"],
     path: ["fill-rule", "d"],
     circle: ["cx", "cy", "r", "stroke", "stroke-width", "fill", "alpha"],
     span: opts.allowMath ? ["aria-hidden", "style"] : [],
@@ -311,6 +311,9 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     ),
     allowedClasses: { ...defaultAllowedClasses, ...opts.allowedClasses },
     allowProtocolRelative: false,
+    parser: {
+      lowerCaseAttributeNames: false,
+    },
   });
 }
 
