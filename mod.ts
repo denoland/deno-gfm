@@ -157,6 +157,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     "del",
     "details",
     "summary",
+    "input",
   ]);
   if (opts.allowIframes) {
     defaultAllowedTags.push("iframe");
@@ -278,7 +279,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       "aria-label",
       "aria-describedby",
     ],
-    svg: ["viewbox", "width", "height", "aria-hidden", "background"],
+    svg: ["viewBox", "width", "height", "aria-hidden", "background"],
     path: ["fill-rule", "d"],
     circle: ["cx", "cy", "r", "stroke", "stroke-width", "fill", "alpha"],
     span: opts.allowMath ? ["aria-hidden", "style"] : [],
@@ -295,6 +296,10 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     annotation: ["encoding"], // Only enabled when math is enabled
     details: ["open"],
     section: ["data-footnotes"],
+    input: ["checked", "disabled", {
+      name: "type",
+      values: ["checkbox"],
+    }],
   };
 
   return sanitizeHtml(html, {
@@ -309,6 +314,9 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     ),
     allowedClasses: { ...defaultAllowedClasses, ...opts.allowedClasses },
     allowProtocolRelative: false,
+    parser: {
+      lowerCaseAttributeNames: false,
+    },
   });
 }
 
