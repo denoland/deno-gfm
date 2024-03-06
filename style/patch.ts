@@ -80,16 +80,13 @@ for (const selector of KATEX_CSS_SELECTORS) {
 // de-duplicate classes
 classes = [...new Set(classes)];
 
-$.logStep("Writing the final style.js");
-const CSS = await cwd.join("dist/main.css").readTextSync();
+$.logStep("Writing the final style.ts");
+const CSS = cwd.join("dist/main.css").readTextSync();
 
-await cwd.join("../style.js").writeText(
-  `/** @type {string} */
-export const CSS = \`${CSS}\`;
+await cwd.join("../style.ts").writeText(`
+export const CSS: string = \`${CSS}\`;
 
-/** @type {string} */
-export const KATEX_CSS = \`${KATEX_CSS}\`;
+export const KATEX_CSS: string = \`${KATEX_CSS}\`;
 
-export const KATEX_CLASSES = ${JSON.stringify(classes)};
-`,
-);
+export const KATEX_CLASSES: string[] = ${JSON.stringify(classes)};
+`);

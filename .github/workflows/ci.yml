@@ -1,28 +1,47 @@
 name: ci
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "*"
+  pull_request:
+    branches:
+      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - uses: actions/checkout@master
-      - uses: denoland/setup-deno@main
-        with:
-          deno-version: "1.x"
+      - uses: actions/checkout@v4
+
+      - uses: denoland/setup-deno@v1
+
       - name: Run fmt
         run: |
           deno fmt --check
+
       - name: Run lint
         run: |
           deno lint
+
       - name: Check project
         run: |
           deno task check:types
+
       - name: Install Chromium
         run: deno run -A --unstable https://deno.land/x/puppeteer@16.2.0/install.ts
         env:
           PUPPETEER_PRODUCT: chrome
+
       - name: Run tests
         run: |
           deno task test
+
+      - name: Publish package (tag only)
+        if: startsWith(github.ref, 'refs/tags/')
+        run: deno publish
