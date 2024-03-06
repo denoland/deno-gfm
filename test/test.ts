@@ -243,7 +243,7 @@ Deno.test(
 
 Deno.test("image title and no alt", () => {
   const markdown = `![](image.jpg "best title")`;
-  const expected = `<p><img src="image.jpg" title="best title" /></p>\n`;
+  const expected = `<p><img src="image.jpg" alt="" title="best title" /></p>\n`;
 
   const html = render(markdown);
   assertEquals(html, expected);
