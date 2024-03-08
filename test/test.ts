@@ -432,7 +432,9 @@ Deno.test("example file", () => {
   const markdown = Deno.readTextFileSync("./example/content.md");
   const expectedHTML = Deno.readTextFileSync("./test/fixtures/example.html");
   const expectedStrip = Deno.readTextFileSync("./test/fixtures/example.strip");
-  const expectedJSON = JSON.parse(Deno.readTextFileSync("./test/fixtures/example.json"));
+  const expectedJSON = JSON.parse(
+    Deno.readTextFileSync("./test/fixtures/example.json"),
+  );
 
   assertEquals(render(markdown), expectedHTML);
   assertEquals(strip(markdown), expectedStrip);
