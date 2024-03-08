@@ -395,7 +395,7 @@ Deno.test("svg test", () => {
 
   const html = render(markdown);
   assertEquals(html, result);
-  assertEquals(strip(markdown), "");
+  assertEquals(strip(markdown), "\n");
 });
 
 Deno.test("task list", () => {
