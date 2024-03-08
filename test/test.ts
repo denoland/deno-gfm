@@ -1,12 +1,14 @@
 import { assertEquals, assertStringIncludes } from "@std/assert";
 import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.43/deno-dom-wasm.ts";
-import { render, Renderer } from "../mod.ts";
+import { render, Renderer, strip } from "../mod.ts";
 
 Deno.test("Basic markdown", async () => {
   const markdown = await Deno.readTextFile("./test/fixtures/basic.md");
-  const expected = await Deno.readTextFile("./test/fixtures/basic.html");
+  const expectedHTML = await Deno.readTextFile("./test/fixtures/basic.html");
+  const expectedStrip = await Deno.readTextFile("./test/fixtures/basic.strip");
   const html = render(markdown);
-  assertEquals(html, expected);
+  assertEquals(html, expectedHTML);
+  assertEquals(strip(markdown), expectedStrip);
 
   const document = new DOMParser().parseFromString(html, "text/html");
   assertEquals(document?.querySelector("h1")?.textContent, "Heading");
@@ -16,8 +18,11 @@ Deno.test("Basic markdown", async () => {
 Deno.test("Math rendering", async () => {
   const math = await Deno.readTextFile("./test/fixtures/math.md");
   const expected = await Deno.readTextFile("./test/fixtures/math.html");
+  const expectedStrip = await Deno.readTextFile("./test/fixtures/basic.strip");
   const html = render(math, { allowMath: true });
   assertEquals(html, expected);
+  assertEquals(strip(math), expectedStrip);
+
   const document = new DOMParser().parseFromString(html, "text/html");
   assertEquals(
     document?.querySelector(".katex-mathml")?.textContent,
@@ -74,9 +79,13 @@ Deno.test(
   "<td> in table supports align, rowspan, and colspan",
   async () => {
     const markdown = await Deno.readTextFile("./test/fixtures/table.md");
-    const expected = await Deno.readTextFile("./test/fixtures/table.html");
+    const expectedHTML = await Deno.readTextFile("./test/fixtures/table.html");
+    const expectedStrip = await Deno.readTextFile(
+      "./test/fixtures/table.strip",
+    );
     const html = render(markdown);
-    assertEquals(html, expected);
+    assertEquals(html, expectedHTML);
+    assertEquals(strip(markdown), expectedStrip);
   },
 );
 
@@ -101,9 +110,13 @@ Deno.test(
   "alerts rendering",
   async () => {
     const markdown = await Deno.readTextFile("./test/fixtures/alerts.md");
-    const expected = await Deno.readTextFile("./test/fixtures/alerts.html");
+    const expectedHTML = await Deno.readTextFile("./test/fixtures/alerts.html");
+    const expectedStrip = await Deno.readTextFile(
+      "./test/fixtures/alerts.strip",
+    );
     const html = render(markdown);
-    assertEquals(html, expected);
+    assertEquals(html, expectedHTML);
+    assertEquals(strip(html), expectedStrip);
   },
 );
 
@@ -304,18 +317,24 @@ Deno.test("render github-slugger not reused", function () {
 
 Deno.test("footnotes", () => {
   const markdown = Deno.readTextFileSync("./test/fixtures/footnote.md");
-  const expected = Deno.readTextFileSync("./test/fixtures/footnote.html");
+  const expectedHTML = Deno.readTextFileSync("./test/fixtures/footnote.html");
+  const expectedStrip = Deno.readTextFileSync("./test/fixtures/footnote.strip");
 
   const html = render(markdown);
-  assertEquals(html, expected);
+  assertEquals(html, expectedHTML);
+  assertEquals(strip(markdown), expectedStrip);
 });
 
 Deno.test("hard line breaks", () => {
   const markdown = Deno.readTextFileSync("./test/fixtures/lineBreaks.md");
-  const expected = Deno.readTextFileSync("./test/fixtures/lineBreaks.html");
+  const expectedHTML = Deno.readTextFileSync("./test/fixtures/lineBreaks.html");
+  const expectedStrip = Deno.readTextFileSync(
+    "./test/fixtures/lineBreaks.strip",
+  );
 
   const html = render(markdown, { breaks: true });
-  assertEquals(html, expected);
+  assertEquals(html, expectedHTML);
+  assertEquals(strip(markdown, { breaks: true }), expectedStrip);
 });
 
 Deno.test(
@@ -349,12 +368,16 @@ Deno.test("details, summary, and del", () => {
 
 </details>
 `;
-  const expected = Deno.readTextFileSync(
+  const expectedHTML = Deno.readTextFileSync(
     "./test/fixtures/detailsSummaryDel.html",
+  );
+  const expectedStrip = Deno.readTextFileSync(
+    "./test/fixtures/detailsSummaryDel.strip",
   );
 
   const html = render(markdown);
-  assertEquals(html, expected);
+  assertEquals(html, expectedHTML);
+  assertEquals(strip(markdown), expectedStrip);
 });
 
 Deno.test("del tag test", () => {
@@ -363,6 +386,7 @@ Deno.test("del tag test", () => {
 
   const html = render(markdown);
   assertEquals(html, result);
+  assertEquals(strip(markdown), "tofu");
 });
 
 Deno.test("h1 test", () => {
@@ -372,6 +396,7 @@ Deno.test("h1 test", () => {
 
   const html = render(markdown);
   assertEquals(html, result);
+  assertEquals(strip(markdown), "hello");
 });
 
 Deno.test("svg test", () => {
@@ -380,16 +405,19 @@ Deno.test("svg test", () => {
 
   const html = render(markdown);
   assertEquals(html, result);
+  assertEquals(strip(markdown), "");
 });
 
 Deno.test("task list", () => {
   const markdown = `- Normal list
 - [x] done
 - [ ] not done`;
-  const expected = Deno.readTextFileSync("./test/fixtures/taskList.html");
+  const expectedHTML = Deno.readTextFileSync("./test/fixtures/taskList.html");
+  const expectedStrip = Deno.readTextFileSync("./test/fixtures/taskList.strip");
 
   const html = render(markdown);
-  assertEquals(html, expected);
+  assertEquals(html, expectedHTML);
+  assertEquals(strip(markdown), expectedStrip);
 });
 
 Deno.test("anchor test raw", () => {
