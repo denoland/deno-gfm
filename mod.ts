@@ -435,16 +435,16 @@ class StripTokenizer extends Marked.Tokenizer {
     // copied & modified from Marked to remove escaping
     const cap = this.rules.inline.code.exec(src);
     if (cap) {
-      let text = cap[2].replace(/\n/g, ' ');
+      let text = cap[2].replace(/\n/g, " ");
       const hasNonSpaceChars = /[^ ]/.test(text);
       const hasSpaceCharsOnBothEnds = /^ /.test(text) && / $/.test(text);
       if (hasNonSpaceChars && hasSpaceCharsOnBothEnds) {
         text = text.substring(1, text.length - 1);
       }
       return {
-        type: 'codespan',
+        type: "codespan",
         raw: cap[0],
-        text
+        text,
       };
     }
   }
