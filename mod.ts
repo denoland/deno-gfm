@@ -88,10 +88,13 @@ export class Renderer extends Marked.Renderer {
   }
 }
 
+const BLOCK_MATH_REGEXP = /\$\$\s(.+?)\s\$\$/g;
+const INLINE_MATH_REGEXP = /\s\$((?=\S).*?(?=\S))\$/g;
+
 /** Convert inline and block math to katex */
 function mathify(markdown: string) {
   // Deal with block math
-  markdown = markdown.replace(/\$\$\s(.+?)\s\$\$/g, (match, p1) => {
+  markdown = markdown.replace(BLOCK_MATH_REGEXP, (match, p1) => {
     try {
       return katex.renderToString(p1.trim(), { displayMode: true });
     } catch (e) {
@@ -102,7 +105,7 @@ function mathify(markdown: string) {
   });
 
   // Deal with inline math
-  markdown = markdown.replace(/\s\$((?=\S).*?(?=\S))\$/g, (match, p1) => {
+  markdown = markdown.replace(INLINE_MATH_REGEXP, (match, p1) => {
     try {
       return " " + katex.renderToString(p1, { displayMode: false });
     } catch (e) {
@@ -113,6 +116,17 @@ function mathify(markdown: string) {
   });
 
   return markdown;
+}
+
+function getOpts(opts: RenderOptions) {
+  return {
+    baseUrl: opts.baseUrl,
+    breaks: opts.breaks ?? false,
+    gfm: true,
+    mangle: false,
+    renderer: opts.renderer ? opts.renderer : new Renderer(opts),
+    async: false,
+  };
 }
 
 export interface RenderOptions {
@@ -136,14 +150,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     markdown = mathify(markdown);
   }
 
-  const marked_opts = {
-    baseUrl: opts.baseUrl,
-    breaks: opts.breaks ?? false,
-    gfm: true,
-    mangle: false,
-    renderer: opts.renderer ? opts.renderer : new Renderer(opts),
-    async: false,
-  };
+  const marked_opts = getOpts(opts);
 
   const html =
     (opts.inline
@@ -335,4 +342,125 @@ function mergeAttributes(
     merged[tag] = [...(merged[tag] || []), ...customs[tag]];
   }
   return merged;
+}
+
+function stripTokens(tokens: Marked.Token[]): string {
+  let out = "";
+  for (const token of tokens) {
+    if ("tokens" in token && token.tokens) {
+      out += stripTokens(token.tokens);
+    }
+
+    switch (token.type) {
+      case "space":
+        out += token.raw;
+        break;
+      case "code":
+        if (token.lang != "math") {
+          out += token.text;
+        }
+        break;
+      case "heading":
+        out += "\n\n";
+        break;
+      case "table":
+        for (const cell of token.header) {
+          out += stripTokens(cell.tokens) + " ";
+        }
+        out += "\n";
+        for (const row of token.rows) {
+          for (const cell of row) {
+            out += stripTokens(cell.tokens) + " ";
+          }
+          out += "\n";
+        }
+        break;
+      case "hr":
+        break;
+      case "blockquote":
+        break;
+      case "list":
+        out += stripTokens(token.items);
+        break;
+      case "list_item":
+        out += "\n";
+        break;
+      case "paragraph":
+        break;
+      case "html": {
+        // TODO: extract alt from img
+        out += sanitizeHtml(token.text, {
+          allowedTags: [],
+          allowedAttributes: {},
+        }).trim() + "\n\n";
+        break;
+      }
+      case "text":
+        if (!("tokens" in token) || !token.tokens) {
+          out += token.raw;
+        }
+        break;
+      case "def":
+        break;
+      case "escape":
+        break;
+      case "link":
+        break;
+      case "image":
+        if (token.title) {
+          out += token.title;
+        } else {
+          out += token.text;
+        }
+        break;
+      case "strong":
+        break;
+      case "em":
+        break;
+      case "codespan":
+        out += token.text;
+        break;
+      case "br":
+        break;
+      case "del":
+        break;
+    }
+  }
+
+  return out;
+}
+
+class StripTokenizer extends Marked.Tokenizer {
+  codespan(src: string): Marked.Tokens.Codespan | undefined {
+    // copied & modified from Marked to remove escaping
+    const cap = this.rules.inline.code.exec(src);
+    if (cap) {
+      let text = cap[2].replace(/\n/g, " ");
+      const hasNonSpaceChars = /[^ ]/.test(text);
+      const hasSpaceCharsOnBothEnds = /^ /.test(text) && / $/.test(text);
+      if (hasNonSpaceChars && hasSpaceCharsOnBothEnds) {
+        text = text.substring(1, text.length - 1);
+      }
+      return {
+        type: "codespan",
+        raw: cap[0],
+        text,
+      };
+    }
+  }
+}
+
+/**
+ * Strip all markdown syntax to get a plaintext output
+ */
+export function strip(markdown: string, opts: RenderOptions = {}): string {
+  markdown = emojify(markdown).replace(BLOCK_MATH_REGEXP, "").replace(
+    INLINE_MATH_REGEXP,
+    "",
+  );
+  const tokens = Marked.marked.lexer(markdown, {
+    ...getOpts(opts),
+    tokenizer: new StripTokenizer(),
+  });
+  return stripTokens(tokens).trim().replace(/\n{3,}/g, "\n") + "\n";
 }
