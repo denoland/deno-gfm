@@ -344,35 +344,55 @@ function mergeAttributes(
   return merged;
 }
 
-function stripTokens(tokens: Marked.Token[]): string {
-  let out = "";
+function stripTokens(
+  tokens: Marked.Token[],
+  sections: MarkdownSections[],
+  header: boolean,
+) {
+  let index = sections.length - 1;
+
   for (const token of tokens) {
+    if (token.type === "heading") {
+      sections[index].header = sections[index].header.trim().replace(
+        /\n{3,}/g,
+        "\n",
+      );
+      sections[index].content = sections[index].content.trim().replace(
+        /\n{3,}/g,
+        "\n",
+      );
+
+      sections.push({ header: "", depth: token.depth, content: "" });
+      index += 1;
+    }
+
     if ("tokens" in token && token.tokens) {
-      out += stripTokens(token.tokens);
+      stripTokens(token.tokens, sections, token.type === "heading");
     }
 
     switch (token.type) {
       case "space":
-        out += token.raw;
+        sections[index][header ? "header" : "content"] += token.raw;
         break;
       case "code":
         if (token.lang != "math") {
-          out += token.text;
+          sections[index][header ? "header" : "content"] += token.text;
         }
         break;
       case "heading":
-        out += "\n\n";
         break;
       case "table":
         for (const cell of token.header) {
-          out += stripTokens(cell.tokens) + " ";
+          stripTokens(cell.tokens, sections, header);
+          sections[index][header ? "header" : "content"] += " ";
         }
-        out += "\n";
+        sections[index][header ? "header" : "content"] += "\n";
         for (const row of token.rows) {
           for (const cell of row) {
-            out += stripTokens(cell.tokens) + " ";
+            stripTokens(cell.tokens, sections, header);
+            sections[index][header ? "header" : "content"] += " ";
           }
-          out += "\n";
+          sections[index][header ? "header" : "content"] += "\n";
         }
         break;
       case "hr":
@@ -380,24 +400,25 @@ function stripTokens(tokens: Marked.Token[]): string {
       case "blockquote":
         break;
       case "list":
-        out += stripTokens(token.items);
+        stripTokens(token.items, sections, header);
         break;
       case "list_item":
-        out += "\n";
+        sections[index][header ? "header" : "content"] += "\n";
         break;
       case "paragraph":
         break;
       case "html": {
         // TODO: extract alt from img
-        out += sanitizeHtml(token.text, {
-          allowedTags: [],
-          allowedAttributes: {},
-        }).trim() + "\n\n";
+        sections[index][header ? "header" : "content"] +=
+          sanitizeHtml(token.text, {
+            allowedTags: [],
+            allowedAttributes: {},
+          }).trim() + "\n\n";
         break;
       }
       case "text":
         if (!("tokens" in token) || !token.tokens) {
-          out += token.raw;
+          sections[index][header ? "header" : "content"] += token.raw;
         }
         break;
       case "def":
@@ -408,9 +429,9 @@ function stripTokens(tokens: Marked.Token[]): string {
         break;
       case "image":
         if (token.title) {
-          out += token.title;
+          sections[index][header ? "header" : "content"] += token.title;
         } else {
-          out += token.text;
+          sections[index][header ? "header" : "content"] += token.text;
         }
         break;
       case "strong":
@@ -418,7 +439,7 @@ function stripTokens(tokens: Marked.Token[]): string {
       case "em":
         break;
       case "codespan":
-        out += token.text;
+        sections[index][header ? "header" : "content"] += token.text;
         break;
       case "br":
         break;
@@ -426,8 +447,6 @@ function stripTokens(tokens: Marked.Token[]): string {
         break;
     }
   }
-
-  return out;
 }
 
 class StripTokenizer extends Marked.Tokenizer {
@@ -450,10 +469,22 @@ class StripTokenizer extends Marked.Tokenizer {
   }
 }
 
+export interface MarkdownSections {
+  /** The header of the section */
+  header: string;
+  /** The depth-level of the header. 0 if it is root level */
+  depth: number;
+  content: string;
+}
+
 /**
- * Strip all markdown syntax to get a plaintext output
+ * Strip all markdown syntax to get a plaintext output, divided up in sections
+ * based on headers
  */
-export function strip(markdown: string, opts: RenderOptions = {}): string {
+export function stripSplitBySections(
+  markdown: string,
+  opts: RenderOptions = {},
+): MarkdownSections[] {
   markdown = emojify(markdown).replace(BLOCK_MATH_REGEXP, "").replace(
     INLINE_MATH_REGEXP,
     "",
@@ -462,5 +493,22 @@ export function strip(markdown: string, opts: RenderOptions = {}): string {
     ...getOpts(opts),
     tokenizer: new StripTokenizer(),
   });
-  return stripTokens(tokens).trim().replace(/\n{3,}/g, "\n") + "\n";
+
+  const sections: MarkdownSections[] = [{
+    header: "",
+    depth: 0,
+    content: "",
+  }];
+  stripTokens(tokens, sections, false);
+
+  return sections;
+}
+
+/**
+ * Strip all markdown syntax to get a plaintext output
+ */
+export function strip(markdown: string, opts: RenderOptions = {}): string {
+  return stripSplitBySections(markdown, opts).map((section) =>
+    section.header + "\n" + section.content
+  ).join("\n\n").trim() + "\n";
 }
