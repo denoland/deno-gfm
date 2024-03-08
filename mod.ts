@@ -462,5 +462,5 @@ export function strip(markdown: string, opts: RenderOptions = {}): string {
     ...getOpts(opts),
     tokenizer: new StripTokenizer(),
   });
-  return stripTokens(tokens).replace(/\n{3,}/g, "\n").trim();
+  return stripTokens(tokens).trim().replace(/\n{3,}/g, "\n") + "\n";
 }
