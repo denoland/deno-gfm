@@ -386,7 +386,7 @@ Deno.test("h1 test", () => {
 
   const html = render(markdown);
   assertEquals(html, result);
-  assertEquals(strip(markdown), "hello");
+  assertEquals(strip(markdown), "Hello");
 });
 
 Deno.test("svg test", () => {
