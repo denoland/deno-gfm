@@ -45,6 +45,7 @@ enum[] An array of enums. ['comedy', 'action', 'romance']
 vector[<size>] A vector of numbers to perform vector search on. [0.403, 0.192, 0.830]
 
 Math rendering
+
 We support code blocks with the "math" type!
 We also support math blocks and inline math blocks as well!
 
@@ -56,12 +57,14 @@ equations with:
 \dot{z} & = -\beta z + xy \end{aligned}
 
 Deno
+
 Build Status - Cirrus Twitter handle
 Discord Chat
 Deno is a simple, modern and secure runtime for JavaScript and
 TypeScript that uses V8 and is built in Rust.
 
 Features
+
 Secure by default. No file, network, or environment access, unless explicitly
 enabled.
 Supports TypeScript out of the box.
@@ -72,6 +75,7 @@ Set of reviewed standard modules that are guaranteed to work with
 Deno.
 
 Install
+
 Shell (Mac, Linux):
 
 curl -fsSL https://deno.land/x/install/install.sh | sh
@@ -101,6 +105,7 @@ deno_install
 and releases for other options.
 
 Getting Started
+
 Try running a simple program:
 
 deno run https://deno.land/std/examples/welcome.ts
@@ -126,6 +131,7 @@ The complete API reference is available at the runtime
 documentation.
 
 Contributing
+
 We appreciate your help!
 
 To contribute, please read our
