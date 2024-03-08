@@ -509,6 +509,6 @@ export function stripSplitBySections(
  */
 export function strip(markdown: string, opts: RenderOptions = {}): string {
   return stripSplitBySections(markdown, opts).map((section) =>
-    section.header + "\n" + section.content
+    section.header + "\n\n" + section.content
   ).join("\n\n").trim() + "\n";
 }
