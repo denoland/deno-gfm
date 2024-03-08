@@ -392,11 +392,11 @@ function stripTokens(tokens: Marked.Token[]): string {
         out += sanitizeHtml(token.text, {
           allowedTags: [],
           allowedAttributes: {},
-        });
+        }).trim() + "\n\n";
         break;
       }
       case "text":
-        if (!token.tokens) {
+        if (!("tokens" in token) || !token.tokens) {
           out += token.raw;
         }
         break;
@@ -431,7 +431,7 @@ function stripTokens(tokens: Marked.Token[]): string {
 }
 
 class StripTokenizer extends Marked.Tokenizer {
-  codespan(src) {
+  codespan(src: string): Marked.Tokens.Codespan | undefined {
     // copied & modified from Marked to remove escaping
     const cap = this.rules.inline.code.exec(src);
     if (cap) {

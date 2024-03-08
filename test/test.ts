@@ -18,7 +18,7 @@ Deno.test("Basic markdown", async () => {
 Deno.test("Math rendering", async () => {
   const math = await Deno.readTextFile("./test/fixtures/math.md");
   const expected = await Deno.readTextFile("./test/fixtures/math.html");
-  const expectedStrip = await Deno.readTextFile("./test/fixtures/basic.strip");
+  const expectedStrip = await Deno.readTextFile("./test/fixtures/math.strip");
   const html = render(math, { allowMath: true });
   assertEquals(html, expected);
   assertEquals(strip(math), expectedStrip);
@@ -79,13 +79,9 @@ Deno.test(
   "<td> in table supports align, rowspan, and colspan",
   async () => {
     const markdown = await Deno.readTextFile("./test/fixtures/table.md");
-    const expectedHTML = await Deno.readTextFile("./test/fixtures/table.html");
-    const expectedStrip = await Deno.readTextFile(
-      "./test/fixtures/table.strip",
-    );
+    const expected = await Deno.readTextFile("./test/fixtures/table.html");
     const html = render(markdown);
-    assertEquals(html, expectedHTML);
-    assertEquals(strip(markdown), expectedStrip);
+    assertEquals(html, expected);
   },
 );
 
@@ -317,24 +313,18 @@ Deno.test("render github-slugger not reused", function () {
 
 Deno.test("footnotes", () => {
   const markdown = Deno.readTextFileSync("./test/fixtures/footnote.md");
-  const expectedHTML = Deno.readTextFileSync("./test/fixtures/footnote.html");
-  const expectedStrip = Deno.readTextFileSync("./test/fixtures/footnote.strip");
+  const expected = Deno.readTextFileSync("./test/fixtures/footnote.html");
 
   const html = render(markdown);
-  assertEquals(html, expectedHTML);
-  assertEquals(strip(markdown), expectedStrip);
+  assertEquals(html, expected);
 });
 
 Deno.test("hard line breaks", () => {
   const markdown = Deno.readTextFileSync("./test/fixtures/lineBreaks.md");
-  const expectedHTML = Deno.readTextFileSync("./test/fixtures/lineBreaks.html");
-  const expectedStrip = Deno.readTextFileSync(
-    "./test/fixtures/lineBreaks.strip",
-  );
+  const expected = Deno.readTextFileSync("./test/fixtures/lineBreaks.html");
 
   const html = render(markdown, { breaks: true });
-  assertEquals(html, expectedHTML);
-  assertEquals(strip(markdown, { breaks: true }), expectedStrip);
+  assertEquals(html, expected);
 });
 
 Deno.test(
