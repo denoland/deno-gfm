@@ -1,0 +1,179 @@
+{
+  "json": {
+    "name": "Deno"
+  }
+}
+
+- hello
++ world
+
+Buildscript
+import { build } from "https://deno.land/x/esbuild/mod.ts";
+import sassPlugin from "https://deno.land/x/esbuild_plugin_sass_deno/mod.ts";
+
+build({
+  entryPoints: [
+    "example/in.ts",
+  ],
+  bundle: true,
+  outfile: "example/out.js",
+  plugins: [sassPlugin()],
+});
+
+Main Entrypoint File:
+import styles from "./styles.scss";
+
+document.getElementsByTagName("head")[0].innerHTML +=
+  `<style>${styles}</style>`;
+
+Some strikethrough text
+
+Summary
+  Some Details
+
+even more details
+Type Description example 
+string A string of characters. 'Hello world' 
+number A numeric value, either float or integer. 42 
+boolean A boolean value. true 
+enum An enum value. 'drama' 
+geopoint A geopoint value. { lat: 40.7128, lon: 74.0060 } 
+string[] An array of strings. ['red', 'green', 'blue'] 
+number[] An array of numbers. [42, 91, 28.5] 
+boolean[] An array of booleans. [true, false, false] 
+enum[] An array of enums. ['comedy', 'action', 'romance'] 
+vector[<size>] A vector of numbers to perform vector search on. [0.403, 0.192, 0.830]
+
+Math rendering
+
+We support code blocks with the "math" type!
+We also support math blocks and inline math blocks as well!
+
+When, there are two solutions to and they are
+You can even typeset individual letters or whole sentences inline just like
+or. You can also use math blocks to typeset whole
+equations with:
+ \begin{aligned} \dot{x} & = \sigma(y-x)  \dot{y} & = \rho x - y - xz 
+\dot{z} & = -\beta z + xy \end{aligned}
+
+Deno
+
+Build Status - Cirrus Twitter handle
+Discord Chat
+Deno is a simple, modern and secure runtime for JavaScript and
+TypeScript that uses V8 and is built in Rust.
+
+Features
+
+Secure by default. No file, network, or environment access, unless explicitly
+enabled.
+Supports TypeScript out of the box.
+Ships only a single executable file.
+Built-in utilities like a dependency inspector (deno info) and a code
+formatter (deno fmt).
+Set of reviewed standard modules that are guaranteed to work with
+Deno.
+
+Install
+
+Shell (Mac, Linux):
+
+curl -fsSL https://deno.land/x/install/install.sh | sh
+
+PowerShell (Windows):
+
+iwr https://deno.land/x/install/install.ps1 -useb | iex
+
+Homebrew (Mac):
+
+brew install deno
+
+Chocolatey (Windows):
+
+choco install deno
+
+Scoop (Windows):
+
+scoop install deno
+
+Build and install from source using Cargo:
+
+cargo install deno --locked
+
+See
+deno_install
+and releases for other options.
+
+Getting Started
+
+Try running a simple program:
+
+deno run https://deno.land/std/examples/welcome.ts
+
+Or a more complex one:
+
+const listener = Deno.listen({ port: 8000 });
+console.log("http://localhost:8000/");
+
+for await (const conn of listener) {
+  serve(conn);
+}
+
+async function serve(conn: Deno.Conn) {
+  for await (const { respondWith } of Deno.serveHttp(conn)) {
+    respondWith(new Response("Hello world"));
+  }
+}
+
+You can find a deeper introduction, examples, and environment setup guides in
+the manual.
+The complete API reference is available at the runtime
+documentation.
+
+Contributing
+
+We appreciate your help!
+
+To contribute, please read our
+contributing instructions.
+
+/** @jsx h */
+import { h, IS_BROWSER, useState } from "../deps.ts";
+
+export default function Home() {
+  return (
+    <div>
+      <p>
+        Welcome to `fresh`. Try update this message in the ./pages/index.tsx
+        file, and refresh.
+      </p>
+      <Counter />
+      <p>{IS_BROWSER ? "Viewing browser render." : "Viewing JIT render."}</p>
+    </div>
+  );
+}
+
+function Counter() {
+  const [count, setCount] = useState(0);
+  return (
+    <div>
+      <p>{count}</p>
+      <button
+        onClick={() => setCount(count - 1)}
+        disabled={!IS_BROWSER}
+      >
+        -1
+      </button>
+      <button
+        onClick={() => setCount(count + 1)}
+        disabled={!IS_BROWSER}
+      >
+        +1
+      </button>
+    </div>
+  );
+}
+
+export const config: PageConfig = { runtimeJS: true };
+
+Figure 1. The deno mascot dinosaur standing in the rain.

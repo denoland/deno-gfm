@@ -1,6 +1,6 @@
 import { assertEquals, assertStringIncludes } from "@std/assert";
 import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.43/deno-dom-wasm.ts";
-import { render, Renderer, strip } from "../mod.ts";
+import { render, Renderer, strip, stripSplitBySections } from "../mod.ts";
 
 Deno.test("Basic markdown", async () => {
   const markdown = await Deno.readTextFile("./test/fixtures/basic.md");
@@ -426,4 +426,17 @@ Deno.test("anchor test", () => {
 
   const html = render(markdown);
   assertEquals(html, result);
+});
+
+Deno.test("example file", () => {
+  const markdown = Deno.readTextFileSync("./example/content.md");
+  const expectedHTML = Deno.readTextFileSync("./test/fixtures/example.html");
+  const expectedStrip = Deno.readTextFileSync("./test/fixtures/example.strip");
+  const expectedJSON = JSON.parse(
+    Deno.readTextFileSync("./test/fixtures/example.json"),
+  );
+
+  assertEquals(render(markdown), expectedHTML);
+  assertEquals(strip(markdown), expectedStrip);
+  assertEquals(stripSplitBySections(markdown), expectedJSON);
 });
