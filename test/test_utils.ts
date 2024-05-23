@@ -1,8 +1,8 @@
 import {
   default as puppeteer,
-  Page,
+  type Page,
 } from "https://deno.land/x/puppeteer@16.2.0/mod.ts";
-import { CSS, render, RenderOptions } from "../mod.ts";
+import { CSS, render, type RenderOptions } from "../mod.ts";
 
 type TestCase = {
   markdown: string;
