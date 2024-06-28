@@ -6,7 +6,7 @@ CSS, syntax highlighting, and HTML sanitization.
 ## Usage
 
 ```js
-import { CSS, render } from "jsr:@deno/gfm@0.6";
+import { CSS, render } from "jsr:@deno/gfm";
 
 const markdown = `
 # Hello, world!
@@ -83,7 +83,7 @@ By default syntax highlighting for JavaScript, Markdown, and HTML is included.
 You can include more languages importing them:
 
 ```js
-import { CSS, render } from "jsr:@deno/gfm@0.6";
+import { CSS, render } from "jsr:@deno/gfm";
 
 // Add support for TypeScript, Bash, and Rust.
 import "npm:prismjs@1.29.0/components/prism-typescript.js";
@@ -100,7 +100,7 @@ By default, all rendering is in blocks. There are cases where one would like to
 render some inline markdown, and this is achievable using the `inline` setting:
 
 ```ts
-import { render } from "jsr:@deno/gfm@0.6";
+import { render } from "jsr:@deno/gfm";
 
 const markdown = "My [Deno](https://deno.land) Blog";
 const header = render(markdown, { inline: true });
@@ -113,7 +113,7 @@ By default math rendering is disabled. To enable it, you must include the
 additional CSS and enable the `allowMath` setting:
 
 ```ts
-import { CSS, KATEX_CSS, render } from "jsr:@deno/gfm@0.6";
+import { CSS, KATEX_CSS, render } from "jsr:@deno/gfm";
 
 const markdown = `
 Block math:
