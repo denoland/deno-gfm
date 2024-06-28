@@ -5,8 +5,14 @@ CSS, syntax highlighting, and HTML sanitization.
 
 ## Usage
 
+First install the package with the command:
+
+```sh
+deno add @deno/gfm
+```
+
 ```js
-import { CSS, render } from "jsr:@deno/gfm";
+import { CSS, render } from "@deno/gfm";
 
 const markdown = `
 # Hello, world!
@@ -83,7 +89,7 @@ By default syntax highlighting for JavaScript, Markdown, and HTML is included.
 You can include more languages importing them:
 
 ```js
-import { CSS, render } from "jsr:@deno/gfm";
+import { CSS, render } from "@deno/gfm";
 
 // Add support for TypeScript, Bash, and Rust.
 import "npm:prismjs@1.29.0/components/prism-typescript.js";
@@ -100,7 +106,7 @@ By default, all rendering is in blocks. There are cases where one would like to
 render some inline markdown, and this is achievable using the `inline` setting:
 
 ```ts
-import { render } from "jsr:@deno/gfm";
+import { render } from "@deno/gfm";
 
 const markdown = "My [Deno](https://deno.land) Blog";
 const header = render(markdown, { inline: true });
