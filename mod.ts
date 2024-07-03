@@ -26,6 +26,12 @@ Marked.marked.use({
   },
 });
 
+/**
+ * An extension of Marked.Renderer which helps 
+ * @param options these are options passed into Renderer to decide various configuration
+ * @param options.allowMath This enables the math module
+ * @param baseUrl This helps with parsing links to go to the expected url in use
+ */
 export class Renderer extends Marked.Renderer {
   allowMath: boolean;
   baseUrl: string | undefined;
@@ -38,6 +44,18 @@ export class Renderer extends Marked.Renderer {
     this.#slugger = new GitHubSlugger();
   }
 
+  /**
+   * Heading render covers h1, h2, h3, h4, h5, h6 and returns the html for that level as well as an anchor tag to link directly to this header
+   * @param text Text you want in the header
+   * @param level Heading level 1,2,3,4,5,6
+   * @param raw TODO: How do you pass this in?
+   * @example in markdown
+   * ```md
+   * ### Hi there 
+   * => 
+   * <h3 id="hi_there"><linkgoeshere></linkgoeshere>Hi There<h3>
+   * ```
+   */
   heading(
     text: string,
     level: 1 | 2 | 3 | 4 | 5 | 6,
@@ -47,10 +65,33 @@ export class Renderer extends Marked.Renderer {
     return `<h${level} id="${slug}"><a class="anchor" aria-hidden="true" tabindex="-1" href="#${slug}"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>${text}</h${level}>\n`;
   }
 
+  /**
+   * Image render covers any image passed in adding its src, alt, and title to html props.
+   * @param src url of the image
+   * @param title title for the image - TODO: How do you pass this in?
+   * @param alt alt text for the image
+   * @example in markdown
+   * ```md
+   * ![Screenshot of a comment on a GitHub issue showing an image, added in the Markdown, of an Octocat smiling and raising a tentacle.](https://myoctocat.com/assets/images/base-octocat.svg) 
+   * => 
+   * <img src="${src}" alt="${alt}" title="${title ?? ""}" />
+   * ```
+   * from github https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#images
+   */
   image(src: string, title: string | null, alt: string): string {
     return `<img src="${src}" alt="${alt}" title="${title ?? ""}" />`;
   }
 
+  /**
+   * Code render covers code blocks.  Code is determined by language passed in and then handled by npm​:katex​ for math and npm​:prismjs for everything else
+   * @param code code that needs to be passed in
+   * @param language language that was on there from ```<language>
+   * @example in markdown
+   * ```md
+   * \```ts
+   * \```
+   * ```
+   */
   code(code: string, language?: string): string {
     // a language of `ts, ignore` should really be `ts`
     // and it should be lowercase to ensure it has parity with regular github markdown
@@ -72,6 +113,13 @@ export class Renderer extends Marked.Renderer {
     return `<div class="highlight highlight-source-${language} notranslate"><pre>${html}</pre></div>`;
   }
 
+  /**
+   * Link render covers all links.  If it's an anchor (#) - it doesn't have any rel tag
+   * @param href Url to go to
+   * @param title Additional Attribute
+   * @param text text for the link - TODO: How do you pass this in?
+   * @returns 
+   */
   link(href: string, title: string | null, text: string): string {
     const titleAttr = title ? ` title="${title}"` : "";
     if (href.startsWith("#")) {
@@ -118,6 +166,9 @@ function mathify(markdown: string) {
   return markdown;
 }
 
+/**
+ * Get options passed into any given function
+ */
 function getOpts(opts: RenderOptions) {
   return {
     baseUrl: opts.baseUrl,
@@ -129,6 +180,7 @@ function getOpts(opts: RenderOptions) {
   };
 }
 
+/** Options that can be passed into any given function*/
 export interface RenderOptions {
   baseUrl?: string;
   mediaBaseUrl?: string;
