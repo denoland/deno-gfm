@@ -89,7 +89,7 @@ export class Renderer extends Marked.Renderer {
   }
 
   /**
-   * Code render covers code blocks.  Code is determined by language passed in and then handled by npm​:katex​ for math and npm​:prismjs for everything else
+   * Code render covers code blocks.  Code is determined by language passed in and then handled by npm:katex for math and npm:prismjs for everything else
    * @param code code that needs to be passed in
    * @param language language that was on there from ```<language>
    * @example in markdown
