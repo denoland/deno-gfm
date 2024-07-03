@@ -46,7 +46,7 @@ export class Renderer extends Marked.Renderer {
 
   /**
    * Heading render covers h1, h2, h3, h4, h5, h6 and returns the html for that level as well as an anchor tag to link directly to this header
-   * @param text Text you want in the header
+   * @param text Text to be in the header
    * @param level Heading level 1,2,3,4,5,6
    * @param raw TODO: How do you pass this in?
    * @example in markdown
@@ -195,15 +195,22 @@ export interface RenderOptions {
   breaks?: boolean;
 }
 
+/**
+ * Main exported function for deno-gfm.  This function is the one that passes in markdown as a string and spits out HTML
+ * @param markdown All Markdown to be parsed - Mutable
+ * @param opts Options to be used - Mutable
+ */
 export function render(markdown: string, opts: RenderOptions = {}): string {
   opts.mediaBaseUrl ??= opts.baseUrl;
+  /** Replace all emoji names in a string with actual emojis with emojify */ 
   markdown = emojify(markdown);
   if (opts.allowMath) {
+    /** Replace all math blocks and inline into math */
     markdown = mathify(markdown);
   }
 
   const marked_opts = getOpts(opts);
-
+  /** Marked used to parse markdown into an html string */
   const html =
     (opts.inline
       ? Marked.marked.parseInline(markdown, marked_opts)
@@ -213,6 +220,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     return html;
   }
 
+  /** Rest of functions main purpose is to sanitize the html to make sure only wanted tags/classes/attributes are passing through */
   let defaultAllowedTags = sanitizeHtml.defaults.allowedTags.concat([
     "img",
     "video",
@@ -264,6 +272,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     ]);
   }
 
+  /** Helper function to transform img/video tags to make sure they have valid src as a URL */
   function transformMedia(tagName: string, attribs: sanitizeHtml.Attributes) {
     if (opts.mediaBaseUrl && attribs.src) {
       try {
@@ -385,6 +394,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
   });
 }
 
+/** Helper function to merge two objects together */
 function mergeAttributes(
   defaults: Record<string, sanitizeHtml.AllowedAttribute[]>,
   customs: Record<string, sanitizeHtml.AllowedAttribute[]>,
@@ -396,6 +406,7 @@ function mergeAttributes(
   return merged;
 }
 
+/** Helper function to merge two objects together */
 function stripTokens(
   tokens: Marked.Token[],
   sections: MarkdownSections[],
@@ -501,6 +512,7 @@ function stripTokens(
   }
 }
 
+/** Extension of the Markdown tokenizer to handle codespans */
 class StripTokenizer extends Marked.Tokenizer {
   codespan(src: string): Marked.Tokens.Codespan | undefined {
     // copied & modified from Marked to remove escaping
