@@ -27,7 +27,7 @@ Marked.marked.use({
 });
 
 /**
- * An extension of Marked.Renderer which helps 
+ * An extension of Marked.Renderer which helps
  * @param options these are options passed into Renderer to decide various configuration
  * @param options.allowMath This enables the math module
  * @param baseUrl This helps with parsing links to go to the expected url in use
@@ -41,7 +41,7 @@ export class Renderer extends Marked.Renderer {
 
   /**
    * Constructor for Renderer class used to initialize baseUrl, allowMath, and #slugger
-   * @param options 
+   * @param options
    */
   constructor(options: Marked.MarkedOptions & RenderOptions = {}) {
     super(options);
@@ -57,8 +57,8 @@ export class Renderer extends Marked.Renderer {
    * @param raw TODO: How do you pass this in?
    * @example in markdown
    * ```md
-   * ### Hi there 
-   * => 
+   * ### Hi there
+   * =>
    * <h3 id="hi_there"><linkgoeshere></linkgoeshere>Hi There<h3>
    * ```
    */
@@ -78,8 +78,8 @@ export class Renderer extends Marked.Renderer {
    * @param alt alt text for the image
    * @example in markdown
    * ```md
-   * ![Screenshot of a comment on a GitHub issue showing an image, added in the Markdown, of an Octocat smiling and raising a tentacle.](https://myoctocat.com/assets/images/base-octocat.svg) 
-   * => 
+   * ![Screenshot of a comment on a GitHub issue showing an image, added in the Markdown, of an Octocat smiling and raising a tentacle.](https://myoctocat.com/assets/images/base-octocat.svg)
+   * =>
    * <img src="${src}" alt="${alt}" title="${title ?? ""}" />
    * ```
    * from github https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#images
@@ -124,7 +124,7 @@ export class Renderer extends Marked.Renderer {
    * @param href Url to go to
    * @param title Additional Attribute
    * @param text text for the link - TODO: How do you pass this in?
-   * @returns 
+   * @returns
    */
   link(href: string, title: string | null, text: string): string {
     const titleAttr = title ? ` title="${title}"` : "";
@@ -219,7 +219,7 @@ export interface RenderOptions {
  */
 export function render(markdown: string, opts: RenderOptions = {}): string {
   opts.mediaBaseUrl ??= opts.baseUrl;
-  /** Replace all emoji names in a string with actual emojis with emojify */ 
+  /** Replace all emoji names in a string with actual emojis with emojify */
   markdown = emojify(markdown);
   if (opts.allowMath) {
     /** Replace all math blocks and inline into math */
