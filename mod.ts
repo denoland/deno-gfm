@@ -33,10 +33,16 @@ Marked.marked.use({
  * @param baseUrl This helps with parsing links to go to the expected url in use
  */
 export class Renderer extends Marked.Renderer {
+  /** This enables the math module */
   allowMath: boolean;
+  /** baseUrl used for links and relative images */
   baseUrl: string | undefined;
   #slugger: GitHubSlugger;
 
+  /**
+   * Constructor for Renderer class used to initialize baseUrl, allowMath, and #slugger
+   * @param options 
+   */
   constructor(options: Marked.MarkedOptions & RenderOptions = {}) {
     super(options);
     this.baseUrl = options.baseUrl;
@@ -182,16 +188,27 @@ function getOpts(opts: RenderOptions) {
 
 /** Options that can be passed into any given function*/
 export interface RenderOptions {
+  /** baseURl to make links absolute rather than relative */
   baseUrl?: string;
+  /** mediaBaseUrl used within images/videos */
   mediaBaseUrl?: string;
+  /** is this inline markdown or a file */
   inline?: boolean;
+  /** are Iframes okay in the markdown? */
   allowIframes?: boolean;
+  /** is Math blocks okay in the markdown? */
   allowMath?: boolean;
+  /** Should the html not be sanitized */
   disableHtmlSanitization?: boolean;
+  /** Is there a custom renderer to use? */
   renderer?: Renderer;
+  /** What additional classes are there to preserve */
   allowedClasses?: { [index: string]: boolean | Array<string | RegExp> };
+  /** What additional tags are there to preserve */
   allowedTags?: string[];
+  /** What additional attributes are there to preserve */
   allowedAttributes?: Record<string, sanitizeHtml.AllowedAttribute[]>;
+  /** Should there be breaks */
   breaks?: boolean;
 }
 
@@ -533,11 +550,13 @@ class StripTokenizer extends Marked.Tokenizer {
   }
 }
 
+/** A single section of Markdown  */
 export interface MarkdownSections {
   /** The header of the section */
   header: string;
   /** The depth-level of the header. 0 if it is root level */
   depth: number;
+  /** The content of the section */
   content: string;
 }
 
