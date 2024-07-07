@@ -1,4 +1,23 @@
 {
+  "name": "@deno/gfm",
+  "version": "0.8.2",
+  "exports": "./mod.ts",
+  "imports": {
+    "emoji": "jsr:@denosaurs/emoji@0.3",
+    "marked": "npm:marked@^12",
+    "github-slugger": "npm:github-slugger@^2.0",
+    "marked-alert": "npm:marked-alert@^2.0",
+    "marked-footnote": "npm:marked-footnote@^1.2",
+    "marked-gfm-heading-id": "npm:marked-gfm-heading-id@^3.1",
+    "prismjs": "npm:prismjs@^1.29",
+    "sanitize-html": "npm:sanitize-html@^2.11",
+    "he": "npm:he@^1.2",
+    "katex": "npm:katex@^0.16",
+    "@std/assert": "jsr:@std/assert@^0.214"
+  },
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "dom.asynciterable", "deno.ns"]
+  },
   "tasks": {
     "build": "deno run --allow-read --allow-write --allow-net --allow-run --allow-env ./style/patch.ts && deno fmt",
     "check:types": "deno check **/*.ts",
@@ -11,6 +30,5 @@
   },
   "fmt": {
     "exclude": ["./test/fixtures/alerts.md", "./test/fixtures/lineBreaks.md"]
-  },
-  "lock": false
+  }
 }

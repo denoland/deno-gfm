@@ -1,0 +1,195 @@
+<pre><code>{
+  "json": {
+    "name": "Deno"
+  }
+}</code></pre><pre><code>- hello
++ world</code></pre><ul>
+<li>Buildscript</li>
+</ul>
+<pre><code>import { build } from "https://deno.land/x/esbuild/mod.ts";
+import sassPlugin from "https://deno.land/x/esbuild_plugin_sass_deno/mod.ts";
+
+build({
+  entryPoints: [
+    "example/in.ts",
+  ],
+  bundle: true,
+  outfile: "example/out.js",
+  plugins: [sassPlugin()],
+});</code></pre><ul>
+<li>Main Entrypoint File:</li>
+</ul>
+<pre><code>import styles from "./styles.scss";
+
+document.getElementsByTagName("head")[0].innerHTML +=
+  `&lt;style&gt;${styles}&lt;/style&gt;`;</code></pre><p><del>Some strikethrough <code>text</code></del></p>
+<details>
+  <summary>Summary</summary>
+  <p>Some Details
+
+</p><p><strong>even more details</strong></p>
+<p></p>
+</details>
+
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+<th>example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>string</code></td>
+<td>A string of characters.</td>
+<td><code>'Hello world'</code></td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td>A numeric value, either float or integer.</td>
+<td><code>42</code></td>
+</tr>
+<tr>
+<td><code>boolean</code></td>
+<td>A boolean value.</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>enum</code></td>
+<td>An enum value.</td>
+<td><code>'drama'</code></td>
+</tr>
+<tr>
+<td><code>geopoint</code></td>
+<td>A geopoint value.</td>
+<td><code>{ lat: 40.7128, lon: 74.0060 }</code></td>
+</tr>
+<tr>
+<td><code>string[]</code></td>
+<td>An array of strings.</td>
+<td><code>['red', 'green', 'blue']</code></td>
+</tr>
+<tr>
+<td><code>number[]</code></td>
+<td>An array of numbers.</td>
+<td><code>[42, 91, 28.5]</code></td>
+</tr>
+<tr>
+<td><code>boolean[]</code></td>
+<td>An array of booleans.</td>
+<td><code>[true, false, false]</code></td>
+</tr>
+<tr>
+<td><code>enum[]</code></td>
+<td>An array of enums.</td>
+<td><code>['comedy', 'action', 'romance']</code></td>
+</tr>
+<tr>
+<td><code>vector[&lt;size&gt;]</code></td>
+<td>A vector of numbers to perform vector search on.</td>
+<td><code>[0.403, 0.192, 0.830]</code></td>
+</tr>
+</tbody></table>
+<h2 id="math-rendering"><a class="anchor" aria-hidden="true" tabindex="-1" href="#math-rendering"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Math rendering</h2>
+<p>We support code blocks with the "math" type!</p>
+<pre><code>G_{\mu v} = \frac{8 \pi G}{c^4} T_{\mu v}</code></pre><p>We also support math blocks and inline math blocks as well!</p>
+<p>When $a \ne 0$, there are two solutions to $(ax^2 + bx + c = 0)$ and they are</p>
+<p>$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$</p>
+<p>You can even typeset individual letters or whole sentences inline just like $x$
+or $Quadratic ; formula$. You can also use math blocks to typeset whole
+equations with $\LaTeX$:</p>
+<p>$$ \begin{aligned} \dot{x} &amp; = \sigma(y-x) \ \dot{y} &amp; = \rho x - y - xz \
+\dot{z} &amp; = -\beta z + xy \end{aligned} $$</p>
+<h1 id="deno"><a class="anchor" aria-hidden="true" tabindex="-1" href="#deno"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Deno</h1>
+<p><a href="https://github.com/denoland/deno/actions" rel="noopener noreferrer"><img src="https://github.com/denoland/deno/workflows/ci/badge.svg?branch=main&amp;event=push" alt="Build Status - Cirrus" /></a> <a href="https://twitter.com/intent/follow?screen_name=deno_land" rel="noopener noreferrer"><img src="https://img.shields.io/twitter/follow/deno_land.svg?style=social&amp;label=Follow" alt="Twitter handle" /></a>
+<a href="https://discord.gg/deno" rel="noopener noreferrer"><img src="https://img.shields.io/discord/684898665143206084?logo=discord&amp;style=social" alt="Discord Chat" /></a></p>
+<img align="right" src="https://deno.land/logo.svg" height="150px" alt="the deno mascot dinosaur standing in the rain" />
+
+<p>Deno is a <em>simple</em>, <em>modern</em> and <em>secure</em> runtime for <strong>JavaScript</strong> and
+<strong>TypeScript</strong> that uses V8 and is built in Rust.</p>
+<h3 id="features"><a class="anchor" aria-hidden="true" tabindex="-1" href="#features"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Features</h3>
+<ul>
+<li>Secure by default. No file, network, or environment access, unless explicitly
+enabled.</li>
+<li>Supports TypeScript out of the box.</li>
+<li>Ships only a single executable file.</li>
+<li>Built-in utilities like a dependency inspector (deno info) and a code
+formatter (deno fmt).</li>
+<li>Set of reviewed standard modules that are guaranteed to work with
+<a href="https://deno.land/std/" rel="noopener noreferrer">Deno</a>.</li>
+</ul>
+<h3 id="install"><a class="anchor" aria-hidden="true" tabindex="-1" href="#install"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Install</h3>
+<p>Shell (Mac, Linux):</p>
+<pre><code>curl -fsSL https://deno.land/x/install/install.sh | sh</code></pre><p>PowerShell (Windows):</p>
+<pre><code>iwr https://deno.land/x/install/install.ps1 -useb | iex</code></pre><p><a href="https://formulae.brew.sh/formula/deno" rel="noopener noreferrer">Homebrew</a> (Mac):</p>
+<pre><code>brew install deno</code></pre><p><a href="https://chocolatey.org/packages/deno" rel="noopener noreferrer">Chocolatey</a> (Windows):</p>
+<pre><code>choco install deno</code></pre><p><a href="https://scoop.sh/" rel="noopener noreferrer">Scoop</a> (Windows):</p>
+<pre><code>scoop install deno</code></pre><p>Build and install from source using <a href="https://crates.io/crates/deno" rel="noopener noreferrer">Cargo</a>:</p>
+<pre><code>cargo install deno --locked</code></pre><p>See
+<a href="https://github.com/denoland/deno_install/blob/master/README.md" rel="noopener noreferrer">deno_install</a>
+and <a href="https://github.com/denoland/deno/releases" rel="noopener noreferrer">releases</a> for other options.</p>
+<h3 id="getting-started"><a class="anchor" aria-hidden="true" tabindex="-1" href="#getting-started"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Getting Started</h3>
+<p>Try running a simple program:</p>
+<pre><code>deno run https://deno.land/std/examples/welcome.ts</code></pre><p>Or a more complex one:</p>
+<pre><code>const listener = Deno.listen({ port: 8000 });
+console.log("http://localhost:8000/");
+
+for await (const conn of listener) {
+  serve(conn);
+}
+
+async function serve(conn: Deno.Conn) {
+  for await (const { respondWith } of Deno.serveHttp(conn)) {
+    respondWith(new Response("Hello world"));
+  }
+}</code></pre><p>You can find a deeper introduction, examples, and environment setup guides in
+the <a href="https://deno.land/manual" rel="noopener noreferrer">manual</a>.</p>
+
+
+<p>The complete API reference is available at the runtime
+<a href="https://doc.deno.land" rel="noopener noreferrer">documentation</a>.</p>
+<h3 id="contributing"><a class="anchor" aria-hidden="true" tabindex="-1" href="#contributing"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Contributing</h3>
+<p>We appreciate your help!</p>
+<p>To contribute, please read our
+<a href="https://deno.land/manual/contributing" rel="noopener noreferrer">contributing instructions</a>.</p>
+<pre><code>/** @jsx h */
+import { h, IS_BROWSER, useState } from "../deps.ts";
+
+export default function Home() {
+  return (
+    &lt;div&gt;
+      &lt;p&gt;
+        Welcome to `fresh`. Try update this message in the ./pages/index.tsx
+        file, and refresh.
+      &lt;/p&gt;
+      &lt;Counter /&gt;
+      &lt;p&gt;{IS_BROWSER ? "Viewing browser render." : "Viewing JIT render."}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+function Counter() {
+  const [count, setCount] = useState(0);
+  return (
+    &lt;div&gt;
+      &lt;p&gt;{count}&lt;/p&gt;
+      &lt;button
+        onClick={() =&gt; setCount(count - 1)}
+        disabled={!IS_BROWSER}
+      &gt;
+        -1
+      &lt;/button&gt;
+      &lt;button
+        onClick={() =&gt; setCount(count + 1)}
+        disabled={!IS_BROWSER}
+      &gt;
+        +1
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+export const config: PageConfig = { runtimeJS: true };</code></pre><figure>
+  <img src="https://deno.land/logo.svg" />
+  <figcaption><b>Figure 1.</b> The deno mascot dinosaur standing in the rain.</figcaption>
+</figure>

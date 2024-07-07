@@ -47,6 +47,19 @@ document.getElementsByTagName("head")[0].innerHTML +=
 </p>
 </details>
 
+| Type             | Description                                      | example                           |
+| ---------------- | ------------------------------------------------ | --------------------------------- |
+| `string`         | A string of characters.                          | `'Hello world'`                   |
+| `number`         | A numeric value, either float or integer.        | `42`                              |
+| `boolean`        | A boolean value.                                 | `true`                            |
+| `enum`           | An enum value.                                   | `'drama'`                         |
+| `geopoint`       | A geopoint value.                                | `{ lat: 40.7128, lon: 74.0060 }`  |
+| `string[]`       | An array of strings.                             | `['red', 'green', 'blue']`        |
+| `number[]`       | An array of numbers.                             | `[42, 91, 28.5]`                  |
+| `boolean[]`      | An array of booleans.                            | `[true, false, false]`            |
+| `enum[]`         | An array of enums.                               | `['comedy', 'action', 'romance']` |
+| `vector[<size>]` | A vector of numbers to perform vector search on. | `[0.403, 0.192, 0.830]`           |
+
 ## Math rendering
 
 We support code blocks with the "math" type!

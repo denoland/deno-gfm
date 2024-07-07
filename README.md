@@ -5,8 +5,14 @@ CSS, syntax highlighting, and HTML sanitization.
 
 ## Usage
 
+First install the package with the command:
+
+```sh
+deno add @deno/gfm
+```
+
 ```js
-import { CSS, render } from "https://deno.land/x/gfm/mod.ts";
+import { CSS, render } from "@deno/gfm";
 
 const markdown = `
 # Hello, world!
@@ -83,12 +89,12 @@ By default syntax highlighting for JavaScript, Markdown, and HTML is included.
 You can include more languages importing them:
 
 ```js
-import { CSS, render } from "https://deno.land/x/gfm/mod.ts";
+import { CSS, render } from "@deno/gfm";
 
 // Add support for TypeScript, Bash, and Rust.
-import "https://esm.sh/prismjs@1.29.0/components/prism-typescript?no-check";
-import "https://esm.sh/prismjs@1.29.0/components/prism-bash?no-check";
-import "https://esm.sh/prismjs@1.29.0/components/prism-rust?no-check";
+import "npm:prismjs@1.29.0/components/prism-typescript.js";
+import "npm:prismjs@1.29.0/components/prism-bash.js";
+import "npm:prismjs@1.29.0/components/prism-rust.js";
 ```
 
 A full list of supported languages is available here:
@@ -100,7 +106,7 @@ By default, all rendering is in blocks. There are cases where one would like to
 render some inline markdown, and this is achievable using the `inline` setting:
 
 ```ts
-import { render } from "https://deno.land/x/gfm/mod.ts";
+import { render } from "@deno/gfm";
 
 const markdown = "My [Deno](https://deno.land) Blog";
 const header = render(markdown, { inline: true });
@@ -113,7 +119,7 @@ By default math rendering is disabled. To enable it, you must include the
 additional CSS and enable the `allowMath` setting:
 
 ```ts
-import { CSS, KATEX_CSS, render } from "https://deno.land/x/gfm/mod.ts";
+import { CSS, KATEX_CSS, render } from "jsr:@deno/gfm";
 
 const markdown = `
 Block math:

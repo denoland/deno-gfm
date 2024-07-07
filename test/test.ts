@@ -1,11 +1,14 @@
-import { assertEquals, assertStringIncludes, DOMParser } from "./test_deps.ts";
-import { render, Renderer } from "../mod.ts";
+import { assertEquals, assertStringIncludes } from "@std/assert";
+import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.43/deno-dom-wasm.ts";
+import { render, Renderer, strip, stripSplitBySections } from "../mod.ts";
 
 Deno.test("Basic markdown", async () => {
   const markdown = await Deno.readTextFile("./test/fixtures/basic.md");
-  const expected = await Deno.readTextFile("./test/fixtures/basic.html");
+  const expectedHTML = await Deno.readTextFile("./test/fixtures/basic.html");
+  const expectedStrip = await Deno.readTextFile("./test/fixtures/basic.strip");
   const html = render(markdown);
-  assertEquals(html, expected);
+  assertEquals(html, expectedHTML);
+  assertEquals(strip(markdown), expectedStrip);
 
   const document = new DOMParser().parseFromString(html, "text/html");
   assertEquals(document?.querySelector("h1")?.textContent, "Heading");
@@ -15,8 +18,11 @@ Deno.test("Basic markdown", async () => {
 Deno.test("Math rendering", async () => {
   const math = await Deno.readTextFile("./test/fixtures/math.md");
   const expected = await Deno.readTextFile("./test/fixtures/math.html");
+  const expectedStrip = await Deno.readTextFile("./test/fixtures/math.strip");
   const html = render(math, { allowMath: true });
   assertEquals(html, expected);
+  assertEquals(strip(math), expectedStrip);
+
   const document = new DOMParser().parseFromString(html, "text/html");
   assertEquals(
     document?.querySelector(".katex-mathml")?.textContent,
@@ -100,9 +106,13 @@ Deno.test(
   "alerts rendering",
   async () => {
     const markdown = await Deno.readTextFile("./test/fixtures/alerts.md");
-    const expected = await Deno.readTextFile("./test/fixtures/alerts.html");
+    const expectedHTML = await Deno.readTextFile("./test/fixtures/alerts.html");
+    const expectedStrip = await Deno.readTextFile(
+      "./test/fixtures/alerts.strip",
+    );
     const html = render(markdown);
-    assertEquals(html, expected);
+    assertEquals(html, expectedHTML);
+    assertEquals(strip(html), expectedStrip);
   },
 );
 
@@ -242,7 +252,7 @@ Deno.test(
 
 Deno.test("image title and no alt", () => {
   const markdown = `![](image.jpg "best title")`;
-  const expected = `<p><img src="image.jpg" title="best title" /></p>\n`;
+  const expected = `<p><img src="image.jpg" alt="" title="best title" /></p>\n`;
 
   const html = render(markdown);
   assertEquals(html, expected);
@@ -296,7 +306,7 @@ Deno.test("render github-slugger not reused", function () {
   for (let i = 0; i < 2; i++) {
     const html = render("## Hello");
     const expected =
-      `<h2 id="hello"><a class="anchor" aria-hidden="true" tabindex="-1" href="#hello"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Hello</h2>`;
+      `<h2 id="hello"><a class="anchor" aria-hidden="true" tabindex="-1" href="#hello"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Hello</h2>\n`;
     assertEquals(html, expected);
   }
 });
@@ -338,21 +348,26 @@ Deno.test(
 Deno.test("details, summary, and del", () => {
   const markdown = `Example
 
-  <details open>
-  <summary>Shopping list</summary>
+<details open>
+<summary>Shopping list</summary>
 
-  * Vegetables
-  * Fruits
-  * Fish
-  * <del>tofu</del>
+* Vegetables
+* Fruits
+* Fish
+* <del>tofu</del>
 
-  </details>`;
-  const expected = Deno.readTextFileSync(
+</details>
+`;
+  const expectedHTML = Deno.readTextFileSync(
     "./test/fixtures/detailsSummaryDel.html",
+  );
+  const expectedStrip = Deno.readTextFileSync(
+    "./test/fixtures/detailsSummaryDel.strip",
   );
 
   const html = render(markdown);
-  assertEquals(html, expected.trim());
+  assertEquals(html, expectedHTML);
+  assertEquals(strip(markdown), expectedStrip);
 });
 
 Deno.test("del tag test", () => {
@@ -361,15 +376,17 @@ Deno.test("del tag test", () => {
 
   const html = render(markdown);
   assertEquals(html, result);
+  assertEquals(strip(markdown), "tofu\n");
 });
 
 Deno.test("h1 test", () => {
   const markdown = "# Hello";
   const result =
-    `<h1 id="hello"><a class="anchor" aria-hidden="true" tabindex="-1" href="#hello"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Hello</h1>`;
+    `<h1 id="hello"><a class="anchor" aria-hidden="true" tabindex="-1" href="#hello"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Hello</h1>\n`;
 
   const html = render(markdown);
   assertEquals(html, result);
+  assertEquals(strip(markdown), "Hello\n");
 });
 
 Deno.test("svg test", () => {
@@ -378,16 +395,50 @@ Deno.test("svg test", () => {
 
   const html = render(markdown);
   assertEquals(html, result);
+  assertEquals(strip(markdown), "\n");
 });
 
 Deno.test("task list", () => {
   const markdown = `- Normal list
 - [x] done
 - [ ] not done`;
-  const expected = Deno.readTextFileSync("./test/fixtures/taskList.html");
+  const expectedHTML = Deno.readTextFileSync("./test/fixtures/taskList.html");
+  const expectedStrip = Deno.readTextFileSync("./test/fixtures/taskList.strip");
 
   const html = render(markdown);
-  assertEquals(html, expected);
+  assertEquals(html, expectedHTML);
+  assertEquals(strip(markdown), expectedStrip);
+});
+
+Deno.test("anchor test raw", () => {
+  const markdown =
+    `<a class="anchor" aria-hidden="true" tabindex="-1" href="#hello">foo</a>`;
+  const result =
+    `<p><a class="anchor" aria-hidden="true" tabindex="-1" href="#hello">foo</a></p>\n`;
+
+  const html = render(markdown);
+  assertEquals(html, result);
+});
+
+Deno.test("anchor test", () => {
+  const markdown = `[asdf](#hello)`;
+  const result = `<p><a href="#hello">asdf</a></p>\n`;
+
+  const html = render(markdown);
+  assertEquals(html, result);
+});
+
+Deno.test("example file", () => {
+  const markdown = Deno.readTextFileSync("./example/content.md");
+  const expectedHTML = Deno.readTextFileSync("./test/fixtures/example.html");
+  const expectedStrip = Deno.readTextFileSync("./test/fixtures/example.strip");
+  const expectedJSON = JSON.parse(
+    Deno.readTextFileSync("./test/fixtures/example.json"),
+  );
+
+  assertEquals(render(markdown), expectedHTML);
+  assertEquals(strip(markdown), expectedStrip);
+  assertEquals(stripSplitBySections(markdown), expectedJSON);
 });
 
 Deno.test("yaml unit", () => {

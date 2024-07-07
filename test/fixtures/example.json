@@ -1,0 +1,37 @@
+[
+  {
+    "header": "",
+    "depth": 0,
+    "content": "{\n  \"json\": {\n    \"name\": \"Deno\"\n  }\n}\n\n- hello\n+ world\n\nBuildscript\nimport { build } from \"https://deno.land/x/esbuild/mod.ts\";\nimport sassPlugin from \"https://deno.land/x/esbuild_plugin_sass_deno/mod.ts\";\n\nbuild({\n  entryPoints: [\n    \"example/in.ts\",\n  ],\n  bundle: true,\n  outfile: \"example/out.js\",\n  plugins: [sassPlugin()],\n});\n\nMain Entrypoint File:\nimport styles from \"./styles.scss\";\n\ndocument.getElementsByTagName(\"head\")[0].innerHTML +=\n  `<style>${styles}</style>`;\n\nSome strikethrough text\n\nSummary\n  Some Details\n\neven more details\nType Description example \nstring A string of characters. 'Hello world' \nnumber A numeric value, either float or integer. 42 \nboolean A boolean value. true \nenum An enum value. 'drama' \ngeopoint A geopoint value. { lat: 40.7128, lon: 74.0060 } \nstring[] An array of strings. ['red', 'green', 'blue'] \nnumber[] An array of numbers. [42, 91, 28.5] \nboolean[] An array of booleans. [true, false, false] \nenum[] An array of enums. ['comedy', 'action', 'romance'] \nvector[<size>] A vector of numbers to perform vector search on. [0.403, 0.192, 0.830]"
+  },
+  {
+    "header": "Math rendering",
+    "depth": 2,
+    "content": "We support code blocks with the \"math\" type!\nWe also support math blocks and inline math blocks as well!\n\nWhen, there are two solutions to and they are\nYou can even typeset individual letters or whole sentences inline just like\nor. You can also use math blocks to typeset whole\nequations with:\n \\begin{aligned} \\dot{x} & = \\sigma(y-x)  \\dot{y} & = \\rho x - y - xz \n\\dot{z} & = -\\beta z + xy \\end{aligned}"
+  },
+  {
+    "header": "Deno",
+    "depth": 1,
+    "content": "Build Status - Cirrus Twitter handle\nDiscord Chat\nDeno is a simple, modern and secure runtime for JavaScript and\nTypeScript that uses V8 and is built in Rust."
+  },
+  {
+    "header": "Features",
+    "depth": 3,
+    "content": "Secure by default. No file, network, or environment access, unless explicitly\nenabled.\nSupports TypeScript out of the box.\nShips only a single executable file.\nBuilt-in utilities like a dependency inspector (deno info) and a code\nformatter (deno fmt).\nSet of reviewed standard modules that are guaranteed to work with\nDeno."
+  },
+  {
+    "header": "Install",
+    "depth": 3,
+    "content": "Shell (Mac, Linux):\n\ncurl -fsSL https://deno.land/x/install/install.sh | sh\n\nPowerShell (Windows):\n\niwr https://deno.land/x/install/install.ps1 -useb | iex\n\nHomebrew (Mac):\n\nbrew install deno\n\nChocolatey (Windows):\n\nchoco install deno\n\nScoop (Windows):\n\nscoop install deno\n\nBuild and install from source using Cargo:\n\ncargo install deno --locked\n\nSee\ndeno_install\nand releases for other options."
+  },
+  {
+    "header": "Getting Started",
+    "depth": 3,
+    "content": "Try running a simple program:\n\ndeno run https://deno.land/std/examples/welcome.ts\n\nOr a more complex one:\n\nconst listener = Deno.listen({ port: 8000 });\nconsole.log(\"http://localhost:8000/\");\n\nfor await (const conn of listener) {\n  serve(conn);\n}\n\nasync function serve(conn: Deno.Conn) {\n  for await (const { respondWith } of Deno.serveHttp(conn)) {\n    respondWith(new Response(\"Hello world\"));\n  }\n}\n\nYou can find a deeper introduction, examples, and environment setup guides in\nthe manual.\nThe complete API reference is available at the runtime\ndocumentation."
+  },
+  {
+    "header": "Contributing",
+    "depth": 3,
+    "content": "We appreciate your help!\n\nTo contribute, please read our\ncontributing instructions.\n\n/** @jsx h */\nimport { h, IS_BROWSER, useState } from \"../deps.ts\";\n\nexport default function Home() {\n  return (\n    <div>\n      <p>\n        Welcome to `fresh`. Try update this message in the ./pages/index.tsx\n        file, and refresh.\n      </p>\n      <Counter />\n      <p>{IS_BROWSER ? \"Viewing browser render.\" : \"Viewing JIT render.\"}</p>\n    </div>\n  );\n}\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <p>{count}</p>\n      <button\n        onClick={() => setCount(count - 1)}\n        disabled={!IS_BROWSER}\n      >\n        -1\n      </button>\n      <button\n        onClick={() => setCount(count + 1)}\n        disabled={!IS_BROWSER}\n      >\n        +1\n      </button>\n    </div>\n  );\n}\n\nexport const config: PageConfig = { runtimeJS: true };\n\nFigure 1. The deno mascot dinosaur standing in the rain.\n\n"
+  }
+]
