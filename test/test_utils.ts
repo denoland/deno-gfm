@@ -9,7 +9,7 @@ type TestCase = {
   renderOptions?: RenderOptions;
 };
 
-export type TestCases = "basicMarkdownTable" | "footnotes";
+export type TestCases = "basicMarkdownTable" | "footnotes" | "yaml";
 
 export const testCases: Record<TestCases, TestCase> = {
   "basicMarkdownTable": {
@@ -23,6 +23,9 @@ export const testCases: Record<TestCases, TestCase> = {
   },
   "footnotes": {
     markdown: Deno.readTextFileSync("./test/fixtures/footnote.md"),
+  },
+  "yaml": {
+    markdown: Deno.readTextFileSync("./test/fixtures/yaml.md"),
   },
 };
 

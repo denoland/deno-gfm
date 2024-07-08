@@ -440,3 +440,11 @@ Deno.test("example file", () => {
   assertEquals(strip(markdown), expectedStrip);
   assertEquals(stripSplitBySections(markdown), expectedJSON);
 });
+
+Deno.test("yaml unit", () => {
+  const markdown = Deno.readTextFileSync("./test/fixtures/yaml.md");
+  const expected = Deno.readTextFileSync("./test/fixtures/yaml.html");
+
+  const html = render(markdown);
+  assertEquals(html, expected.trim());
+});
