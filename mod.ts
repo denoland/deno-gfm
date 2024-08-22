@@ -53,9 +53,16 @@ export class Renderer extends Marked.Renderer {
   }
 
   code(code: string, language?: string): string {
-    // a language of `ts, ignore` should really be `ts`
-    // and it should be lowercase to ensure it has parity with regular github markdown
-    language = language?.split(",")?.[0].toLocaleLowerCase();
+    const isTitleIncluded = language?.match(/\stitle="(.+)"/);
+    let title = null;
+    if (isTitleIncluded) {
+      language = language!.split(" ")[0];
+      title = isTitleIncluded[1];
+    } else {
+      // a language of `ts, ignore` should really be `ts`
+      // and it should be lowercase to ensure it has parity with regular github markdown
+      language = language?.split(",")?.[0].toLocaleLowerCase();
+    }
 
     // transform math code blocks into HTML+MathML
     // https://github.blog/changelog/2022-06-28-fenced-block-syntax-for-mathematical-expressions/
@@ -70,7 +77,10 @@ export class Renderer extends Marked.Renderer {
       return `<pre><code class="notranslate">${he.encode(code)}</code></pre>`;
     }
     const html = Prism.highlight(code, grammar, language!);
-    return `<div class="highlight highlight-source-${language} notranslate"><pre>${html}</pre></div>`;
+    const titleHtml = title
+      ? `<div class="markdown-code-title">${title}</div>`
+      : ``;
+    return `<div class="highlight highlight-source-${language} notranslate">${titleHtml}<pre>${html}</pre></div>`;
   }
 
   link(href: string, title: string | null, text: string): string {
