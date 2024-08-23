@@ -22,24 +22,23 @@ blocks[^bignote].
 
 [^bignote]: The first paragraph of the definition.
 
-    Paragraph two of the definition.
+Paragraph two of the definition.
 
-    > A blockquote with
-    > multiple lines.
+> A blockquote with multiple lines.
 
-    ~~~
-    a code block
-    ~~~
+```
+a code block
+```
 
-    | Header 1 | Header 2 |
-    | -------- | -------- |
-    | Cell 1   | Cell 2   |
+| Header 1 | Header 2 |
+| -------- | -------- |
+| Cell 1   | Cell 2   |
 
-    A \`final\` paragraph before list.
+A \`final\` paragraph before list.
 
-    - Item 1
-    - Item 2
-      - Subitem 1
-      - Subitem 2
+- Item 1
+- Item 2
+  - Subitem 1
+  - Subitem 2
 
 [^@#$%]: A footnote on the label: "@#$%".

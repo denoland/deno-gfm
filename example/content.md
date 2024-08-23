@@ -70,12 +70,12 @@ G_{\mu v} = \frac{8 \pi G}{c^4} T_{\mu v}
 
 We also support math blocks and inline math blocks as well!
 
-When $a \ne 0$, there are two solutions to $(ax^2 + bx + c = 0)$ and they are
+When $a \ne 0$, there are two solutions to $(ax^2 + bx + c = 0)$and they are
 
 $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
-You can even typeset individual letters or whole sentences inline just like $x$
-or $Quadratic \; formula$. You can also use math blocks to typeset whole
+You can even typeset individual letters or whole sentences inline just like
+$x$or $Quadratic \; formula$. You can also use math blocks to typeset whole
 equations with $\LaTeX$:
 
 $$ \begin{aligned} \dot{x} & = \sigma(y-x) \\ \dot{y} & = \rho x - y - xz \\
