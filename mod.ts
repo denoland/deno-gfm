@@ -8,8 +8,8 @@ import markedFootnote from "marked-footnote";
 import { gfmHeadingId } from "marked-gfm-heading-id";
 import Prism from "prismjs";
 import sanitizeHtml from "sanitize-html";
+import "prismjs-yaml";
 
-import "https://esm.sh/prismjs@1.29.0/components/prism-yaml";
 import { CSS, KATEX_CLASSES, KATEX_CSS } from "./style.ts";
 export { CSS, KATEX_CSS, Marked };
 
@@ -54,11 +54,11 @@ export class Renderer extends Marked.Renderer {
     if (isTitleIncluded) {
       language = language!.split(" ")[0];
       title = isTitleIncluded[1];
-    } else {
-      // a language of `ts, ignore` should really be `ts`
-      // and it should be lowercase to ensure it has parity with regular github markdown
-      language = language?.split(",")?.[0].toLocaleLowerCase();
     }
+
+    // a language of `ts, ignore` should really be `ts`
+    // and it should be lowercase to ensure it has parity with regular github markdown
+    language = language?.split(",")?.[0].toLocaleLowerCase();
 
     // transform math code blocks into HTML+MathML
     // https://github.blog/changelog/2022-06-28-fenced-block-syntax-for-mathematical-expressions/
