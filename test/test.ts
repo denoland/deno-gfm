@@ -35,19 +35,25 @@ Deno.test("Math rendering doesn't throw on invalid katex input", () => {
   render(" $&$");
 });
 
-Deno.test("When allowMath is not specified, make sure math is not rendered", () => {
-  const markdown = "This is a test $$y=x^2$$";
-  const expected = `<p>This is a test $$y=x^2$$</p>\n`;
-  const html = render(markdown);
-  assertEquals(html, expected);
-});
+Deno.test(
+  "When allowMath is not specified, make sure math is not rendered",
+  () => {
+    const markdown = "This is a test $$y=x^2$$";
+    const expected = `<p>This is a test $$y=x^2$$</p>\n`;
+    const html = render(markdown);
+    assertEquals(html, expected);
+  },
+);
 
-Deno.test("When allowMath is not specified, make sure math code block is not rendered", () => {
-  const markdown = "```math\ny=x^2\n```";
-  const expected = `<pre><code>y=x^2</code></pre>`;
-  const html = render(markdown);
-  assertEquals(html, expected);
-});
+Deno.test(
+  "When allowMath is not specified, make sure math code block is not rendered",
+  () => {
+    const markdown = "```math\ny=x^2\n```";
+    const expected = `<pre><code>y=x^2</code></pre>`;
+    const html = render(markdown);
+    assertEquals(html, expected);
+  },
+);
 
 Deno.test("bug #61 generate a tag", () => {
   const markdown = "[link](https://example.com)";
@@ -75,46 +81,35 @@ Deno.test(
   },
 );
 
-Deno.test(
-  "<td> in table supports align, rowspan, and colspan",
-  async () => {
-    const markdown = await Deno.readTextFile("./test/fixtures/table.md");
-    const expected = await Deno.readTextFile("./test/fixtures/table.html");
-    const html = render(markdown);
-    assertEquals(html, expected);
-  },
-);
+Deno.test("<td> in table supports align, rowspan, and colspan", async () => {
+  const markdown = await Deno.readTextFile("./test/fixtures/table.md");
+  const expected = await Deno.readTextFile("./test/fixtures/table.html");
+  const html = render(markdown);
+  assertEquals(html, expected);
+});
 
-Deno.test(
-  "custom renderer",
-  () => {
-    const markdown = `# hello world`;
-    const expected = `<h1 id="custom-renderer">hello world</h1>`;
+Deno.test("custom renderer", () => {
+  const markdown = `# hello world`;
+  const expected = `<h1 id="custom-renderer">hello world</h1>`;
 
-    class CustomRenderer extends Renderer {
-      heading(text: string, level: 1 | 2 | 3 | 4 | 5 | 6): string {
-        return `<h${level} id="custom-renderer">${text}</h${level}>`;
-      }
+  class CustomRenderer extends Renderer {
+    heading(text: string, level: 1 | 2 | 3 | 4 | 5 | 6): string {
+      return `<h${level} id="custom-renderer">${text}</h${level}>`;
     }
+  }
 
-    const html = render(markdown, { renderer: new CustomRenderer({}) });
-    assertEquals(html, expected);
-  },
-);
+  const html = render(markdown, { renderer: new CustomRenderer({}) });
+  assertEquals(html, expected);
+});
 
-Deno.test(
-  "alerts rendering",
-  async () => {
-    const markdown = await Deno.readTextFile("./test/fixtures/alerts.md");
-    const expectedHTML = await Deno.readTextFile("./test/fixtures/alerts.html");
-    const expectedStrip = await Deno.readTextFile(
-      "./test/fixtures/alerts.strip",
-    );
-    const html = render(markdown);
-    assertEquals(html, expectedHTML);
-    assertEquals(strip(html), expectedStrip);
-  },
-);
+Deno.test("alerts rendering", async () => {
+  const markdown = await Deno.readTextFile("./test/fixtures/alerts.md");
+  const expectedHTML = await Deno.readTextFile("./test/fixtures/alerts.html");
+  const expectedStrip = await Deno.readTextFile("./test/fixtures/alerts.strip");
+  const html = render(markdown);
+  assertEquals(html, expectedHTML);
+  assertEquals(strip(html), expectedStrip);
+});
 
 Deno.test("Iframe rendering", () => {
   const markdown =
@@ -226,29 +221,26 @@ Deno.test("Math rendering in code block", () => {
   assertEquals(html, expected);
 });
 
-Deno.test(
-  "custom allowed classes",
-  async () => {
-    const markdown = await Deno.readTextFile(
-      "./test/fixtures/customAllowedClasses.md",
-    );
-    const expected = await Deno.readTextFile(
-      "./test/fixtures/customAllowedClasses.html",
-    );
-    class CustomRenderer extends Renderer {
-      list(body: string, ordered: boolean): string {
-        const type = ordered ? "list-decimal" : "list-disc";
-        const tag = ordered ? "ol" : "ul";
-        return `<${tag} class="${type}">${body}</${tag}>`;
-      }
+Deno.test("custom allowed classes", async () => {
+  const markdown = await Deno.readTextFile(
+    "./test/fixtures/customAllowedClasses.md",
+  );
+  const expected = await Deno.readTextFile(
+    "./test/fixtures/customAllowedClasses.html",
+  );
+  class CustomRenderer extends Renderer {
+    list(body: string, ordered: boolean): string {
+      const type = ordered ? "list-decimal" : "list-disc";
+      const tag = ordered ? "ol" : "ul";
+      return `<${tag} class="${type}">${body}</${tag}>`;
     }
-    const html = render(markdown, {
-      renderer: new CustomRenderer({}),
-      allowedClasses: { ul: ["list-disc"], ol: ["list-decimal"] },
-    });
-    assertEquals(html, expected.trim());
-  },
-);
+  }
+  const html = render(markdown, {
+    renderer: new CustomRenderer({}),
+    allowedClasses: { ul: ["list-disc"], ol: ["list-decimal"] },
+  });
+  assertEquals(html, expected.trim());
+});
 
 Deno.test("image title and no alt", () => {
   const markdown = `![](image.jpg "best title")`;
@@ -262,6 +254,15 @@ Deno.test("js language", () => {
   const markdown = "```js\nconst foo = 'bar';\n```";
   const expected =
     `<div class="highlight highlight-source-js notranslate"><pre><span class="token keyword">const</span> foo <span class="token operator">=</span> <span class="token string">'bar'</span><span class="token punctuation">;</span></pre></div>`;
+
+  const html = render(markdown);
+  assertEquals(html, expected);
+});
+
+Deno.test("code fence with a title", () => {
+  const markdown = "```js title=\"index.ts\"\nconst foo = 'bar';\n```";
+  const expected =
+    `<div class="highlight highlight-source-js notranslate"><div class="markdown-code-title">index.ts</div><pre><span class="token keyword">const</span> foo <span class="token operator">=</span> <span class="token string">'bar'</span><span class="token punctuation">;</span></pre></div>`;
 
   const html = render(markdown);
   assertEquals(html, expected);
@@ -327,23 +328,20 @@ Deno.test("hard line breaks", () => {
   assertEquals(html, expected);
 });
 
-Deno.test(
-  "custom allowed tags and attributes",
-  () => {
-    const markdown = Deno.readTextFileSync(
-      "./test/fixtures/customAllowedTags.md",
-    );
-    const expected = Deno.readTextFileSync(
-      "./test/fixtures/customAllowedTags.html",
-    );
+Deno.test("custom allowed tags and attributes", () => {
+  const markdown = Deno.readTextFileSync(
+    "./test/fixtures/customAllowedTags.md",
+  );
+  const expected = Deno.readTextFileSync(
+    "./test/fixtures/customAllowedTags.html",
+  );
 
-    const html = render(markdown, {
-      allowedTags: ["meter"],
-      allowedAttributes: { meter: ["value", "optimum"], a: ["hreflang"] },
-    });
-    assertEquals(html, expected);
-  },
-);
+  const html = render(markdown, {
+    allowedTags: ["meter"],
+    allowedAttributes: { meter: ["value", "optimum"], a: ["hreflang"] },
+  });
+  assertEquals(html, expected);
+});
 
 Deno.test("details, summary, and del", () => {
   const markdown = `Example

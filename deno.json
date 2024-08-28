@@ -10,6 +10,7 @@
     "marked-footnote": "npm:marked-footnote@^1.2",
     "marked-gfm-heading-id": "npm:marked-gfm-heading-id@^3.1",
     "prismjs": "npm:prismjs@^1.29",
+    "prismjs-yaml": "npm:prismjs@^1.29/components/prism-yaml.js",
     "sanitize-html": "npm:sanitize-html@^2.11",
     "he": "npm:he@^1.2",
     "katex": "npm:katex@^0.16",
@@ -29,6 +30,11 @@
     "test": "deno test --allow-read --allow-env --allow-write --allow-run --allow-net"
   },
   "fmt": {
-    "exclude": ["./test/fixtures/alerts.md", "./test/fixtures/lineBreaks.md"]
+    "exclude": [
+      "./test/fixtures/alerts.md",
+      "./test/fixtures/lineBreaks.md",
+      "./test/fixtures/footnote.md",
+      "./example/content.md"
+    ]
   }
 }
