@@ -11,10 +11,10 @@
     "marked-gfm-heading-id": "npm:marked-gfm-heading-id@^3.1",
     "prismjs": "npm:prismjs@^1.29",
     "prismjs-yaml": "npm:prismjs@^1.29/components/prism-yaml.js",
-    "sanitize-html": "npm:sanitize-html@^2.11",
+    "sanitize-html": "npm:sanitize-html@^2.13",
     "he": "npm:he@^1.2",
     "katex": "npm:katex@^0.16",
-    "@std/assert": "jsr:@std/assert@^0.214"
+    "@std/assert": "jsr:@std/assert@^1.0"
   },
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "dom.asynciterable", "deno.ns"]
