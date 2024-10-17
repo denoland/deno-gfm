@@ -53,7 +53,7 @@ async function handler(_req: Request): Promise<Response> {
     });
   } catch (err) {
     console.error(err);
-    return new Response(err.message, { status: 500 });
+    return new Response((err as Error).message, { status: 500 });
   }
 }
 

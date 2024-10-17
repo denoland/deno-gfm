@@ -93,7 +93,7 @@ Deno.test("custom renderer", () => {
   const expected = `<h1 id="custom-renderer">hello world</h1>`;
 
   class CustomRenderer extends Renderer {
-    heading(text: string, level: 1 | 2 | 3 | 4 | 5 | 6): string {
+    override heading(text: string, level: 1 | 2 | 3 | 4 | 5 | 6): string {
       return `<h${level} id="custom-renderer">${text}</h${level}>`;
     }
   }
@@ -229,7 +229,7 @@ Deno.test("custom allowed classes", async () => {
     "./test/fixtures/customAllowedClasses.html",
   );
   class CustomRenderer extends Renderer {
-    list(body: string, ordered: boolean): string {
+    override list(body: string, ordered: boolean): string {
       const type = ordered ? "list-decimal" : "list-disc";
       const tag = ordered ? "ol" : "ul";
       return `<${tag} class="${type}">${body}</${tag}>`;
