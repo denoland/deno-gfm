@@ -57,16 +57,14 @@ Deno.test(
 
 Deno.test("bug #61 generate a tag", () => {
   const markdown = "[link](https://example.com)";
-  const expected =
-    `<p><a href="https://example.com" rel="noopener noreferrer">link</a></p>\n`;
+  const expected = `<p><a href="https://example.com" rel="noopener noreferrer">link</a></p>\n`;
   const html = render(markdown);
   assertEquals(html, expected);
 });
 
 Deno.test("bug #61 generate a tag with disableHtmlSanitization", () => {
   const markdown = "[link](https://example.com)";
-  const expected =
-    `<p><a href="https://example.com" rel="noopener noreferrer">link</a></p>\n`;
+  const expected = `<p><a href="https://example.com" rel="noopener noreferrer">link</a></p>\n`;
   const html = render(markdown, { disableHtmlSanitization: true });
   assertEquals(html, expected);
 });
@@ -114,8 +112,7 @@ Deno.test("alerts rendering", async () => {
 Deno.test("Iframe rendering", () => {
   const markdown =
     'Here is an iframe:\n\n<iframe src="https://example.com" width="300" height="200"></iframe>';
-  const expected =
-    `<p>Here is an iframe:</p>\n<iframe src="https://example.com" width="300" height="200"></iframe>`;
+  const expected = `<p>Here is an iframe:</p>\n<iframe src="https://example.com" width="300" height="200"></iframe>`;
 
   const html = render(markdown, { allowIframes: true });
   assertEquals(html, expected);
@@ -133,8 +130,7 @@ Deno.test("Iframe rendering disabled", () => {
 Deno.test("Media URL transformation", () => {
   const markdown = "![Image](image.jpg)\n\n![Video](video.mp4)";
   const mediaBaseUrl = "https://cdn.example.com/";
-  const expected =
-    `<p><img src="https://cdn.example.com/image.jpg" alt="Image" /></p>\n<p><img src="https://cdn.example.com/video.mp4" alt="Video" /></p>\n`;
+  const expected = `<p><img src="https://cdn.example.com/image.jpg" alt="Image" /></p>\n<p><img src="https://cdn.example.com/video.mp4" alt="Video" /></p>\n`;
 
   const html = render(markdown, { mediaBaseUrl: mediaBaseUrl });
   assertEquals(html, expected);
@@ -142,8 +138,7 @@ Deno.test("Media URL transformation", () => {
 
 Deno.test("Media URL transformation without base URL", () => {
   const markdown = "![Image](image.jpg)\n\n![Video](video.mp4)";
-  const expectedWithoutTransformation =
-    `<p><img src="image.jpg" alt="Image" /></p>\n<p><img src="video.mp4" alt="Video" /></p>\n`;
+  const expectedWithoutTransformation = `<p><img src="image.jpg" alt="Image" /></p>\n<p><img src="video.mp4" alt="Video" /></p>\n`;
 
   const html = render(markdown);
   assertEquals(html, expectedWithoutTransformation);
@@ -168,8 +163,7 @@ Deno.test("Media URL transformation with invalid URL", () => {
 
 Deno.test("Inline rendering", () => {
   const markdown = "My [Deno](https://deno.land) Blog";
-  const expected =
-    `My <a href="https://deno.land" rel="noopener noreferrer">Deno</a> Blog`;
+  const expected = `My <a href="https://deno.land" rel="noopener noreferrer">Deno</a> Blog`;
 
   const html = render(markdown, { inline: true });
   assertEquals(html, expected);
@@ -177,8 +171,7 @@ Deno.test("Inline rendering", () => {
 
 Deno.test("Inline rendering false", () => {
   const markdown = "My [Deno](https://deno.land) Blog";
-  const expected =
-    `<p>My <a href="https://deno.land" rel="noopener noreferrer">Deno</a> Blog</p>\n`;
+  const expected = `<p>My <a href="https://deno.land" rel="noopener noreferrer">Deno</a> Blog</p>\n`;
 
   const html = render(markdown, { inline: false });
   assertEquals(html, expected);
@@ -187,8 +180,7 @@ Deno.test("Inline rendering false", () => {
 Deno.test("Link URL resolution with base URL", () => {
   const markdown = "[Test Link](/path/to/resource)";
   const baseUrl = "https://example.com/";
-  const expected =
-    `<p><a href="https://example.com/path/to/resource" rel="noopener noreferrer">Test Link</a></p>\n`;
+  const expected = `<p><a href="https://example.com/path/to/resource" rel="noopener noreferrer">Test Link</a></p>\n`;
 
   const html = render(markdown, { baseUrl: baseUrl });
   assertEquals(html, expected);
@@ -196,8 +188,7 @@ Deno.test("Link URL resolution with base URL", () => {
 
 Deno.test("Link URL resolution without base URL", () => {
   const markdown = "[Test Link](/path/to/resource)";
-  const expected =
-    `<p><a href="/path/to/resource" rel="noopener noreferrer">Test Link</a></p>\n`;
+  const expected = `<p><a href="/path/to/resource" rel="noopener noreferrer">Test Link</a></p>\n`;
 
   const html = render(markdown);
   assertEquals(html, expected);
@@ -206,8 +197,7 @@ Deno.test("Link URL resolution without base URL", () => {
 Deno.test("Link URL resolution with invalid URL and base URL", () => {
   const markdown = "[Test Link](/path/to/resource)";
   const baseUrl = "this is an invalid url";
-  const expected =
-    `<p><a href="/path/to/resource" rel="noopener noreferrer">Test Link</a></p>\n`;
+  const expected = `<p><a href="/path/to/resource" rel="noopener noreferrer">Test Link</a></p>\n`;
 
   const html = render(markdown, { baseUrl: baseUrl });
   assertEquals(html, expected);
@@ -252,8 +242,7 @@ Deno.test("image title and no alt", () => {
 
 Deno.test("js language", () => {
   const markdown = "```js\nconst foo = 'bar';\n```";
-  const expected =
-    `<div class="highlight highlight-source-js notranslate"><pre><span class="token keyword">const</span> foo <span class="token operator">=</span> <span class="token string">'bar'</span><span class="token punctuation">;</span></pre></div>`;
+  const expected = `<div class="highlight highlight-source-js notranslate"><pre><span class="token keyword">const</span> foo <span class="token operator">=</span> <span class="token string">'bar'</span><span class="token punctuation">;</span></pre></div>`;
 
   const html = render(markdown);
   assertEquals(html, expected);
@@ -261,17 +250,49 @@ Deno.test("js language", () => {
 
 Deno.test("code fence with a title", () => {
   const markdown = "```js title=\"index.ts\"\nconst foo = 'bar';\n```";
-  const expected =
-    `<div class="highlight highlight-source-js notranslate"><div class="markdown-code-title">index.ts</div><pre><span class="token keyword">const</span> foo <span class="token operator">=</span> <span class="token string">'bar'</span><span class="token punctuation">;</span></pre></div>`;
+  const expected = `<div class="highlight highlight-source-js notranslate"><div class="markdown-code-title">index.ts</div><pre><span class="token keyword">const</span> foo <span class="token operator">=</span> <span class="token string">'bar'</span><span class="token punctuation">;</span></pre></div>`;
 
   const html = render(markdown);
   assertEquals(html, expected);
 });
 
+Deno.test("code containing mermaid", () => {
+  // test with two code blocks to see if the script and styles are not replicated
+  const markdown =
+    "```mermaid\ngraph TD;A-->B;A-->C;B-->D;C-->D;\n```\n\n```mermaid\ngraph TD;A-->B;A-->C;B-->D;C-->D;\n```";
+  const expected = `<script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: false, theme: "neutral" });
+    const elements = document.querySelectorAll(".mermaid-container");
+    elements.forEach((element) => {
+      const code = element.querySelector(".mermaid-code")?.textContent || "";
+      if (code) {
+        element.innerHTML = \`<div class="mermaid">\${code}</div>\`;
+      }
+    });
+    await mermaid.run();
+  </script>
+  <style>
+    .mermaid-code {
+      display: none;
+    }
+  </style>
+  <div class="mermaid-container"><pre><code>graph TD;A--&gt;B;A--&gt;C;B--&gt;D;C--&gt;D;</code></pre><div class="mermaid-code">graph TD;A--&gt;B;A--&gt;C;B--&gt;D;C--&gt;D;</div></div>
+  <div class="mermaid-container"><pre><code>graph TD;A--&gt;B;A--&gt;C;B--&gt;D;C--&gt;D;</code></pre><div class="mermaid-code">graph TD;A--&gt;B;A--&gt;C;B--&gt;D;C--&gt;D;</div></div>`;
+
+  const html = render(markdown);
+  assertEquals(
+    html,
+    expected
+      .split("\n")
+      .map((line) => line.trim())
+      .join(""),
+  );
+});
+
 Deno.test("link with title", () => {
   const markdown = `[link](https://example.com "asdf")`;
-  const expected =
-    `<p><a href="https://example.com" title="asdf" rel="noopener noreferrer">link</a></p>\n`;
+  const expected = `<p><a href="https://example.com" title="asdf" rel="noopener noreferrer">link</a></p>\n`;
   const html = render(markdown);
   assertEquals(html, expected);
 });
@@ -284,8 +305,7 @@ Deno.test("expect console warning from invalid math", () => {
   };
 
   const html = render("$$ +& $$", { allowMath: true });
-  const expected =
-    `<p>$$ +&amp; <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow></mrow><annotation encoding="application/x-tex"></annotation></semantics></math></span><span class="katex-html" aria-hidden="true"></span></span></p>\n`;
+  const expected = `<p>$$ +&amp; <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow></mrow><annotation encoding="application/x-tex"></annotation></semantics></math></span><span class="katex-html" aria-hidden="true"></span></span></p>\n`;
   assertEquals(html, expected);
   assertStringIncludes(
     warnCalls[0],
@@ -306,8 +326,7 @@ Deno.test("expect console warning from invalid math", () => {
 Deno.test("render github-slugger not reused", function () {
   for (let i = 0; i < 2; i++) {
     const html = render("## Hello");
-    const expected =
-      `<h2 id="hello"><a class="anchor" aria-hidden="true" tabindex="-1" href="#hello"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Hello</h2>\n`;
+    const expected = `<h2 id="hello"><a class="anchor" aria-hidden="true" tabindex="-1" href="#hello"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Hello</h2>\n`;
     assertEquals(html, expected);
   }
 });
@@ -379,8 +398,7 @@ Deno.test("del tag test", () => {
 
 Deno.test("h1 test", () => {
   const markdown = "# Hello";
-  const result =
-    `<h1 id="hello"><a class="anchor" aria-hidden="true" tabindex="-1" href="#hello"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Hello</h1>\n`;
+  const result = `<h1 id="hello"><a class="anchor" aria-hidden="true" tabindex="-1" href="#hello"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Hello</h1>\n`;
 
   const html = render(markdown);
   assertEquals(html, result);
@@ -409,10 +427,8 @@ Deno.test("task list", () => {
 });
 
 Deno.test("anchor test raw", () => {
-  const markdown =
-    `<a class="anchor" aria-hidden="true" tabindex="-1" href="#hello">foo</a>`;
-  const result =
-    `<p><a class="anchor" aria-hidden="true" tabindex="-1" href="#hello">foo</a></p>\n`;
+  const markdown = `<a class="anchor" aria-hidden="true" tabindex="-1" href="#hello">foo</a>`;
+  const result = `<p><a class="anchor" aria-hidden="true" tabindex="-1" href="#hello">foo</a></p>\n`;
 
   const html = render(markdown);
   assertEquals(html, result);
