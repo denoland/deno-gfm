@@ -123,10 +123,64 @@
   }
 }
 
+.markdown-body {
+  .markdown-alert {
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
+    color: inherit;
+    border-left: 0.25em solid #3d444d;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .markdown-alert-title {
+      display: flex;
+      gap: 7px;
+      font-weight: 500;
+      align-items: center;
+      line-height: 1;
+    }
+
+    // Define a mixin for alerts with specific border and title colors
+    @mixin alert-variant($border-color, $title-color) {
+      border-left-color: $border-color;
+
+      .markdown-alert-title {
+        color: $title-color;
+      }
+    }
+
+    &.markdown-alert-note {
+      @include alert-variant(#1f6feb, #4493f8);
+    }
+
+    &.markdown-alert-important {
+      @include alert-variant(#8957e5, #ab7df8);
+    }
+
+    &.markdown-alert-warning {
+      @include alert-variant(#9e6a03, #d29922);
+    }
+
+    &.markdown-alert-tip {
+      @include alert-variant(#238636, #3fb950);
+    }
+
+    &.markdown-alert-caution {
+      @include alert-variant(#da3633, #f85149);
+    }
+  }
+}
+
 .markdown-body .markdown-code-title {
   background-color: var(--bgColor-muted, var(--color-canvas-subtle));
   padding: 8px 16px;
-  border-bottom: 1px solid var(--borderColor-muted,var(--color-border-muted));
+  border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));
   margin: 0;
   font-size: 85%;
   font-weight: bold;
@@ -145,9 +199,9 @@
 }
 
 [data-footnote-ref]::before {
-  content: '[';
+  content: "[";
 }
 
 [data-footnote-ref]::after {
-  content: ']';
+  content: "]";
 }
