@@ -76,7 +76,12 @@ If you want to use the light or dark theme depending on the user's browser
 preference, set the following:
 
 ```html
-<div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body">
+<div
+  data-color-mode="auto"
+  data-light-theme="light"
+  data-dark-theme="dark"
+  class="markdown-body"
+>
   ... markdown body here ...
 </div>
 ```

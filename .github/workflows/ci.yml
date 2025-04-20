@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: denoland/setup-deno@v1
+      - uses: denoland/setup-deno@v2
 
       - name: Run fmt
         run: |
@@ -34,9 +34,7 @@ jobs:
           deno task check:types
 
       - name: Install Chromium
-        run: deno run -A --unstable https://deno.land/x/puppeteer@16.2.0/install.ts
-        env:
-          PUPPETEER_PRODUCT: chrome
+        run: deno run -A npm:puppeteer browsers install chrome
 
       - name: Run tests
         run: |

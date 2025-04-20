@@ -2,6 +2,10 @@
 @import "@primer/css/color-modes/themes/dark.scss";
 @import "@primer/css/markdown/index.scss";
 
+.dark {
+  @include primer-colors-dark;
+}
+
 .markdown-body {
   background-color: var(--color-canvas-default);
   color: var(--color-fg-default);

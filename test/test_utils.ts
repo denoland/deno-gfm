@@ -1,7 +1,4 @@
-import {
-  default as puppeteer,
-  type Page,
-} from "https://deno.land/x/puppeteer@16.2.0/mod.ts";
+import { default as puppeteer, type Page } from "npm:puppeteer";
 import { CSS, render, type RenderOptions } from "../mod.ts";
 
 type TestCase = {
