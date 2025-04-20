@@ -2,6 +2,10 @@
 @import "@primer/css/color-modes/themes/dark.scss";
 @import "@primer/css/markdown/index.scss";
 
+.dark {
+  @include primer-colors-dark;
+}
+
 .markdown-body {
   background-color: var(--color-canvas-default);
   color: var(--color-fg-default);
@@ -126,7 +130,7 @@
 .markdown-body .markdown-code-title {
   background-color: var(--bgColor-muted, var(--color-canvas-subtle));
   padding: 8px 16px;
-  border-bottom: 1px solid var(--borderColor-muted,var(--color-border-muted));
+  border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));
   margin: 0;
   font-size: 85%;
   font-weight: bold;
@@ -145,9 +149,9 @@
 }
 
 [data-footnote-ref]::before {
-  content: '[';
+  content: "[";
 }
 
 [data-footnote-ref]::after {
-  content: ']';
+  content: "]";
 }

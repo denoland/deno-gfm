@@ -1,5 +1,5 @@
 import $ from "https://deno.land/x/dax@0.36.0/mod.ts";
-import css from "npm:css@3.0.0";
+import css from "css";
 
 await $`rm -rf style/node_modules/@primer/primitives`;
 await $`npm install`.cwd("./style");
