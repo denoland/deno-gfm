@@ -4,7 +4,7 @@
   "exports": "./mod.ts",
   "nodeModulesDir": "auto",
   "imports": {
-    "emoji": "jsr:@denosaurs/emoji@^0.3",
+    "emoji": "jsr:@denosaurs/emoji@^0.3.1",
     "marked": "npm:marked@^12",
     "github-slugger": "npm:github-slugger@^2.0",
     "marked-alert": "npm:marked-alert@^2.0",
