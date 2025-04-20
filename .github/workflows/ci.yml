@@ -42,4 +42,4 @@ jobs:
 
       - name: Publish package (tag only)
         if: startsWith(github.ref, 'refs/tags/')
-        run: deno publish
+        run: deno publish --allow-dirty
