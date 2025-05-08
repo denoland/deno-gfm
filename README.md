@@ -8,7 +8,7 @@ CSS, syntax highlighting, and HTML sanitization.
 First install the package with the command:
 
 ```sh
-deno add @deno/gfm
+deno add jsr:@deno/gfm
 ```
 
 ```js
