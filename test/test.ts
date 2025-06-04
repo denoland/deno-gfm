@@ -268,6 +268,40 @@ Deno.test("code fence with a title", () => {
   assertEquals(html, expected);
 });
 
+Deno.test("code containing mermaid", () => {
+  // test with two code blocks to see if the script and styles are not replicated
+  const markdown =
+    "```mermaid\ngraph TD;A-->B;A-->C;B-->D;C-->D;\n```\n\n```mermaid\ngraph TD;A-->B;A-->C;B-->D;C-->D;\n```";
+  const expected = `<script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: false, theme: "neutral" });
+    const elements = document.querySelectorAll(".mermaid-container");
+    elements.forEach((element) => {
+      const code = element.querySelector(".mermaid-code")?.textContent || "";
+      if (code) {
+        element.innerHTML = \`<div class="mermaid">\${code}</div>\`;
+      }
+    });
+    await mermaid.run();
+  </script>
+  <style>
+    .mermaid-code {
+      display: none;
+    }
+  </style>
+  <div class="mermaid-container"><pre><code>graph TD;A--&gt;B;A--&gt;C;B--&gt;D;C--&gt;D;</code></pre><div class="mermaid-code">graph TD;A--&gt;B;A--&gt;C;B--&gt;D;C--&gt;D;</div></div>
+  <div class="mermaid-container"><pre><code>graph TD;A--&gt;B;A--&gt;C;B--&gt;D;C--&gt;D;</code></pre><div class="mermaid-code">graph TD;A--&gt;B;A--&gt;C;B--&gt;D;C--&gt;D;</div></div>`;
+
+  const html = render(markdown);
+  assertEquals(
+    html,
+    expected
+      .split("\n")
+      .map((line) => line.trim())
+      .join(""),
+  );
+});
+
 Deno.test("link with title", () => {
   const markdown = `[link](https://example.com "asdf")`;
   const expected =

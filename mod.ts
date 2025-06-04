@@ -31,6 +31,7 @@ export class Renderer extends Marked.Renderer {
   allowMath: boolean;
   baseUrl: string | undefined;
   #slugger: GitHubSlugger;
+  mermaidImport: boolean = false;
 
   constructor(options: Marked.MarkedOptions & RenderOptions = {}) {
     super(options);
@@ -63,23 +64,41 @@ export class Renderer extends Marked.Renderer {
     // a language of `ts, ignore` should really be `ts`
     // and it should be lowercase to ensure it has parity with regular github markdown
     language = language?.split(",")?.[0].toLocaleLowerCase();
+    const isMermaid = language === "mermaid";
 
     // transform math code blocks into HTML+MathML
     // https://github.blog/changelog/2022-06-28-fenced-block-syntax-for-mathematical-expressions/
     if (language === "math" && this.allowMath) {
       return katex.renderToString(code, { displayMode: true });
     }
+    if (isMermaid) {
+      this.mermaidImport = true;
+    }
     const grammar =
       language && Object.hasOwnProperty.call(Prism.languages, language)
         ? Prism.languages[language]
         : undefined;
     if (grammar === undefined) {
+      if (isMermaid) {
+        return minify(`<div class="mermaid-container">
+            <pre><code class="notranslate">${code}</code></pre>
+            <div class="mermaid-code">${code}</div>
+          </div>`);
+      }
       return `<pre><code class="notranslate">${he.encode(code)}</code></pre>`;
     }
     const html = Prism.highlight(code, grammar, language!);
     const titleHtml = title
       ? `<div class="markdown-code-title">${title}</div>`
       : ``;
+    if (isMermaid) {
+      return minify(`
+        <div class="mermaid-container">
+          <div class="highlight highlight-source-${language} notranslate">${titleHtml}<pre>${html}</pre></div>
+          <div class="mermaid-code">${code}</div>
+        </div>
+        `);
+    }
     return `<div class="highlight highlight-source-${language} notranslate">${titleHtml}<pre>${html}</pre></div>`;
   }
 
@@ -97,6 +116,10 @@ export class Renderer extends Marked.Renderer {
     }
     return `<a href="${href}"${titleAttr} rel="noopener noreferrer">${text}</a>`;
   }
+}
+
+function minify(str: string): string {
+  return str.replace(/^\s+|\s+$|\n/gm, "");
 }
 
 const BLOCK_MATH_REGEXP = /\$\$\s(.+?)\s\$\$/g;
@@ -169,8 +192,33 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       : Marked.marked.parse(markdown, marked_opts)
   ) as string;
 
+  let additionalCode = "";
+  if (marked_opts.renderer.mermaidImport) {
+    additionalCode = minify(`
+      <script type="module">
+        import mermaid from "https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs";
+        mermaid.initialize({ startOnLoad: false, theme: "neutral" });
+
+        const elements = document.querySelectorAll(".mermaid-container");
+        elements.forEach((element) => {
+          const code = element.querySelector(".mermaid-code")?.textContent || "";
+          if (code) {
+            element.innerHTML = \`<div class="mermaid">\${code}</div>\`;
+          }
+        });
+
+        await mermaid.run();
+      </script>
+      <style>
+        .mermaid-code {
+          display: none;
+        }
+      </style>
+    `);
+  }
+
   if (opts.disableHtmlSanitization) {
-    return html;
+    return additionalCode + html;
   }
 
   let defaultAllowedTags = sanitizeHtml.defaults.allowedTags.concat([
@@ -243,6 +291,8 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       "markdown-alert",
       "markdown-alert-*",
       "markdown-code-title",
+      "mermaid-code",
+      "mermaid-container",
     ],
     span: [
       "token",
@@ -334,22 +384,25 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     ],
   };
 
-  return sanitizeHtml(html, {
-    transformTags: {
-      img: transformMedia,
-      video: transformMedia,
-    },
-    allowedTags: [...defaultAllowedTags, ...(opts.allowedTags ?? [])],
-    allowedAttributes: mergeAttributes(
-      defaultAllowedAttributes,
-      opts.allowedAttributes ?? {},
-    ),
-    allowedClasses: { ...defaultAllowedClasses, ...opts.allowedClasses },
-    allowProtocolRelative: false,
-    parser: {
-      lowerCaseAttributeNames: false,
-    },
-  });
+  return (
+    additionalCode +
+    sanitizeHtml(html, {
+      transformTags: {
+        img: transformMedia,
+        video: transformMedia,
+      },
+      allowedTags: [...defaultAllowedTags, ...(opts.allowedTags ?? [])],
+      allowedAttributes: mergeAttributes(
+        defaultAllowedAttributes,
+        opts.allowedAttributes ?? {},
+      ),
+      allowedClasses: { ...defaultAllowedClasses, ...opts.allowedClasses },
+      allowProtocolRelative: false,
+      parser: {
+        lowerCaseAttributeNames: false,
+      },
+    })
+  );
 }
 
 function mergeAttributes(
