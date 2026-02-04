@@ -33,9 +33,6 @@ jobs:
         run: |
           deno task check:types
 
-      - name: Install Chromium
-        run: deno run -A npm:puppeteer browsers install chrome
-
       - name: Run tests
         run: |
           deno task test

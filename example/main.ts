@@ -1,14 +1,12 @@
-import { serve } from "https://deno.land/std@0.192.0/http/server.ts";
-
 import { CSS, KATEX_CSS, render } from "../mod.ts";
 
-import "https://esm.sh/prismjs@1.29.0/components/prism-jsx?no-check&pin=v57";
-import "https://esm.sh/prismjs@1.29.0/components/prism-typescript?no-check&pin=v57";
-import "https://esm.sh/prismjs@1.29.0/components/prism-tsx?no-check&pin=v57";
-import "https://esm.sh/prismjs@1.29.0/components/prism-bash?no-check&pin=v57";
-import "https://esm.sh/prismjs@1.29.0/components/prism-powershell?no-check&pin=v57";
-import "https://esm.sh/prismjs@1.29.0/components/prism-json?no-check&pin=v57";
-import "https://esm.sh/prismjs@1.29.0/components/prism-diff?no-check&pin=v57";
+import "prismjs-jsx";
+import "prismjs-typescript";
+import "prismjs-tsx";
+import "prismjs-bash";
+import "prismjs-powershell";
+import "prismjs-json";
+import "prismjs-diff";
 
 const CONTENT_PATH = new URL("./content.md", import.meta.url);
 
@@ -57,6 +55,4 @@ async function handler(_req: Request): Promise<Response> {
   }
 }
 
-serve(handler, {
-  port: 8001,
-});
+Deno.serve({ port: 8001 }, handler);
