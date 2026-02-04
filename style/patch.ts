@@ -1,18 +1,20 @@
-import $ from "https://deno.land/x/dax@0.36.0/mod.ts";
+// deno-lint-ignore no-import-prefix
+import $ from "jsr:@david/dax@^0.45.0";
 import css from "css";
 
-await $`rm -rf style/node_modules/@primer/primitives`;
+await $`rm -rf style/node_modules/@primer/primitives style/.parcel-cache style/dist`;
 await $`npm install`.cwd("./style");
 
 const colorVariables = new Set<string>();
 const variableRegex = /--[\w-]+/g;
 
 const cwd = $.path("./style");
+const markdownScssDir = cwd.join("node_modules/@primer/css/markdown");
 const scssFiles = [
   cwd.join("main.scss"),
-  ...Array.from(
-    cwd.expandGlobSync("node_modules/@primer/css/markdown/*.scss"),
-  ).map((e) => e.path),
+  ...Array.from(Deno.readDirSync(markdownScssDir.toString()))
+    .filter((e) => e.isFile && e.name.endsWith(".scss"))
+    .map((e) => markdownScssDir.join(e.name)),
 ];
 
 for (const pathRef of scssFiles) {
@@ -51,7 +53,7 @@ await $`npx parcel build main.scss --no-source-maps`.cwd("./style").quiet();
 // KATEX
 
 $.logStep("Fetching katex styles");
-const KATEX_BASE_URL = "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist";
+const KATEX_BASE_URL = "https://cdn.jsdelivr.net/npm/katex@0.16.28/dist";
 let KATEX_CSS = await $.request(`${KATEX_BASE_URL}/katex.min.css`).text();
 
 // Replace url of fonts with a cdn since we aren't packaging these

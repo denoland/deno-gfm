@@ -1,6 +1,12 @@
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.43/deno-dom-wasm.ts";
-import { render, Renderer, strip, stripSplitBySections } from "../mod.ts";
+import { DOMParser } from "deno-dom";
+import {
+  type Marked,
+  render,
+  Renderer,
+  strip,
+  stripSplitBySections,
+} from "../mod.ts";
 
 Deno.test("Basic markdown", async () => {
   const markdown = await Deno.readTextFile("./test/fixtures/basic.md");
@@ -93,8 +99,9 @@ Deno.test("custom renderer", () => {
   const expected = `<h1 id="custom-renderer">hello world</h1>`;
 
   class CustomRenderer extends Renderer {
-    override heading(text: string, level: 1 | 2 | 3 | 4 | 5 | 6): string {
-      return `<h${level} id="custom-renderer">${text}</h${level}>`;
+    override heading(token: Marked.Tokens.Heading): string {
+      const text = this.parser.parseInline(token.tokens);
+      return `<h${token.depth} id="custom-renderer">${text}</h${token.depth}>`;
     }
   }
 
@@ -229,9 +236,13 @@ Deno.test("custom allowed classes", async () => {
     "./test/fixtures/customAllowedClasses.html",
   );
   class CustomRenderer extends Renderer {
-    override list(body: string, ordered: boolean): string {
-      const type = ordered ? "list-decimal" : "list-disc";
-      const tag = ordered ? "ol" : "ul";
+    override list(token: Marked.Tokens.List): string {
+      let body = "";
+      for (const item of token.items) {
+        body += this.listitem(item);
+      }
+      const type = token.ordered ? "list-decimal" : "list-disc";
+      const tag = token.ordered ? "ol" : "ul";
       return `<${tag} class="${type}">${body}</${tag}>`;
     }
   }

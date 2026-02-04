@@ -39,20 +39,22 @@ export class Renderer extends Marked.Renderer {
     this.#slugger = new GitHubSlugger();
   }
 
-  override heading(
-    text: string,
-    level: 1 | 2 | 3 | 4 | 5 | 6,
-    raw: string,
-  ): string {
+  override heading({
+    tokens,
+    depth,
+    text: raw,
+  }: Marked.Tokens.Heading): string {
+    const text = this.parser.parseInline(tokens);
     const slug = this.#slugger.slug(raw);
-    return `<h${level} id="${slug}"><a class="anchor" aria-hidden="true" tabindex="-1" href="#${slug}"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>${text}</h${level}>\n`;
+    return `<h${depth} id="${slug}"><a class="anchor" aria-hidden="true" tabindex="-1" href="#${slug}"><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>${text}</h${depth}>\n`;
   }
 
-  override image(src: string, title: string | null, alt: string): string {
-    return `<img src="${src}" alt="${alt}" title="${title ?? ""}" />`;
+  override image({ href, title, text }: Marked.Tokens.Image): string {
+    return `<img src="${href}" alt="${text}" title="${title ?? ""}" />`;
   }
 
-  override code(code: string, language?: string): string {
+  override code({ text, lang }: Marked.Tokens.Code): string {
+    let language = lang;
     const isTitleIncluded = language?.match(/\stitle="(.+)"/);
     let title = null;
     if (isTitleIncluded) {
@@ -67,23 +69,24 @@ export class Renderer extends Marked.Renderer {
     // transform math code blocks into HTML+MathML
     // https://github.blog/changelog/2022-06-28-fenced-block-syntax-for-mathematical-expressions/
     if (language === "math" && this.allowMath) {
-      return katex.renderToString(code, { displayMode: true });
+      return katex.renderToString(text, { displayMode: true });
     }
     const grammar =
       language && Object.hasOwnProperty.call(Prism.languages, language)
         ? Prism.languages[language]
         : undefined;
     if (grammar === undefined) {
-      return `<pre><code class="notranslate">${he.encode(code)}</code></pre>`;
+      return `<pre><code class="notranslate">${he.encode(text)}</code></pre>`;
     }
-    const html = Prism.highlight(code, grammar, language!);
+    const html = Prism.highlight(text, grammar, language!);
     const titleHtml = title
       ? `<div class="markdown-code-title">${title}</div>`
       : ``;
     return `<div class="highlight highlight-source-${language} notranslate">${titleHtml}<pre>${html}</pre></div>`;
   }
 
-  override link(href: string, title: string | null, text: string): string {
+  override link({ href, title, tokens }: Marked.Tokens.Link): string {
+    const text = this.parser.parseInline(tokens);
     const titleAttr = title ? ` title="${title}"` : "";
     if (href.startsWith("#")) {
       return `<a href="${href}"${titleAttr}>${text}</a>`;
@@ -131,10 +134,8 @@ function mathify(markdown: string) {
 
 function getOpts(opts: RenderOptions) {
   return {
-    baseUrl: opts.baseUrl,
     breaks: opts.breaks ?? false,
     gfm: true,
-    mangle: false,
     renderer: opts.renderer ? opts.renderer : new Renderer(opts),
     async: false,
   };
@@ -383,7 +384,7 @@ function stripTokens(
       index += 1;
     }
 
-    if ("tokens" in token && token.tokens) {
+    if ("tokens" in token && token.tokens && token.type !== "image") {
       stripTokens(token.tokens, sections, token.type === "heading");
     }
 

@@ -1,4 +1,4 @@
-import { default as puppeteer, type Page } from "npm:puppeteer";
+import { launch, type Page } from "@astral/astral";
 import { CSS, render, type RenderOptions } from "../mod.ts";
 
 type TestCase = {
@@ -33,14 +33,12 @@ export async function browserTest(
   const { serverProcess, address } = await startServer();
 
   try {
-    const browser = await puppeteer.launch({
+    const browser = await launch({
       args: ["--no-sandbox"],
-      headless: true,
     });
 
     try {
-      const page = await browser.newPage();
-      await page.goto(`${address}/${test}`);
+      const page = await browser.newPage(`${address}/${test}`);
       await fn(page);
     } finally {
       await browser.close();

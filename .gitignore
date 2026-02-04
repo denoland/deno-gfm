@@ -1,3 +1,4 @@
 cov_profile
 deno.lock
 .DS_Store
+node_modules/

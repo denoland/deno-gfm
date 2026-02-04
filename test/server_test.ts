@@ -22,8 +22,7 @@ Deno.test({
           );
           return cell ? cell.textContent?.trim() : null;
         },
-        row,
-        col,
+        { args: [row, col] },
       );
     };
 
@@ -46,7 +45,7 @@ Deno.test({
 
     const getComputedStyle = (
       selector: string,
-      property: keyof CSSStyleDeclaration,
+      property: string & keyof CSSStyleDeclaration,
     ) => {
       return page.evaluate(
         (selector, property) => {
@@ -57,8 +56,7 @@ Deno.test({
           const style = globalThis.getComputedStyle(element);
           return style[property];
         },
-        selector,
-        property,
+        { args: [selector, property] },
       );
     };
 
@@ -90,17 +88,17 @@ Deno.test(
       const scrollPositionBefore = await page.evaluate(() =>
         globalThis.scrollY
       );
-      await page.click("#footnote-ref-1"); // click the first footnote link. note that we select by id, not href
+      await (await page.$("#footnote-ref-1"))!.click(); // click the first footnote link. note that we select by id, not href
       const scrollPositionAfter = await page.evaluate(() => globalThis.scrollY);
       assert(scrollPositionAfter > scrollPositionBefore);
 
-      await page.click("#footnote-ref-bignote");
+      await (await page.$("#footnote-ref-bignote"))!.click();
       const scrollPositionAfter2 = await page.evaluate(() =>
         globalThis.scrollY
       );
       assert(scrollPositionAfter2 === scrollPositionAfter);
 
-      await page.click("#footnote-1 > p > a");
+      await (await page.$("#footnote-1 > p > a"))!.click();
       const scrollPositionAfter3 = await page.evaluate(() =>
         globalThis.scrollY
       );
@@ -152,7 +150,7 @@ Deno.test(
       assertEquals(h2Style.border, "");
 
       // 4. Verify blue box around the footnote after clicking
-      await page.click("#footnote-ref-1");
+      await (await page.$("#footnote-ref-1"))!.click();
       const footnoteStyle = await page.evaluate(() => {
         const element = document.querySelector("#footnote-1");
         if (element) {
